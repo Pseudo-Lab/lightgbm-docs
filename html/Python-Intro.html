@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python-package Introduction &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Features" href="Features.html" />
+    <link rel="prev" title="Quick Start" href="Quick-Start.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-interface">Data Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-parameters">Setting Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cv">CV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#early-stopping">Early Stopping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prediction">Prediction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python-package Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Python-Intro.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-package-introduction">
+<h1>Python-package Introduction<a class="headerlink" href="#python-package-introduction" title="Permalink to this heading"></a></h1>
+<p>This document gives a basic walk-through of LightGBM Python-package.</p>
+<p><strong>List of other helpful links</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/microsoft/LightGBM/tree/master/examples/python-guide">Python Examples</a></p></li>
+<li><p><a class="reference external" href="./Python-API.html">Python API</a></p></li>
+<li><p><a class="reference external" href="./Parameters-Tuning.html">Parameters Tuning</a></p></li>
+</ul>
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
+<p>The preferred way to install LightGBM is via pip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lightgbm</span>
+</pre></div>
+</div>
+<p>Refer to <a class="reference external" href="https://github.com/microsoft/LightGBM/tree/master/python-package">Python-package</a> folder for the detailed installation guide.</p>
+<p>To verify your installation, try to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">lightgbm</span></code> in Python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+</pre></div>
+</div>
+</section>
+<section id="data-interface">
+<h2>Data Interface<a class="headerlink" href="#data-interface" title="Permalink to this heading"></a></h2>
+<p>The LightGBM Python module can load data from:</p>
+<ul class="simple">
+<li><p>LibSVM (zero-based) / TSV / CSV format text file</p></li>
+<li><p>NumPy 2D array(s), pandas DataFrame, H2O DataTable’s Frame, SciPy sparse matrix</p></li>
+<li><p>LightGBM binary file</p></li>
+<li><p>LightGBM <code class="docutils literal notranslate"><span class="pre">Sequence</span></code> object(s)</p></li>
+</ul>
+<p>The data is stored in a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object.</p>
+<p>Many of the examples in this page use functionality from <code class="docutils literal notranslate"><span class="pre">numpy</span></code>. To run the examples, be sure to import <code class="docutils literal notranslate"><span class="pre">numpy</span></code> in your session.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<p><strong>To load a LibSVM (zero-based) text file or a LightGBM binary file into Dataset:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;train.svm.bin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>To load a numpy array into Dataset:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 500 entities, each contains 10 features</span>
+<span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>  <span class="c1"># binary target</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>To load a scipy.sparse.csr_matrix array into Dataset:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy</span>
+<span class="n">csr</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">dat</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)))</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">csr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Load from Sequence objects:</strong></p>
+<p>We can implement <code class="docutils literal notranslate"><span class="pre">Sequence</span></code> interface to read binary files. The following example shows reading HDF5 file with <code class="docutils literal notranslate"><span class="pre">h5py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">h5py</span>
+
+<span class="k">class</span> <span class="nc">HDFSequence</span><span class="p">(</span><span class="n">lgb</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdf_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">hdf_dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;train.hdf5&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">HDFSequence</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">],</span> <span class="mi">8192</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">][:])</span>
+</pre></div>
+</div>
+<p>Features of using <code class="docutils literal notranslate"><span class="pre">Sequence</span></code> interface:</p>
+<ul class="simple">
+<li><p>Data sampling uses random access, thus does not go through the whole dataset</p></li>
+<li><p>Reading data in batch, thus saves memory when constructing <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object</p></li>
+<li><p>Supports creating <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> from multiple data files</p></li>
+</ul>
+<p>Please refer to <code class="docutils literal notranslate"><span class="pre">Sequence</span></code> <a class="reference external" href="./Python-API.html#data-structure-api">API doc</a>.</p>
+<p><a class="reference external" href="https://github.com/microsoft/LightGBM/blob/master/examples/python-guide/dataset_from_multi_hdf5.py">dataset_from_multi_hdf5.py</a> is a detailed example.</p>
+<p><strong>Saving Dataset into a LightGBM binary file will make loading faster:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;train.svm.txt&#39;</span><span class="p">)</span>
+<span class="n">train_data</span><span class="o">.</span><span class="n">save_binary</span><span class="p">(</span><span class="s1">&#39;train.bin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Create validation data:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">validation_data</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">create_valid</span><span class="p">(</span><span class="s1">&#39;validation.svm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">validation_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="s1">&#39;validation.svm&#39;</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="n">train_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In LightGBM, the validation data should be aligned with training data.</p>
+<p><strong>Specific feature names and categorical features:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">feature_name</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="s1">&#39;c2&#39;</span><span class="p">,</span> <span class="s1">&#39;c3&#39;</span><span class="p">],</span> <span class="n">categorical_feature</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;c3&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>LightGBM can use categorical features as input directly.
+It doesn’t need to convert to one-hot encoding, and is much faster than one-hot encoding (about 8x speed-up).</p>
+<p><strong>Note</strong>: You should convert your categorical features to <code class="docutils literal notranslate"><span class="pre">int</span></code> type before you construct <code class="docutils literal notranslate"><span class="pre">Dataset</span></code>.</p>
+<p><strong>Weights can be set when needed:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_data</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">train_data</span><span class="o">.</span><span class="n">set_weight</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And you can use <code class="docutils literal notranslate"><span class="pre">Dataset.set_init_score()</span></code> to set initial score, and <code class="docutils literal notranslate"><span class="pre">Dataset.set_group()</span></code> to set group/query data for ranking tasks.</p>
+<p><strong>Memory efficient usage:</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object in LightGBM is very memory-efficient, it only needs to save discrete bins.
+However, Numpy/Array/Pandas object is memory expensive.
+If you are concerned about your memory consumption, you can save memory by:</p>
+<ol class="arabic simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">free_raw_data=True</span></code> (default is <code class="docutils literal notranslate"><span class="pre">True</span></code>) when constructing the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code></p></li>
+<li><p>Explicitly set <code class="docutils literal notranslate"><span class="pre">raw_data=None</span></code> after the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> has been constructed</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">gc</span></code></p></li>
+</ol>
+</section>
+<section id="setting-parameters">
+<h2>Setting Parameters<a class="headerlink" href="#setting-parameters" title="Permalink to this heading"></a></h2>
+<p>LightGBM can use a dictionary to set <a class="reference external" href="./Parameters.html">Parameters</a>.
+For instance:</p>
+<ul>
+<li><p>Booster parameters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">param</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;num_leaves&#39;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span> <span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;binary&#39;</span><span class="p">}</span>
+<span class="n">param</span><span class="p">[</span><span class="s1">&#39;metric&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;auc&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>You can also specify multiple eval metrics:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">param</span><span class="p">[</span><span class="s1">&#39;metric&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;auc&#39;</span><span class="p">,</span> <span class="s1">&#39;binary_logloss&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="training">
+<h2>Training<a class="headerlink" href="#training" title="Permalink to this heading"></a></h2>
+<p>Training a model requires a parameter list and data set:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">num_round</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">bst</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">num_round</span><span class="p">,</span> <span class="n">valid_sets</span><span class="o">=</span><span class="p">[</span><span class="n">validation_data</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>After training, the model can be saved:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bst</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s1">&#39;model.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The trained model can also be dumped to JSON format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">json_model</span> <span class="o">=</span> <span class="n">bst</span><span class="o">.</span><span class="n">dump_model</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>A saved model can be loaded:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bst</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">Booster</span><span class="p">(</span><span class="n">model_file</span><span class="o">=</span><span class="s1">&#39;model.txt&#39;</span><span class="p">)</span>  <span class="c1"># init model</span>
+</pre></div>
+</div>
+</section>
+<section id="cv">
+<h2>CV<a class="headerlink" href="#cv" title="Permalink to this heading"></a></h2>
+<p>Training with 5-fold CV:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lgb</span><span class="o">.</span><span class="n">cv</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">num_round</span><span class="p">,</span> <span class="n">nfold</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="early-stopping">
+<h2>Early Stopping<a class="headerlink" href="#early-stopping" title="Permalink to this heading"></a></h2>
+<p>If you have a validation set, you can use early stopping to find the optimal number of boosting rounds.
+Early stopping requires at least one set in <code class="docutils literal notranslate"><span class="pre">valid_sets</span></code>. If there is more than one, it will use all of them except the training data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bst</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">num_round</span><span class="p">,</span> <span class="n">valid_sets</span><span class="o">=</span><span class="n">valid_sets</span><span class="p">,</span> <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">bst</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s1">&#39;model.txt&#39;</span><span class="p">,</span> <span class="n">num_iteration</span><span class="o">=</span><span class="n">bst</span><span class="o">.</span><span class="n">best_iteration</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The model will train until the validation score stops improving.
+Validation score needs to improve at least every <code class="docutils literal notranslate"><span class="pre">early_stopping_rounds</span></code> to continue training.</p>
+<p>The index of iteration that has the best performance will be saved in the <code class="docutils literal notranslate"><span class="pre">best_iteration</span></code> field if early stopping logic is enabled by setting <code class="docutils literal notranslate"><span class="pre">early_stopping_rounds</span></code>.
+Note that <code class="docutils literal notranslate"><span class="pre">train()</span></code> will return a model from the best iteration.</p>
+<p>This works with both metrics to minimize (L2, log loss, etc.) and to maximize (NDCG, AUC, etc.).
+Note that if you specify more than one evaluation metric, all of them will be used for early stopping.
+However, you can change this behavior and make LightGBM check only the first metric for early stopping by passing <code class="docutils literal notranslate"><span class="pre">first_metric_only=True</span></code> in <code class="docutils literal notranslate"><span class="pre">param</span></code> or <code class="docutils literal notranslate"><span class="pre">early_stopping</span></code> callback constructor.</p>
+</section>
+<section id="prediction">
+<h2>Prediction<a class="headerlink" href="#prediction" title="Permalink to this heading"></a></h2>
+<p>A model that has been trained or loaded can perform predictions on datasets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 7 entities, each contains 10 features</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">ypred</span> <span class="o">=</span> <span class="n">bst</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If early stopping is enabled during training, you can get predictions from the best iteration with <code class="docutils literal notranslate"><span class="pre">bst.best_iteration</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ypred</span> <span class="o">=</span> <span class="n">bst</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num_iteration</span><span class="o">=</span><span class="n">bst</span><span class="o">.</span><span class="n">best_iteration</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Quick-Start.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Features.html" class="btn btn-neutral float-right" title="Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

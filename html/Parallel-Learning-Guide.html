@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Distributed Learning Guide &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="LightGBM GPU Tutorial" href="GPU-Tutorial.html" />
+    <link rel="prev" title="lightgbm.register_logger" href="pythonapi/lightgbm.register_logger.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Distributed Learning Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-distributed-lightgbm-works">How Distributed LightGBM Works</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#choose-appropriate-parallel-algorithm">Choose Appropriate Parallel Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#integrations">Integrations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#apache-spark">Apache Spark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dask">Dask</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dask-examples">Dask Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#training-with-dask">Training with Dask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prediction-with-dask">Prediction with Dask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#saving-dask-models">Saving Dask Models</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#kubeflow">Kubeflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lightgbm-cli">LightGBM CLI</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preparation">Preparation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-distributed-learning">Run Distributed Learning</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ray">Ray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mars">Mars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Distributed Learning Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Parallel-Learning-Guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="distributed-learning-guide">
+<h1>Distributed Learning Guide<a class="headerlink" href="#distributed-learning-guide" title="Permalink to this heading"></a></h1>
+<p id="parallel-learning-guide">This guide describes distributed learning in LightGBM. Distributed learning allows the use of multiple machines to produce a single model.</p>
+<p>Follow the <a class="reference external" href="./Quick-Start.html">Quick Start</a> to know how to use LightGBM first.</p>
+<section id="how-distributed-lightgbm-works">
+<h2>How Distributed LightGBM Works<a class="headerlink" href="#how-distributed-lightgbm-works" title="Permalink to this heading"></a></h2>
+<p>This section describes how distributed learning in LightGBM works. To learn how to do this in various programming languages and frameworks, please see <a class="reference external" href="#integrations">Integrations</a>.</p>
+<section id="choose-appropriate-parallel-algorithm">
+<h3>Choose Appropriate Parallel Algorithm<a class="headerlink" href="#choose-appropriate-parallel-algorithm" title="Permalink to this heading"></a></h3>
+<p>LightGBM provides 3 distributed learning algorithms now.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parallel Algorithm</p></th>
+<th class="head"><p>How to Use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Data parallel</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tree_learner=data</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Feature parallel</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tree_learner=feature</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Voting parallel</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tree_learner=voting</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>These algorithms are suited for different scenarios, which is listed in the following table:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>#data is small</p></th>
+<th class="head"><p>#data is large</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>#feature is small</strong></p></td>
+<td><p>Feature Parallel</p></td>
+<td><p>Data Parallel</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>#feature is large</strong></p></td>
+<td><p>Feature Parallel</p></td>
+<td><p>Voting Parallel</p></td>
+</tr>
+</tbody>
+</table>
+<p>More details about these parallel algorithms can be found in <a class="reference external" href="./Features.html#optimization-in-distributed-learning">optimization in distributed learning</a>.</p>
+</section>
+</section>
+<section id="integrations">
+<h2>Integrations<a class="headerlink" href="#integrations" title="Permalink to this heading"></a></h2>
+<p>This section describes how to run distributed LightGBM training in various programming languages and frameworks. To learn how distributed learning in LightGBM works generally, please see <a class="reference external" href="#how-distributed-lightgbm-works">How Distributed LightGBM Works</a>.</p>
+<section id="apache-spark">
+<h3>Apache Spark<a class="headerlink" href="#apache-spark" title="Permalink to this heading"></a></h3>
+<p>Apache Spark users can use <a class="reference external" href="https://aka.ms/spark">SynapseML</a> for machine learning workflows with LightGBM. This project is not maintained by LightGBM’s maintainers.</p>
+<p>See <a class="reference external" href="https://github.com/microsoft/SynapseML/blob/master/notebooks/LightGBM%20-%20Overview.ipynb">this SynapseML example</a> and <a class="reference external" href="https://github.com/microsoft/SynapseML/blob/master/docs/lightgbm.md">the SynapseML documentation</a> for additional information on using LightGBM on Spark.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">SynapseML</span></code> is not maintained by LightGBM’s maintainers. Bug reports or feature requests should be directed to <a class="reference external" href="https://github.com/microsoft/SynapseML/issues">https://github.com/microsoft/SynapseML/issues</a>.</p>
+</div>
+</section>
+<section id="dask">
+<h3>Dask<a class="headerlink" href="#dask" title="Permalink to this heading"></a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.0.</span></p>
+</div>
+<p>LightGBM’s Python package supports distributed learning via <a class="reference external" href="https://docs.dask.org/en/latest/">Dask</a>. This integration is maintained by LightGBM’s maintainers.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Dask integration is only tested on Linux.</p>
+</div>
+<section id="dask-examples">
+<h4>Dask Examples<a class="headerlink" href="#dask-examples" title="Permalink to this heading"></a></h4>
+<p>For sample code using <code class="docutils literal notranslate"><span class="pre">lightgbm.dask</span></code>, see <a class="reference external" href="https://github.com/microsoft/lightgbm/tree/master/examples/python-guide/dask">these Dask examples</a>.</p>
+</section>
+<section id="training-with-dask">
+<h4>Training with Dask<a class="headerlink" href="#training-with-dask" title="Permalink to this heading"></a></h4>
+<p>This section contains detailed information on performing LightGBM distributed training using Dask.</p>
+<section id="configuring-the-dask-cluster">
+<h5>Configuring the Dask Cluster<a class="headerlink" href="#configuring-the-dask-cluster" title="Permalink to this heading"></a></h5>
+<p><strong>Allocating Threads</strong></p>
+<p>When setting up a Dask cluster for training, give each Dask worker process at least two threads. If you do not do this, training might be substantially slower because communication work and training work will block each other.</p>
+<p>If you do not have other significant processes competing with Dask for resources, just accept the default <code class="docutils literal notranslate"><span class="pre">nthreads</span></code> from your chosen <code class="docutils literal notranslate"><span class="pre">dask.distributed</span></code> cluster.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">LocalCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Managing Memory</strong></p>
+<p>Use the Dask diagnostic dashboard or your preferred monitoring tool to monitor Dask workers’ memory consumption during training. As described in <a class="reference external" href="https://distributed.dask.org/en/latest/worker.html#memory-management">the Dask worker documentation</a>, Dask workers will automatically start spilling data to disk if memory consumption gets too high. This can substantially slow down computations, since disk I/O is usually much slower than reading the same data from memory.</p>
+<blockquote>
+<div><p><cite>At 60% of memory load, [Dask will] spill least recently used data to disk</cite></p>
+</div></blockquote>
+<p>To reduce the risk of hitting memory limits, consider restarting each worker process before running any data loading or training code.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="setting-up-training-data">
+<h5>Setting Up Training Data<a class="headerlink" href="#setting-up-training-data" title="Permalink to this heading"></a></h5>
+<p>The estimators in <code class="docutils literal notranslate"><span class="pre">lightgbm.dask</span></code> expect that matrix-like or array-like data are provided in Dask DataFrame, Dask Array, or (in some cases) Dask Series format. See <a class="reference external" href="https://docs.dask.org/en/latest/dataframe.html">the Dask DataFrame documentation</a> and <a class="reference external" href="https://docs.dask.org/en/latest/array.html">the Dask Array documentation</a> for more information on how to create such data structures.</p>
+<a class="reference external image-reference" href="./_static/images/dask-initial-setup.svg"><img alt="On the left, rectangles showing a 5 by 5 grid for a local dataset. On the right, two circles representing Dask workers, one with a 3 by 5 grid and one with a 2 by 5 grid." class="align-center" src="_images/dask-initial-setup.svg" width="600px" /></a>
+<p>While setting up for training, <code class="docutils literal notranslate"><span class="pre">lightgbm</span></code> will concatenate all of the partitions on a worker into a single dataset. Distributed training then proceeds with one LightGBM worker process per Dask worker.</p>
+<a class="reference external image-reference" href="./_static/images/dask-concat.svg"><img alt="A section labeled &quot;before&quot; showing two grids and a section labeled &quot;after&quot; showing a single grid that looks like the two from &quot;before&quot; stacked one on top of the other." class="align-center" src="_images/dask-concat.svg" width="600px" /></a>
+<p>When setting up data partitioning for LightGBM training with Dask, try to follow these suggestions:</p>
+<ul class="simple">
+<li><p>ensure that each worker in the cluster has some of the training data</p></li>
+<li><p>try to give each worker roughly the same amount of data, especially if your dataset is small</p></li>
+<li><p>if you plan to train multiple models (for example, to tune hyperparameters) on the same data, use <code class="docutils literal notranslate"><span class="pre">client.persist()</span></code> before training to materialize the data one time</p></li>
+</ul>
+</section>
+<section id="using-a-specific-dask-client">
+<h5>Using a Specific Dask Client<a class="headerlink" href="#using-a-specific-dask-client" title="Permalink to this heading"></a></h5>
+<p>In most situations, you should not need to tell <code class="docutils literal notranslate"><span class="pre">lightgbm.dask</span></code> to use a specific Dask client. By default, the client returned by <code class="docutils literal notranslate"><span class="pre">distributed.default_client()</span></code> will be used.</p>
+<p>However, you might want to explicitly control the Dask client used by LightGBM if you have multiple active clients in the same session. This is useful in more complex workflows like running multiple training jobs on different Dask clusters.</p>
+<p>LightGBM’s Dask estimators support setting an attribute <code class="docutils literal notranslate"><span class="pre">client</span></code> to control the client that is used.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">LocalCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">()</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+<span class="c1"># option 1: keyword argument in constructor</span>
+<span class="n">dask_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">DaskLGBMClassifier</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+
+<span class="c1"># option 2: set_params() after construction</span>
+<span class="n">dask_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">DaskLGBMClassifier</span><span class="p">()</span>
+<span class="n">dask_model</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="using-specific-ports">
+<h5>Using Specific Ports<a class="headerlink" href="#using-specific-ports" title="Permalink to this heading"></a></h5>
+<p>At the beginning of training, <code class="docutils literal notranslate"><span class="pre">lightgbm.dask</span></code> sets up a LightGBM network where each Dask worker runs one long-running task that acts as a LightGBM worker. During training, LightGBM workers communicate with each other over TCP sockets. By default, random open ports are used when creating these sockets.</p>
+<p>If the communication between Dask workers in the cluster used for training is restricted by firewall rules, you must tell LightGBM exactly what ports to use.</p>
+<p><strong>Option 1: provide a specific list of addresses and ports</strong></p>
+<p>LightGBM supports a parameter <code class="docutils literal notranslate"><span class="pre">machines</span></code>, a comma-delimited string where each entry refers to one worker (host name or IP) and a port that that worker will accept connections on. If you provide this parameter to the estimators in <code class="docutils literal notranslate"><span class="pre">lightgbm.dask</span></code>, LightGBM will not search randomly for ports.</p>
+<p>For example, consider the case where you are running one Dask worker process on each of the following IP addresses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0.1.0</span>
+<span class="mf">10.0.2.0</span>
+<span class="mf">10.0.3.0</span>
+</pre></div>
+</div>
+<p>You could edit your firewall rules to allow traffic on one additional port on each of these hosts, then provide <code class="docutils literal notranslate"><span class="pre">machines</span></code> directly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+
+<span class="n">machines</span> <span class="o">=</span> <span class="s2">&quot;10.0.1.0:12401,10.0.2.0:12402,10.0.3.0:15000&quot;</span>
+<span class="n">dask_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">DaskLGBMRegressor</span><span class="p">(</span><span class="n">machines</span><span class="o">=</span><span class="n">machines</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you are running multiple Dask worker processes on physical host in the cluster, be sure that there are multiple entries for that IP address, with different ports. For example, if you were running a cluster with <code class="docutils literal notranslate"><span class="pre">nprocs=2</span></code> (2 Dask worker processes per machine), you might open two additional ports on each of these hosts, then provide <code class="docutils literal notranslate"><span class="pre">machines</span></code> as follows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+
+<span class="n">machines</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+  <span class="s2">&quot;10.0.1.0:16000&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;10.0.1.0:16001&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;10.0.2.0:16000&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;10.0.2.0:16001&quot;</span><span class="p">,</span>
+<span class="p">])</span>
+<span class="n">dask_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">DaskLGBMRegressor</span><span class="p">(</span><span class="n">machines</span><span class="o">=</span><span class="n">machines</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Providing <code class="docutils literal notranslate"><span class="pre">machines</span></code> gives you complete control over the networking details of training, but it also makes the training process fragile. Training will fail if you use <code class="docutils literal notranslate"><span class="pre">machines</span></code> and any of the following are true:</p>
+<ul class="simple">
+<li><p>any of the ports mentioned in <code class="docutils literal notranslate"><span class="pre">machines</span></code> are not open when training begins</p></li>
+<li><p>some partitions of the training data are held by machines that that are not present in <code class="docutils literal notranslate"><span class="pre">machines</span></code></p></li>
+<li><p>some machines mentioned in <code class="docutils literal notranslate"><span class="pre">machines</span></code> do not hold any of the training data</p></li>
+</ul>
+</div>
+<p><strong>Option 2: specify one port to use on every worker</strong></p>
+<p>If you are only running one Dask worker process on each host, and if you can reliably identify a port that is open on every host, using <code class="docutils literal notranslate"><span class="pre">machines</span></code> is unnecessarily complicated. If <code class="docutils literal notranslate"><span class="pre">local_listen_port</span></code> is given and <code class="docutils literal notranslate"><span class="pre">machines</span></code> is not, LightGBM will not search for ports randomly, but it will limit the list of addresses in the LightGBM network to those Dask workers that have a piece of the training data.</p>
+<p>For example, consider the case where you are running one Dask worker process on each of the following IP addresses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">10.0.1.0</span>
+<span class="mf">10.0.2.0</span>
+<span class="mf">10.0.3.0</span>
+</pre></div>
+</div>
+<p>You could edit your firewall rules to allow communication between any of the workers over one port, then provide that port via parameter <code class="docutils literal notranslate"><span class="pre">local_listen_port</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+
+<span class="n">dask_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">DaskLGBMRegressor</span><span class="p">(</span><span class="n">local_listen_port</span><span class="o">=</span><span class="mi">12400</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Providing <code class="docutils literal notranslate"><span class="pre">local_listen_port</span></code> is slightly less fragile than <code class="docutils literal notranslate"><span class="pre">machines</span></code> because LightGBM will automatically figure out which workers have pieces of the training data. However, using this method, training can fail if any of the following are true:</p>
+<ul class="simple">
+<li><p>the port <code class="docutils literal notranslate"><span class="pre">local_listen_port</span></code> is not open on any of the worker hosts</p></li>
+<li><p>any machine has multiple Dask worker processes running on it</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="prediction-with-dask">
+<h4>Prediction with Dask<a class="headerlink" href="#prediction-with-dask" title="Permalink to this heading"></a></h4>
+<p>The estimators from <code class="docutils literal notranslate"><span class="pre">lightgbm.dask</span></code> can be used to create predictions based on data stored in Dask collections. In that interface, <code class="docutils literal notranslate"><span class="pre">.predict()</span></code> expects a Dask Array or Dask DataFrame, and returns a Dask Array of predictions.</p>
+<p>See <a class="reference external" href="https://github.com/microsoft/lightgbm/tree/master/examples/python-guide/dask/prediction.py">the Dask prediction example</a> for some sample code that shows how to perform Dask-based prediction.</p>
+<p>For model evaluation, consider using <a class="reference external" href="https://ml.dask.org/modules/api.html#dask-ml-metrics-metrics">the metrics functions from dask-ml</a>. Those functions are intended to provide the same API as equivalent functions in <code class="docutils literal notranslate"><span class="pre">sklearn.metrics</span></code>, but they use distributed computation powered by Dask to compute metrics without all of the input data ever needing to be on a single machine.</p>
+</section>
+<section id="saving-dask-models">
+<h4>Saving Dask Models<a class="headerlink" href="#saving-dask-models" title="Permalink to this heading"></a></h4>
+<p>After training with Dask, you have several options for saving a fitted model.</p>
+<p><strong>Option 1: pickle the Dask estimator</strong></p>
+<p>LightGBM’s Dask estimators can be pickled directly with <code class="docutils literal notranslate"><span class="pre">cloudpickle</span></code>, <code class="docutils literal notranslate"><span class="pre">joblib</span></code>, or <code class="docutils literal notranslate"><span class="pre">pickle</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">LocalCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,),</span> <span class="p">(</span><span class="mi">500</span><span class="p">,))</span>
+
+<span class="n">dask_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">DaskLGBMRegressor</span><span class="p">()</span>
+<span class="n">dask_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;dask-model.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">dask_model</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A model saved this way can then later be loaded with whichever serialization library you used to save it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;dask-model.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">dask_model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you explicitly set a Dask client (see <a class="reference external" href="#using-a-specific-dask-client">Using a Specific Dask Client</a>), it will not be saved when pickling the estimator. When loading a Dask estimator from disk, if you need to use a specific client you can add it after loading with <code class="docutils literal notranslate"><span class="pre">dask_model.set_params(client=client)</span></code>.</p>
+</div>
+<p><strong>Option 2: pickle the sklearn estimator</strong></p>
+<p>The estimators available from <code class="docutils literal notranslate"><span class="pre">lightgbm.dask</span></code> can be converted to an instance of the equivalent class from <code class="docutils literal notranslate"><span class="pre">lightgbm.sklearn</span></code>. Choosing this option allows you to use Dask for training but avoid depending on any Dask libraries at scoring time.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">LocalCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,),</span> <span class="p">(</span><span class="mi">500</span><span class="p">,))</span>
+
+<span class="n">dask_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">DaskLGBMRegressor</span><span class="p">()</span>
+<span class="n">dask_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># convert to sklearn equivalent</span>
+<span class="n">sklearn_model</span> <span class="o">=</span> <span class="n">dask_model</span><span class="o">.</span><span class="n">to_local</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">sklearn_model</span><span class="p">))</span>
+<span class="c1">#&gt; lightgbm.sklearn.LGBMRegressor</span>
+
+<span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sklearn_model</span><span class="p">,</span> <span class="s2">&quot;sklearn-model.joblib&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A model saved this way can then later be loaded with whichever serialization library you used to save it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">joblib</span>
+
+<span class="n">sklearn_model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;sklearn-model.joblib&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Option 3: save the LightGBM Booster</strong></p>
+<p>The lowest-level model object in LightGBM is the <code class="docutils literal notranslate"><span class="pre">lightgbm.Booster</span></code>. After training, you can extract a Booster from the Dask estimator.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="kn">import</span> <span class="nn">lightgbm</span> <span class="k">as</span> <span class="nn">lgb</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">LocalCluster</span>
+
+<span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,),</span> <span class="p">(</span><span class="mi">500</span><span class="p">,))</span>
+
+<span class="n">dask_model</span> <span class="o">=</span> <span class="n">lgb</span><span class="o">.</span><span class="n">DaskLGBMRegressor</span><span class="p">()</span>
+<span class="n">dask_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># get underlying Booster object</span>
+<span class="n">bst</span> <span class="o">=</span> <span class="n">dask_model</span><span class="o">.</span><span class="n">booster_</span>
+</pre></div>
+</div>
+<p>From the point forward, you can use any of the following methods to save the Booster:</p>
+<ul class="simple">
+<li><p>serialize with <code class="docutils literal notranslate"><span class="pre">cloudpickle</span></code>, <code class="docutils literal notranslate"><span class="pre">joblib</span></code>, or <code class="docutils literal notranslate"><span class="pre">pickle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bst.dump_model()</span></code>: dump the model to a dictionary which could be written out as JSON</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bst.model_to_string()</span></code>: dump the model to a string in memory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bst.save_model()</span></code>: write the output of <code class="docutils literal notranslate"><span class="pre">bst.model_to_string()</span></code> to a text file</p></li>
+</ul>
+</section>
+</section>
+<section id="kubeflow">
+<h3>Kubeflow<a class="headerlink" href="#kubeflow" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://www.kubeflow.org/docs/components/fairing/fairing-overview">Kubeflow Fairing</a> supports LightGBM distributed training. <a class="reference external" href="https://github.com/kubeflow/fairing/tree/master/examples/lightgbm">These examples</a> show how to get started with LightGBM and Kubeflow Fairing in a hybrid cloud environment.</p>
+<p>Kubeflow users can also use the <a class="reference external" href="https://github.com/kubeflow/xgboost-operator">Kubeflow XGBoost Operator</a> for machine learning workflows with LightGBM. You can see <a class="reference external" href="https://github.com/kubeflow/xgboost-operator/tree/master/config/samples/lightgbm-dist">this example</a> for more details.</p>
+<p>Kubeflow integrations for LightGBM are not maintained by LightGBM’s maintainers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Kubeflow integrations for LightGBM are not maintained by LightGBM’s maintainers. Bug reports or feature requests should be directed to <a class="reference external" href="https://github.com/kubeflow/fairing/issues">https://github.com/kubeflow/fairing/issues</a> or <a class="reference external" href="https://github.com/kubeflow/xgboost-operator/issues">https://github.com/kubeflow/xgboost-operator/issues</a>.</p>
+</div>
+</section>
+<section id="lightgbm-cli">
+<h3>LightGBM CLI<a class="headerlink" href="#lightgbm-cli" title="Permalink to this heading"></a></h3>
+<section id="preparation">
+<span id="build-parallel-version"></span><h4>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading"></a></h4>
+<p>By default, distributed learning with LightGBM uses socket-based communication.</p>
+<p>If you need to build distributed version with MPI support, please refer to <a class="reference external" href="./Installation-Guide.html#build-mpi-version">Installation Guide</a>.</p>
+<section id="socket-version">
+<h5>Socket Version<a class="headerlink" href="#socket-version" title="Permalink to this heading"></a></h5>
+<p>It needs to collect IP of all machines that want to run distributed learning in and allocate one TCP port (assume 12345 here) for all machines,
+and change firewall rules to allow income of this port (12345). Then write these IP and ports in one file (assume <code class="docutils literal notranslate"><span class="pre">mlist.txt</span></code>), like following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">machine1_ip</span> <span class="mi">12345</span>
+<span class="n">machine2_ip</span> <span class="mi">12345</span>
+</pre></div>
+</div>
+</section>
+<section id="mpi-version">
+<h5>MPI Version<a class="headerlink" href="#mpi-version" title="Permalink to this heading"></a></h5>
+<p>It needs to collect IP (or hostname) of all machines that want to run distributed learning in.
+Then write these IP in one file (assume <code class="docutils literal notranslate"><span class="pre">mlist.txt</span></code>) like following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">machine1_ip</span>
+<span class="n">machine2_ip</span>
+</pre></div>
+</div>
+<p><strong>Note</strong>: For Windows users, need to start “smpd” to start MPI service. More details can be found <a class="reference external" href="https://www.youtube.com/watch?v=iqzXhp5TxUY">here</a>.</p>
+</section>
+</section>
+<section id="run-distributed-learning">
+<h4>Run Distributed Learning<a class="headerlink" href="#run-distributed-learning" title="Permalink to this heading"></a></h4>
+<section id="run-parallel-learning">
+<span id="id1"></span><h5>Socket Version<a class="headerlink" href="#run-parallel-learning" title="Permalink to this heading"></a></h5>
+<ol class="arabic">
+<li><p>Edit following parameters in config file:</p>
+<p><code class="docutils literal notranslate"><span class="pre">tree_learner=your_parallel_algorithm</span></code>, edit <code class="docutils literal notranslate"><span class="pre">your_parallel_algorithm</span></code> (e.g. feature/data) here.</p>
+<p><code class="docutils literal notranslate"><span class="pre">num_machines=your_num_machines</span></code>, edit <code class="docutils literal notranslate"><span class="pre">your_num_machines</span></code> (e.g. 4) here.</p>
+<p><code class="docutils literal notranslate"><span class="pre">machine_list_file=mlist.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">mlist.txt</span></code> is created in <a class="reference external" href="#preparation">Preparation section</a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">local_listen_port=12345</span></code>, <code class="docutils literal notranslate"><span class="pre">12345</span></code> is allocated in <a class="reference external" href="#preparation">Preparation section</a>.</p>
+</li>
+<li><p>Copy data file, executable file, config file and <code class="docutils literal notranslate"><span class="pre">mlist.txt</span></code> to all machines.</p></li>
+<li><p>Run following command on all machines, you need to change <code class="docutils literal notranslate"><span class="pre">your_config_file</span></code> to real config file.</p>
+<p>For Windows: <code class="docutils literal notranslate"><span class="pre">lightgbm.exe</span> <span class="pre">config=your_config_file</span></code></p>
+<p>For Linux: <code class="docutils literal notranslate"><span class="pre">./lightgbm</span> <span class="pre">config=your_config_file</span></code></p>
+</li>
+</ol>
+</section>
+<section id="id2">
+<h5>MPI Version<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h5>
+<ol class="arabic">
+<li><p>Edit following parameters in config file:</p>
+<p><code class="docutils literal notranslate"><span class="pre">tree_learner=your_parallel_algorithm</span></code>, edit <code class="docutils literal notranslate"><span class="pre">your_parallel_algorithm</span></code> (e.g. feature/data) here.</p>
+<p><code class="docutils literal notranslate"><span class="pre">num_machines=your_num_machines</span></code>, edit <code class="docutils literal notranslate"><span class="pre">your_num_machines</span></code> (e.g. 4) here.</p>
+</li>
+<li><p>Copy data file, executable file, config file and <code class="docutils literal notranslate"><span class="pre">mlist.txt</span></code> to all machines.</p>
+<p><strong>Note</strong>: MPI needs to be run in the <strong>same path on all machines</strong>.</p>
+</li>
+<li><p>Run following command on one machine (not need to run on all machines), need to change <code class="docutils literal notranslate"><span class="pre">your_config_file</span></code> to real config file.</p>
+<p>For Windows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpiexec</span><span class="o">.</span><span class="n">exe</span> <span class="o">/</span><span class="n">machinefile</span> <span class="n">mlist</span><span class="o">.</span><span class="n">txt</span> <span class="n">lightgbm</span><span class="o">.</span><span class="n">exe</span> <span class="n">config</span><span class="o">=</span><span class="n">your_config_file</span>
+</pre></div>
+</div>
+<p>For Linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpiexec</span> <span class="o">--</span><span class="n">machinefile</span> <span class="n">mlist</span><span class="o">.</span><span class="n">txt</span> <span class="o">./</span><span class="n">lightgbm</span> <span class="n">config</span><span class="o">=</span><span class="n">your_config_file</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h4>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/microsoft/lightgbm/tree/master/examples/parallel_learning">A simple distributed learning example</a></p></li>
+</ul>
+</section>
+</section>
+<section id="ray">
+<h3>Ray<a class="headerlink" href="#ray" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://ray.io/">Ray</a> is a Python-based framework for distributed computing. The <a class="reference external" href="https://github.com/ray-project/lightgbm_ray">lightgbm_ray</a> project, maintained within the official Ray GitHub organization, can be used to perform distributed LightGBM training using <code class="docutils literal notranslate"><span class="pre">ray</span></code>.</p>
+<p>See <a class="reference external" href="https://docs.ray.io/en/latest/lightgbm-ray.html">the lightgbm_ray documentation</a> for usage examples.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">lightgbm_ray</span></code> is not maintained by LightGBM’s maintainers. Bug reports or feature requests should be directed to <a class="reference external" href="https://github.com/ray-project/lightgbm_ray/issues">https://github.com/ray-project/lightgbm_ray/issues</a>.</p>
+</div>
+</section>
+<section id="mars">
+<h3>Mars<a class="headerlink" href="#mars" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://docs.pymars.org/en/latest/index.html">Mars</a> is a tensor-based framework for large-scale data computation. LightGBM integration, maintained within the Mars GitHub repository, can be used to perform distributed LightGBM training using <code class="docutils literal notranslate"><span class="pre">pymars</span></code>.</p>
+<p>See <a class="reference external" href="https://docs.pymars.org/en/latest/user_guide/learn/lightgbm.html">the mars documentation</a> for usage examples.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">Mars</span></code> is not maintained by LightGBM’s maintainers. Bug reports or feature requests should be directed to <a class="reference external" href="https://github.com/mars-project/mars/issues">https://github.com/mars-project/mars/issues</a>.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pythonapi/lightgbm.register_logger.html" class="btn btn-neutral float-left" title="lightgbm.register_logger" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="GPU-Tutorial.html" class="btn btn-neutral float-right" title="LightGBM GPU Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

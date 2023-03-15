@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GPU SDK Correspondence and Device Targeting Table &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GPU Windows Compilation" href="GPU-Windows.html" />
+    <link rel="prev" title="GPU Tuning Guide and Performance Comparison" href="GPU-Performance.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">GPU SDK Correspondence and Device Targeting Table</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GPU-Targets.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gpu-sdk-correspondence-and-device-targeting-table">
+<h1>GPU SDK Correspondence and Device Targeting Table<a class="headerlink" href="#gpu-sdk-correspondence-and-device-targeting-table" title="Permalink to this heading"></a></h1>
+<section id="gpu-targets-table">
+<h2>GPU Targets Table<a class="headerlink" href="#gpu-targets-table" title="Permalink to this heading"></a></h2>
+<p>OpenCL is a universal massively parallel programming framework that targets to multiple backends (GPU, CPU, FPGA, etc).
+Basically, to use a device from a vendor, you have to install drivers from that specific vendor.
+Intel’s and AMD’s OpenCL runtime also include x86 CPU target support.
+NVIDIA’s OpenCL runtime only supports NVIDIA GPU (no CPU support).
+In general, OpenCL CPU backends are quite slow, and should be used for testing and debugging only.</p>
+<p>You can find below a table of correspondence:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>SDK</p></th>
+<th class="head"><p>CPU Intel/AMD</p></th>
+<th class="head"><p>GPU Intel</p></th>
+<th class="head"><p>GPU AMD</p></th>
+<th class="head"><p>GPU NVIDIA</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://software.intel.com/en-us/articles/opencl-drivers">Intel SDK for OpenCL</a></p></td>
+<td><p>Supported</p></td>
+<td><p>Supported</p></td>
+<td><p>Not Supported</p></td>
+<td><p>Not Supported</p></td>
+</tr>
+<tr class="row-odd"><td><p>AMD APP SDK *</p></td>
+<td><p>Supported</p></td>
+<td><p>Not Supported</p></td>
+<td><p>Supported</p></td>
+<td><p>Not Supported</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://developer.nvidia.com/cuda-downloads">NVIDIA CUDA Toolkit</a></p></td>
+<td><p>Not Supported</p></td>
+<td><p>Not Supported</p></td>
+<td><p>Not Supported</p></td>
+<td><p>Supported</p></td>
+</tr>
+</tbody>
+</table>
+<p>Legend:</p>
+<p>* AMD APP SDK is deprecated. On Windows, OpenCL is included in AMD graphics driver. On Linux, newer generation AMD cards are supported by the <a class="reference external" href="https://rocmdocs.amd.com/en/latest/">ROCm</a> driver. You can download an archived copy of AMD APP SDK from our GitHub repo (<a class="reference external" href="https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2">for Linux</a> and <a class="reference external" href="https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.135-GA-windows-F-x64.exe">for Windows</a>).</p>
+</section>
+<hr class="docutils" />
+<section id="query-opencl-devices-in-your-system">
+<h2>Query OpenCL Devices in Your System<a class="headerlink" href="#query-opencl-devices-in-your-system" title="Permalink to this heading"></a></h2>
+<p>Your system might have multiple GPUs from different vendors (“platforms”) installed. Setting up LightGBM GPU device requires two parameters: <a class="reference external" href="./Parameters.html#gpu_platform_id">OpenCL Platform ID</a> (<code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span></code>) and <a class="reference external" href="./Parameters.html#gpu_device_id">OpenCL Device ID</a> (<code class="docutils literal notranslate"><span class="pre">gpu_device_id</span></code>). Generally speaking, each vendor provides an OpenCL platform, and devices from the same vendor have different device IDs under that platform. For example, if your system has an Intel integrated GPU and two discrete GPUs from AMD, you will have two OpenCL platforms (with <code class="docutils literal notranslate"><span class="pre">gpu_platform_id=0</span></code> and <code class="docutils literal notranslate"><span class="pre">gpu_platform_id=1</span></code>). If the platform 0 is Intel, it has one device (<code class="docutils literal notranslate"><span class="pre">gpu_device_id=0</span></code>) representing the Intel GPU; if the platform 1 is AMD, it has two devices (<code class="docutils literal notranslate"><span class="pre">gpu_device_id=0</span></code>, <code class="docutils literal notranslate"><span class="pre">gpu_device_id=1</span></code>) representing the two AMD GPUs. If you have a discrete GPU by AMD/NVIDIA and an integrated GPU by Intel, make sure to select the correct <code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span></code> to use the discrete GPU as it usually provides better performance.</p>
+<p>On Windows, OpenCL devices can be queried using <a class="reference external" href="http://www.ozone3d.net/gpu_caps_viewer/">GPUCapsViewer</a>, under the OpenCL tab. Note that the platform and device IDs reported by this utility start from 1. So you should minus the reported IDs by 1.</p>
+<p>On Linux, OpenCL devices can be listed using the <code class="docutils literal notranslate"><span class="pre">clinfo</span></code> command. On Ubuntu, you can install <code class="docutils literal notranslate"><span class="pre">clinfo</span></code> by executing <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">clinfo</span></code>.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<p>We provide test R code below, but you can use the language of your choice with the examples of your choices:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">lightgbm</span><span class="p">)</span>
+<span class="nf">data</span><span class="p">(</span><span class="n">agaricus.train</span><span class="p">,</span> <span class="n">package</span> <span class="o">=</span> <span class="s">&quot;lightgbm&quot;</span><span class="p">)</span>
+<span class="n">train</span> <span class="o">&lt;-</span> <span class="n">agaricus.train</span>
+<span class="n">train</span><span class="o">$</span><span class="n">data</span><span class="p">[,</span> <span class="m">1</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="m">1</span><span class="o">:</span><span class="m">6513</span>
+<span class="n">dtrain</span> <span class="o">&lt;-</span> <span class="nf">lgb.Dataset</span><span class="p">(</span><span class="n">train</span><span class="o">$</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">train</span><span class="o">$</span><span class="n">label</span><span class="p">)</span>
+<span class="nf">data</span><span class="p">(</span><span class="n">agaricus.test</span><span class="p">,</span> <span class="n">package</span> <span class="o">=</span> <span class="s">&quot;lightgbm&quot;</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">&lt;-</span> <span class="n">agaricus.test</span>
+<span class="n">dtest</span> <span class="o">&lt;-</span> <span class="nf">lgb.Dataset.create.valid</span><span class="p">(</span><span class="n">dtrain</span><span class="p">,</span> <span class="n">test</span><span class="o">$</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">test</span><span class="o">$</span><span class="n">label</span><span class="p">)</span>
+<span class="n">valids</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="n">test</span> <span class="o">=</span> <span class="n">dtest</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="n">objective</span> <span class="o">=</span> <span class="s">&quot;regression&quot;</span><span class="p">,</span>
+               <span class="n">metric</span> <span class="o">=</span> <span class="s">&quot;rmse&quot;</span><span class="p">,</span>
+               <span class="n">device</span> <span class="o">=</span> <span class="s">&quot;gpu&quot;</span><span class="p">,</span>
+               <span class="n">gpu_platform_id</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+               <span class="n">gpu_device_id</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+               <span class="n">nthread</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+               <span class="n">boost_from_average</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+               <span class="n">num_tree_per_iteration</span> <span class="o">=</span> <span class="m">10</span><span class="p">,</span>
+               <span class="n">max_bin</span> <span class="o">=</span> <span class="m">32</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lgb.train</span><span class="p">(</span><span class="n">params</span><span class="p">,</span>
+                   <span class="n">dtrain</span><span class="p">,</span>
+                   <span class="m">2</span><span class="p">,</span>
+                   <span class="n">valids</span><span class="p">,</span>
+                   <span class="n">min_data</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+                   <span class="n">learning_rate</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+                   <span class="n">early_stopping_rounds</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Make sure you list the OpenCL devices in your system and set <code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span></code> and <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span></code> correctly. In the following examples, our system has 1 GPU platform (<code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span> <span class="pre">=</span> <span class="pre">0</span></code>) from AMD APP SDK. The first device <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span> <span class="pre">=</span> <span class="pre">0</span></code> is a GPU device (AMD Oland), and the second device <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span> <span class="pre">=</span> <span class="pre">1</span></code> is the x86 CPU backend.</p>
+<p>Example of using GPU (<code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span> <span class="pre">=</span> <span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span> <span class="pre">=</span> <span class="pre">0</span></code> in our system):</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="n">objective</span> <span class="o">=</span> <span class="s">&quot;regression&quot;</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">metric</span> <span class="o">=</span> <span class="s">&quot;rmse&quot;</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">device</span> <span class="o">=</span> <span class="s">&quot;gpu&quot;</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">gpu_platform_id</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">gpu_device_id</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">nthread</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">boost_from_average</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">num_tree_per_iteration</span> <span class="o">=</span> <span class="m">10</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">max_bin</span> <span class="o">=</span> <span class="m">32</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lgb.train</span><span class="p">(</span><span class="n">params</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">dtrain</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="m">2</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">valids</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">min_data</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">early_stopping_rounds</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">This</span> <span class="n">is</span> <span class="n">the</span> <span class="n">GPU</span> <span class="n">trainer</span><span class="o">!!</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Total</span> <span class="n">Bins</span> <span class="m">232</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">data</span><span class="o">:</span> <span class="m">6513</span><span class="p">,</span> <span class="n">number</span> <span class="n">of</span> <span class="n">used</span> <span class="n">features</span><span class="o">:</span> <span class="m">116</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Using</span> <span class="n">GPU</span> <span class="n">Device</span><span class="o">:</span> <span class="n">Oland</span><span class="p">,</span> <span class="n">Vendor</span><span class="o">:</span> <span class="n">Advanced</span> <span class="n">Micro</span> <span class="n">Devices</span><span class="p">,</span> <span class="n">Inc.</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Compiling</span> <span class="n">OpenCL</span> <span class="n">Kernel</span> <span class="n">with</span> <span class="m">16</span> <span class="n">bins...</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">GPU</span> <span class="n">programs</span> <span class="n">have</span> <span class="n">been</span> <span class="n">built</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Size</span> <span class="n">of</span> <span class="n">histogram</span> <span class="n">bin</span> <span class="n">entry</span><span class="o">:</span> <span class="m">12</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="m">40</span> <span class="n">dense</span> <span class="n">feature</span> <span class="nf">groups </span><span class="p">(</span><span class="m">0.12</span> <span class="n">MB</span><span class="p">)</span> <span class="n">transferred</span> <span class="n">to</span> <span class="n">GPU</span> <span class="n">in</span> <span class="m">0.004211</span> <span class="n">secs.</span> <span class="m">76</span> <span class="n">sparse</span> <span class="n">feature</span> <span class="n">groups.</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">No</span> <span class="n">further</span> <span class="n">splits</span> <span class="n">with</span> <span class="n">positive</span> <span class="n">gain</span><span class="p">,</span> <span class="n">best</span> <span class="n">gain</span><span class="o">:</span> <span class="o">-</span><span class="n">inf</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Trained</span> <span class="n">a</span> <span class="n">tree</span> <span class="n">with</span> <span class="n">leaves</span><span class="o">=</span><span class="m">16</span> <span class="n">and</span> <span class="n">depth</span><span class="o">=</span><span class="m">8</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">:</span>    <span class="n">test</span><span class="s">&#39;s rmse:1.10643e-17</span>
+<span class="s">[LightGBM] [Info] No further splits with positive gain, best gain: -inf</span>
+<span class="s">[LightGBM] [Info] Trained a tree with leaves=7 and depth=5</span>
+<span class="s">[2]:    test&#39;</span><span class="n">s</span> <span class="n">rmse</span><span class="o">:</span><span class="m">0</span>
+</pre></div>
+</div>
+<p>Running on OpenCL CPU backend devices is in generally slow, and we observe crashes on some Windows and macOS systems. Make sure you check the <code class="docutils literal notranslate"><span class="pre">Using</span> <span class="pre">GPU</span> <span class="pre">Device</span></code> line in the log and it is not using a CPU. The above log shows that we are using <code class="docutils literal notranslate"><span class="pre">Oland</span></code> GPU from AMD and not CPU.</p>
+<p>Example of using CPU (<code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span> <span class="pre">=</span> <span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span> <span class="pre">=</span> <span class="pre">1</span></code>). The GPU device reported is <code class="docutils literal notranslate"><span class="pre">Intel(R)</span> <span class="pre">Core(TM)</span> <span class="pre">i7-4600U</span> <span class="pre">CPU</span></code>, so it is using the CPU backend rather than a real GPU.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="n">objective</span> <span class="o">=</span> <span class="s">&quot;regression&quot;</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">metric</span> <span class="o">=</span> <span class="s">&quot;rmse&quot;</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">device</span> <span class="o">=</span> <span class="s">&quot;gpu&quot;</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">gpu_platform_id</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">gpu_device_id</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">nthread</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">boost_from_average</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">num_tree_per_iteration</span> <span class="o">=</span> <span class="m">10</span><span class="p">,</span>
+<span class="o">+</span>                <span class="n">max_bin</span> <span class="o">=</span> <span class="m">32</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lgb.train</span><span class="p">(</span><span class="n">params</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">dtrain</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="m">2</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">valids</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">min_data</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span>
+<span class="o">+</span>                    <span class="n">early_stopping_rounds</span> <span class="o">=</span> <span class="m">10</span><span class="p">)</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">This</span> <span class="n">is</span> <span class="n">the</span> <span class="n">GPU</span> <span class="n">trainer</span><span class="o">!!</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Total</span> <span class="n">Bins</span> <span class="m">232</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">data</span><span class="o">:</span> <span class="m">6513</span><span class="p">,</span> <span class="n">number</span> <span class="n">of</span> <span class="n">used</span> <span class="n">features</span><span class="o">:</span> <span class="m">116</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Using</span> <span class="n">requested</span> <span class="n">OpenCL</span> <span class="n">platform</span> <span class="m">0</span> <span class="n">device</span> <span class="m">1</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Using</span> <span class="n">GPU</span> <span class="n">Device</span><span class="o">:</span> <span class="nf">Intel</span><span class="p">(</span><span class="n">R</span><span class="p">)</span> <span class="nf">Core</span><span class="p">(</span><span class="n">TM</span><span class="p">)</span> <span class="n">i7</span><span class="m">-4600</span><span class="n">U</span> <span class="n">CPU</span> <span class="o">@</span> <span class="m">2.10</span><span class="n">GHz</span><span class="p">,</span> <span class="n">Vendor</span><span class="o">:</span> <span class="n">GenuineIntel</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Compiling</span> <span class="n">OpenCL</span> <span class="n">Kernel</span> <span class="n">with</span> <span class="m">16</span> <span class="n">bins...</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">GPU</span> <span class="n">programs</span> <span class="n">have</span> <span class="n">been</span> <span class="n">built</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Size</span> <span class="n">of</span> <span class="n">histogram</span> <span class="n">bin</span> <span class="n">entry</span><span class="o">:</span> <span class="m">12</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="m">40</span> <span class="n">dense</span> <span class="n">feature</span> <span class="nf">groups </span><span class="p">(</span><span class="m">0.12</span> <span class="n">MB</span><span class="p">)</span> <span class="n">transferred</span> <span class="n">to</span> <span class="n">GPU</span> <span class="n">in</span> <span class="m">0.004540</span> <span class="n">secs.</span> <span class="m">76</span> <span class="n">sparse</span> <span class="n">feature</span> <span class="n">groups.</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">No</span> <span class="n">further</span> <span class="n">splits</span> <span class="n">with</span> <span class="n">positive</span> <span class="n">gain</span><span class="p">,</span> <span class="n">best</span> <span class="n">gain</span><span class="o">:</span> <span class="o">-</span><span class="n">inf</span>
+<span class="p">[</span><span class="n">LightGBM</span><span class="p">]</span> <span class="p">[</span><span class="n">Info</span><span class="p">]</span> <span class="n">Trained</span> <span class="n">a</span> <span class="n">tree</span> <span class="n">with</span> <span class="n">leaves</span><span class="o">=</span><span class="m">16</span> <span class="n">and</span> <span class="n">depth</span><span class="o">=</span><span class="m">8</span>
+<span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">:</span>    <span class="n">test</span><span class="s">&#39;s rmse:1.10643e-17</span>
+<span class="s">[LightGBM] [Info] No further splits with positive gain, best gain: -inf</span>
+<span class="s">[LightGBM] [Info] Trained a tree with leaves=7 and depth=5</span>
+<span class="s">[2]:    test&#39;</span><span class="n">s</span> <span class="n">rmse</span><span class="o">:</span><span class="m">0</span>
+</pre></div>
+</div>
+<p>Known issues:</p>
+<ul class="simple">
+<li><p>Using a bad combination of <code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span></code> and <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span></code> can potentially lead to a <strong>crash</strong> due to OpenCL driver issues on some machines (you will lose your entire session content). Beware of it.</p></li>
+<li><p>On some systems, if you have integrated graphics card (Intel HD Graphics) and a dedicated graphics card (AMD, NVIDIA), the dedicated graphics card will automatically override the integrated graphics card. The workaround is to disable your dedicated graphics card to be able to use your integrated graphics card.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="GPU-Performance.html" class="btn btn-neutral float-left" title="GPU Tuning Guide and Performance Comparison" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="GPU-Windows.html" class="btn btn-neutral float-right" title="GPU Windows Compilation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

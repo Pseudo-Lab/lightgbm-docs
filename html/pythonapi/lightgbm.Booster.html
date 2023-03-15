@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lightgbm.Booster &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="lightgbm.CVBooster" href="lightgbm.CVBooster.html" />
+    <link rel="prev" title="lightgbm.Dataset" href="lightgbm.Dataset.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C-API.html">C API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Python-API.html">Python API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Python-API.html#data-structure-api">Data Structure API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.Dataset.html">lightgbm.Dataset</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">lightgbm.Booster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.CVBooster.html">lightgbm.CVBooster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.Sequence.html">lightgbm.Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#training-api">Training API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#scikit-learn-api">Scikit-learn API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#dask-api">Dask API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#callbacks">Callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#plotting">Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../Python-API.html">Python API</a></li>
+      <li class="breadcrumb-item active">lightgbm.Booster</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/pythonapi/lightgbm.Booster.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lightgbm-booster">
+<h1>lightgbm.Booster<a class="headerlink" href="#lightgbm-booster" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lightgbm.Booster">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lightgbm.</span></span><span class="sig-name descname"><span class="pre">Booster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_set</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Booster in LightGBM.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_set</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_str</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize the Booster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Parameters for Booster.</p></li>
+<li><p><strong>train_set</strong> (<a class="reference internal" href="lightgbm.Dataset.html#lightgbm.Dataset" title="lightgbm.Dataset"><em>Dataset</em></a><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Training dataset.</p></li>
+<li><p><strong>model_file</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Path to the model file.</p></li>
+<li><p><strong>model_str</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Model will be loaded from this string.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether to print messages during construction.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.__init__" title="lightgbm.Booster.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([params, train_set, model_file, ...])</p></td>
+<td><p>Initialize the Booster.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.add_valid" title="lightgbm.Booster.add_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_valid</span></code></a>(data, name)</p></td>
+<td><p>Add validation data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.attr" title="lightgbm.Booster.attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">attr</span></code></a>(key)</p></td>
+<td><p>Get attribute string from the Booster.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.current_iteration" title="lightgbm.Booster.current_iteration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">current_iteration</span></code></a>()</p></td>
+<td><p>Get the index of the current iteration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.dump_model" title="lightgbm.Booster.dump_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump_model</span></code></a>([num_iteration, start_iteration, ...])</p></td>
+<td><p>Dump Booster to JSON format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.eval" title="lightgbm.Booster.eval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval</span></code></a>(data, name[, feval])</p></td>
+<td><p>Evaluate for data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.eval_train" title="lightgbm.Booster.eval_train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_train</span></code></a>([feval])</p></td>
+<td><p>Evaluate for training data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.eval_valid" title="lightgbm.Booster.eval_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_valid</span></code></a>([feval])</p></td>
+<td><p>Evaluate for validation data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.feature_importance" title="lightgbm.Booster.feature_importance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_importance</span></code></a>([importance_type, iteration])</p></td>
+<td><p>Get feature importances.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.feature_name" title="lightgbm.Booster.feature_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_name</span></code></a>()</p></td>
+<td><p>Get names of features.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.free_dataset" title="lightgbm.Booster.free_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">free_dataset</span></code></a>()</p></td>
+<td><p>Free Booster's Datasets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.free_network" title="lightgbm.Booster.free_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">free_network</span></code></a>()</p></td>
+<td><p>Free Booster's network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.get_leaf_output" title="lightgbm.Booster.get_leaf_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_leaf_output</span></code></a>(tree_id, leaf_id)</p></td>
+<td><p>Get the output of a leaf.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.get_split_value_histogram" title="lightgbm.Booster.get_split_value_histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_split_value_histogram</span></code></a>(feature[, bins, ...])</p></td>
+<td><p>Get split value histogram for the specified feature.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.lower_bound" title="lightgbm.Booster.lower_bound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lower_bound</span></code></a>()</p></td>
+<td><p>Get lower bound value of a model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.model_from_string" title="lightgbm.Booster.model_from_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_from_string</span></code></a>(model_str[, verbose])</p></td>
+<td><p>Load Booster from a string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.model_to_string" title="lightgbm.Booster.model_to_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_to_string</span></code></a>([num_iteration, ...])</p></td>
+<td><p>Save Booster to string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.num_feature" title="lightgbm.Booster.num_feature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_feature</span></code></a>()</p></td>
+<td><p>Get number of features.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.num_model_per_iteration" title="lightgbm.Booster.num_model_per_iteration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_model_per_iteration</span></code></a>()</p></td>
+<td><p>Get number of models per iteration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.num_trees" title="lightgbm.Booster.num_trees"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_trees</span></code></a>()</p></td>
+<td><p>Get number of weak sub-models.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.predict" title="lightgbm.Booster.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(data[, start_iteration, ...])</p></td>
+<td><p>Make a prediction.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.refit" title="lightgbm.Booster.refit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refit</span></code></a>(data, label[, decay_rate])</p></td>
+<td><p>Refit the existing Booster by new data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.reset_parameter" title="lightgbm.Booster.reset_parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_parameter</span></code></a>(params)</p></td>
+<td><p>Reset parameters of Booster.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.rollback_one_iter" title="lightgbm.Booster.rollback_one_iter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rollback_one_iter</span></code></a>()</p></td>
+<td><p>Rollback one iteration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.save_model" title="lightgbm.Booster.save_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_model</span></code></a>(filename[, num_iteration, ...])</p></td>
+<td><p>Save Booster to file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.set_attr" title="lightgbm.Booster.set_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_attr</span></code></a>(**kwargs)</p></td>
+<td><p>Set attributes to the Booster.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.set_network" title="lightgbm.Booster.set_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_network</span></code></a>(machines[, local_listen_port, ...])</p></td>
+<td><p>Set the network configuration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.set_train_data_name" title="lightgbm.Booster.set_train_data_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_train_data_name</span></code></a>(name)</p></td>
+<td><p>Set the name to the training Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.shuffle_models" title="lightgbm.Booster.shuffle_models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shuffle_models</span></code></a>([start_iteration, end_iteration])</p></td>
+<td><p>Shuffle models.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.trees_to_dataframe" title="lightgbm.Booster.trees_to_dataframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trees_to_dataframe</span></code></a>()</p></td>
+<td><p>Parse the fitted model and return in an easy-to-read pandas DataFrame.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Booster.update" title="lightgbm.Booster.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>([train_set, fobj])</p></td>
+<td><p>Update Booster for one iteration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Booster.upper_bound" title="lightgbm.Booster.upper_bound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upper_bound</span></code></a>()</p></td>
+<td><p>Get upper bound value of a model.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.add_valid">
+<span class="sig-name descname"><span class="pre">add_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.add_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.add_valid" title="Permalink to this definition"></a></dt>
+<dd><p>Add validation data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="lightgbm.Dataset.html#lightgbm.Dataset" title="lightgbm.Dataset"><em>Dataset</em></a>) – Validation data.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of validation data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Booster with set validation data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.attr">
+<span class="sig-name descname"><span class="pre">attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.attr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.attr" title="Permalink to this definition"></a></dt>
+<dd><p>Get attribute string from the Booster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – The name of the attribute.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>value</strong> – The attribute value.
+Returns None if attribute does not exist.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.current_iteration">
+<span class="sig-name descname"><span class="pre">current_iteration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.current_iteration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.current_iteration" title="Permalink to this definition"></a></dt>
+<dd><p>Get the index of the current iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cur_iter</strong> – The index of the current iteration.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.dump_model">
+<span class="sig-name descname"><span class="pre">dump_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'split'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_hook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.dump_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.dump_model" title="Permalink to this definition"></a></dt>
+<dd><p>Dump Booster to JSON format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_iteration</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Index of the iteration that should be dumped.
+If None, if the best iteration exists, it is dumped; otherwise, all iterations are dumped.
+If &lt;= 0, all iterations are dumped.</p></li>
+<li><p><strong>start_iteration</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – Start index of the iteration that should be dumped.</p></li>
+<li><p><strong>importance_type</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;split&quot;</em><em>)</em>) – What type of feature importance should be dumped.
+If “split”, result contains numbers of times the feature is used in a model.
+If “gain”, result contains total gains of splits which use the feature.</p></li>
+<li><p><strong>object_hook</strong> (<em>callable</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If not None, <code class="docutils literal notranslate"><span class="pre">object_hook</span></code> is a function called while parsing the json
+string returned by the C API. It may be used to alter the json, to store
+specific values while building the json structure. It avoids
+walking through the structure again. It saves a significant amount
+of time if the number of trees is huge.
+Signature is <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">object_hook(node:</span> <span class="pre">dict)</span> <span class="pre">-&gt;</span> <span class="pre">dict</span></code>.
+None is equivalent to <code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">node:</span> <span class="pre">node</span></code>.
+See documentation of <code class="docutils literal notranslate"><span class="pre">json.loads()</span></code> for further details.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>json_repr</strong> – JSON format of Booster.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.eval" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate for data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="lightgbm.Dataset.html#lightgbm.Dataset" title="lightgbm.Dataset"><em>Dataset</em></a>) – Data for the evaluating.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the data.</p></li>
+<li><p><strong>feval</strong> (<em>callable</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Customized evaluation function.
+Should accept two parameters: preds, eval_data,
+and return (eval_name, eval_result, is_higher_better) or list of such tuples.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>preds<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The predicted values.
+If <code class="docutils literal notranslate"><span class="pre">fobj</span></code> is specified, predicted values are returned before any transformation,
+e.g. they are raw margin instead of probability of positive class for binary task in this case.</p>
+</dd>
+<dt>eval_data<span class="classifier">Dataset</span></dt><dd><p>The evaluation dataset.</p>
+</dd>
+<dt>eval_name<span class="classifier">str</span></dt><dd><p>The name of evaluation function (without whitespace).</p>
+</dd>
+<dt>eval_result<span class="classifier">float</span></dt><dd><p>The eval result.</p>
+</dd>
+<dt>is_higher_better<span class="classifier">bool</span></dt><dd><p>Is eval result higher better, e.g. AUC is <code class="docutils literal notranslate"><span class="pre">is_higher_better</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>For multi-class task, the preds is group by class_id first, then group by row_id.
+If you want to get i-th row preds in j-th class, the access way is preds[j * num_data + i].</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong> – List with evaluation results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.eval_train">
+<span class="sig-name descname"><span class="pre">eval_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.eval_train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.eval_train" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate for training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feval</strong> (<em>callable</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Customized evaluation function.
+Should accept two parameters: preds, train_data,
+and return (eval_name, eval_result, is_higher_better) or list of such tuples.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>preds<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The predicted values.
+If <code class="docutils literal notranslate"><span class="pre">fobj</span></code> is specified, predicted values are returned before any transformation,
+e.g. they are raw margin instead of probability of positive class for binary task in this case.</p>
+</dd>
+<dt>train_data<span class="classifier">Dataset</span></dt><dd><p>The training dataset.</p>
+</dd>
+<dt>eval_name<span class="classifier">str</span></dt><dd><p>The name of evaluation function (without whitespace).</p>
+</dd>
+<dt>eval_result<span class="classifier">float</span></dt><dd><p>The eval result.</p>
+</dd>
+<dt>is_higher_better<span class="classifier">bool</span></dt><dd><p>Is eval result higher better, e.g. AUC is <code class="docutils literal notranslate"><span class="pre">is_higher_better</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>For multi-class task, the preds is group by class_id first, then group by row_id.
+If you want to get i-th row preds in j-th class, the access way is preds[j * num_data + i].</p>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong> – List with evaluation results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.eval_valid">
+<span class="sig-name descname"><span class="pre">eval_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.eval_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.eval_valid" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate for validation data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feval</strong> (<em>callable</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Customized evaluation function.
+Should accept two parameters: preds, valid_data,
+and return (eval_name, eval_result, is_higher_better) or list of such tuples.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>preds<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The predicted values.
+If <code class="docutils literal notranslate"><span class="pre">fobj</span></code> is specified, predicted values are returned before any transformation,
+e.g. they are raw margin instead of probability of positive class for binary task in this case.</p>
+</dd>
+<dt>valid_data<span class="classifier">Dataset</span></dt><dd><p>The validation dataset.</p>
+</dd>
+<dt>eval_name<span class="classifier">str</span></dt><dd><p>The name of evaluation function (without whitespace).</p>
+</dd>
+<dt>eval_result<span class="classifier">float</span></dt><dd><p>The eval result.</p>
+</dd>
+<dt>is_higher_better<span class="classifier">bool</span></dt><dd><p>Is eval result higher better, e.g. AUC is <code class="docutils literal notranslate"><span class="pre">is_higher_better</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>For multi-class task, the preds is group by class_id first, then group by row_id.
+If you want to get i-th row preds in j-th class, the access way is preds[j * num_data + i].</p>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong> – List with evaluation results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.feature_importance">
+<span class="sig-name descname"><span class="pre">feature_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'split'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.feature_importance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.feature_importance" title="Permalink to this definition"></a></dt>
+<dd><p>Get feature importances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>importance_type</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;split&quot;</em><em>)</em>) – How the importance is calculated.
+If “split”, result contains numbers of times the feature is used in a model.
+If “gain”, result contains total gains of splits which use the feature.</p></li>
+<li><p><strong>iteration</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Limit number of iterations in the feature importance calculation.
+If None, if the best iteration exists, it is used; otherwise, all trees are used.
+If &lt;= 0, all trees are used (no limits).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong> – Array with feature importances.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.feature_name">
+<span class="sig-name descname"><span class="pre">feature_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.feature_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.feature_name" title="Permalink to this definition"></a></dt>
+<dd><p>Get names of features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>result</strong> – List with names of features.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.free_dataset">
+<span class="sig-name descname"><span class="pre">free_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.free_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.free_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Free Booster’s Datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self</strong> – Booster without Datasets.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.free_network">
+<span class="sig-name descname"><span class="pre">free_network</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.free_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.free_network" title="Permalink to this definition"></a></dt>
+<dd><p>Free Booster’s network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self</strong> – Booster with freed network.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.get_leaf_output">
+<span class="sig-name descname"><span class="pre">get_leaf_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.get_leaf_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.get_leaf_output" title="Permalink to this definition"></a></dt>
+<dd><p>Get the output of a leaf.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tree_id</strong> (<em>int</em>) – The index of the tree.</p></li>
+<li><p><strong>leaf_id</strong> (<em>int</em>) – The index of the leaf in the tree.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong> – The output of the leaf.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.get_split_value_histogram">
+<span class="sig-name descname"><span class="pre">get_split_value_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xgboost_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.get_split_value_histogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.get_split_value_histogram" title="Permalink to this definition"></a></dt>
+<dd><p>Get split value histogram for the specified feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature</strong> (<em>int</em><em> or </em><em>str</em>) – <p>The feature name or index the histogram is calculated for.
+If int, interpreted as index.
+If str, interpreted as name.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Categorical features are not supported.</p>
+</div>
+</p></li>
+<li><p><strong>bins</strong> (<em>int</em><em>, </em><em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – The maximum number of bins.
+If None, or int and &gt; number of unique split values and <code class="docutils literal notranslate"><span class="pre">xgboost_style=True</span></code>,
+the number of bins equals number of unique split values.
+If str, it should be one from the list of the supported values by <code class="docutils literal notranslate"><span class="pre">numpy.histogram()</span></code> function.</p></li>
+<li><p><strong>xgboost_style</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether the returned result should be in the same form as it is in XGBoost.
+If False, the returned value is tuple of 2 numpy arrays as it is in <code class="docutils literal notranslate"><span class="pre">numpy.histogram()</span></code> function.
+If True, the returned value is matrix, in which the first column is the right edges of non-empty bins
+and the second one is the histogram values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>result_tuple</strong> (<em>tuple of 2 numpy arrays</em>) – If <code class="docutils literal notranslate"><span class="pre">xgboost_style=False</span></code>, the values of the histogram of used splitting values for the specified feature
+and the bin edges.</p></li>
+<li><p><strong>result_array_like</strong> (<em>numpy array or pandas DataFrame (if pandas is installed)</em>) – If <code class="docutils literal notranslate"><span class="pre">xgboost_style=True</span></code>, the histogram of used splitting values for the specified feature.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.lower_bound">
+<span class="sig-name descname"><span class="pre">lower_bound</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.lower_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.lower_bound" title="Permalink to this definition"></a></dt>
+<dd><p>Get lower bound value of a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lower_bound</strong> – Lower bound value of the model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.model_from_string">
+<span class="sig-name descname"><span class="pre">model_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.model_from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.model_from_string" title="Permalink to this definition"></a></dt>
+<dd><p>Load Booster from a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_str</strong> (<em>str</em>) – Model will be loaded from this string.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Whether to print messages while loading model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Loaded Booster object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.model_to_string">
+<span class="sig-name descname"><span class="pre">model_to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'split'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.model_to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.model_to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Save Booster to string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_iteration</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Index of the iteration that should be saved.
+If None, if the best iteration exists, it is saved; otherwise, all iterations are saved.
+If &lt;= 0, all iterations are saved.</p></li>
+<li><p><strong>start_iteration</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – Start index of the iteration that should be saved.</p></li>
+<li><p><strong>importance_type</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;split&quot;</em><em>)</em>) – What type of feature importance should be saved.
+If “split”, result contains numbers of times the feature is used in a model.
+If “gain”, result contains total gains of splits which use the feature.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>str_repr</strong> – String representation of Booster.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.num_feature">
+<span class="sig-name descname"><span class="pre">num_feature</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.num_feature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.num_feature" title="Permalink to this definition"></a></dt>
+<dd><p>Get number of features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num_feature</strong> – The number of features.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.num_model_per_iteration">
+<span class="sig-name descname"><span class="pre">num_model_per_iteration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.num_model_per_iteration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.num_model_per_iteration" title="Permalink to this definition"></a></dt>
+<dd><p>Get number of models per iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model_per_iter</strong> – The number of models per iteration.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.num_trees">
+<span class="sig-name descname"><span class="pre">num_trees</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.num_trees"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.num_trees" title="Permalink to this definition"></a></dt>
+<dd><p>Get number of weak sub-models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num_trees</strong> – The number of weak sub-models.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred_contrib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_has_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_reshape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.predict" title="Permalink to this definition"></a></dt>
+<dd><p>Make a prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, </em><em>numpy array</em><em>, </em><em>pandas DataFrame</em><em>, </em><em>H2O DataTable's Frame</em><em> or </em><em>scipy.sparse</em>) – Data source for prediction.
+If str or pathlib.Path, it represents the path to a text file (CSV, TSV, or LibSVM).</p></li>
+<li><p><strong>start_iteration</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – Start index of the iteration to predict.
+If &lt;= 0, starts from the first iteration.</p></li>
+<li><p><strong>num_iteration</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Total number of iterations used in the prediction.
+If None, if the best iteration exists and start_iteration &lt;= 0, the best iteration is used;
+otherwise, all iterations from <code class="docutils literal notranslate"><span class="pre">start_iteration</span></code> are used (no limits).
+If &lt;= 0, all iterations from <code class="docutils literal notranslate"><span class="pre">start_iteration</span></code> are used (no limits).</p></li>
+<li><p><strong>raw_score</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether to predict raw scores.</p></li>
+<li><p><strong>pred_leaf</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether to predict leaf index.</p></li>
+<li><p><strong>pred_contrib</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – <p>Whether to predict feature contributions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to get more explanations for your model’s predictions using SHAP values,
+like SHAP interaction values,
+you can install the shap package (<a class="reference external" href="https://github.com/slundberg/shap">https://github.com/slundberg/shap</a>).
+Note that unlike the shap package, with <code class="docutils literal notranslate"><span class="pre">pred_contrib</span></code> we return a matrix with an extra
+column, where the last column is the expected value.</p>
+</div>
+</p></li>
+<li><p><strong>data_has_header</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether the data has header.
+Used only if data is str.</p></li>
+<li><p><strong>is_reshape</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – If True, result is reshaped to [nrow, ncol].</p></li>
+<li><p><strong>**kwargs</strong> – Other parameters for the prediction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong> – Prediction result.
+Can be sparse or a list of sparse objects (each element represents predictions for one class) for feature contributions (when <code class="docutils literal notranslate"><span class="pre">pred_contrib=True</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array, scipy.sparse or list of scipy.sparse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.refit">
+<span class="sig-name descname"><span class="pre">refit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.refit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.refit" title="Permalink to this definition"></a></dt>
+<dd><p>Refit the existing Booster by new data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, </em><em>numpy array</em><em>, </em><em>pandas DataFrame</em><em>, </em><em>H2O DataTable's Frame</em><em> or </em><em>scipy.sparse</em>) – Data source for refit.
+If str or pathlib.Path, it represents the path to a text file (CSV, TSV, or LibSVM).</p></li>
+<li><p><strong>label</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em> or </em><em>pandas Series / one-column DataFrame</em>) – Label for refit.</p></li>
+<li><p><strong>decay_rate</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.9</em><em>)</em>) – Decay rate of refit,
+will use <code class="docutils literal notranslate"><span class="pre">leaf_output</span> <span class="pre">=</span> <span class="pre">decay_rate</span> <span class="pre">*</span> <span class="pre">old_leaf_output</span> <span class="pre">+</span> <span class="pre">(1.0</span> <span class="pre">-</span> <span class="pre">decay_rate)</span> <span class="pre">*</span> <span class="pre">new_leaf_output</span></code> to refit trees.</p></li>
+<li><p><strong>**kwargs</strong> – Other parameters for refit.
+These parameters will be passed to <code class="docutils literal notranslate"><span class="pre">predict</span></code> method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong> – Refitted Booster.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.reset_parameter">
+<span class="sig-name descname"><span class="pre">reset_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.reset_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.reset_parameter" title="Permalink to this definition"></a></dt>
+<dd><p>Reset parameters of Booster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>dict</em>) – New parameters for Booster.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Booster with new parameters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.rollback_one_iter">
+<span class="sig-name descname"><span class="pre">rollback_one_iter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.rollback_one_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.rollback_one_iter" title="Permalink to this definition"></a></dt>
+<dd><p>Rollback one iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self</strong> – Booster with rolled back one iteration.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'split'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.save_model" title="Permalink to this definition"></a></dt>
+<dd><p>Save Booster to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Filename to save Booster.</p></li>
+<li><p><strong>num_iteration</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Index of the iteration that should be saved.
+If None, if the best iteration exists, it is saved; otherwise, all iterations are saved.
+If &lt;= 0, all iterations are saved.</p></li>
+<li><p><strong>start_iteration</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – Start index of the iteration that should be saved.</p></li>
+<li><p><strong>importance_type</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;split&quot;</em><em>)</em>) – What type of feature importance should be saved.
+If “split”, result contains numbers of times the feature is used in a model.
+If “gain”, result contains total gains of splits which use the feature.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Returns self.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.set_attr">
+<span class="sig-name descname"><span class="pre">set_attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.set_attr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.set_attr" title="Permalink to this definition"></a></dt>
+<dd><p>Set attributes to the Booster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – The attributes to set.
+Setting a value to None deletes an attribute.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Booster with set attributes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.set_network">
+<span class="sig-name descname"><span class="pre">set_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_listen_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listen_time_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_machines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.set_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.set_network" title="Permalink to this definition"></a></dt>
+<dd><p>Set the network configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machines</strong> (<em>list</em><em>, </em><em>set</em><em> or </em><em>str</em>) – Names of machines.</p></li>
+<li><p><strong>local_listen_port</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=12400</em><em>)</em>) – TCP listen port for local machines.</p></li>
+<li><p><strong>listen_time_out</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=120</em><em>)</em>) – Socket time-out in minutes.</p></li>
+<li><p><strong>num_machines</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=1</em><em>)</em>) – The number of machines for distributed learning application.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Booster with set network.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.set_train_data_name">
+<span class="sig-name descname"><span class="pre">set_train_data_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.set_train_data_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.set_train_data_name" title="Permalink to this definition"></a></dt>
+<dd><p>Set the name to the training Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name for the training Dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Booster with set training Dataset name.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.shuffle_models">
+<span class="sig-name descname"><span class="pre">shuffle_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_iteration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.shuffle_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.shuffle_models" title="Permalink to this definition"></a></dt>
+<dd><p>Shuffle models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_iteration</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – The first iteration that will be shuffled.</p></li>
+<li><p><strong>end_iteration</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=-1</em><em>)</em>) – The last iteration that will be shuffled.
+If &lt;= 0, means the last available iteration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Booster with shuffled models.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.trees_to_dataframe">
+<span class="sig-name descname"><span class="pre">trees_to_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.trees_to_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.trees_to_dataframe" title="Permalink to this definition"></a></dt>
+<dd><p>Parse the fitted model and return in an easy-to-read pandas DataFrame.</p>
+<p>The returned DataFrame has the following columns.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tree_index</span></code> : int64, which tree a node belongs to. 0-based, so a value of <code class="docutils literal notranslate"><span class="pre">6</span></code>, for example, means “this node is in the 7th tree”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">node_depth</span></code> : int64, how far a node is from the root of the tree. The root node has a value of <code class="docutils literal notranslate"><span class="pre">1</span></code>, its direct children are <code class="docutils literal notranslate"><span class="pre">2</span></code>, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">node_index</span></code> : str, unique identifier for a node.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">left_child</span></code> : str, <code class="docutils literal notranslate"><span class="pre">node_index</span></code> of the child node to the left of a split. <code class="docutils literal notranslate"><span class="pre">None</span></code> for leaf nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">right_child</span></code> : str, <code class="docutils literal notranslate"><span class="pre">node_index</span></code> of the child node to the right of a split. <code class="docutils literal notranslate"><span class="pre">None</span></code> for leaf nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parent_index</span></code> : str, <code class="docutils literal notranslate"><span class="pre">node_index</span></code> of this node’s parent. <code class="docutils literal notranslate"><span class="pre">None</span></code> for the root node.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">split_feature</span></code> : str, name of the feature used for splitting. <code class="docutils literal notranslate"><span class="pre">None</span></code> for leaf nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">split_gain</span></code> : float64, gain from adding this split to the tree. <code class="docutils literal notranslate"><span class="pre">NaN</span></code> for leaf nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">threshold</span></code> : float64, value of the feature used to decide which side of the split a record will go down. <code class="docutils literal notranslate"><span class="pre">NaN</span></code> for leaf nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">decision_type</span></code> : str, logical operator describing how to compare a value to <code class="docutils literal notranslate"><span class="pre">threshold</span></code>.
+For example, <code class="docutils literal notranslate"><span class="pre">split_feature</span> <span class="pre">=</span> <span class="pre">&quot;Column_10&quot;,</span> <span class="pre">threshold</span> <span class="pre">=</span> <span class="pre">15,</span> <span class="pre">decision_type</span> <span class="pre">=</span> <span class="pre">&quot;&lt;=&quot;</span></code> means that
+records where <code class="docutils literal notranslate"><span class="pre">Column_10</span> <span class="pre">&lt;=</span> <span class="pre">15</span></code> follow the left side of the split, otherwise follows the right side of the split. <code class="docutils literal notranslate"><span class="pre">None</span></code> for leaf nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">missing_direction</span></code> : str, split direction that missing values should go to. <code class="docutils literal notranslate"><span class="pre">None</span></code> for leaf nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">missing_type</span></code> : str, describes what types of values are treated as missing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> : float64, predicted value for this leaf node, multiplied by the learning rate.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weight</span></code> : float64 or int64, sum of hessian (second-order derivative of objective), summed over observations that fall in this node.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">count</span></code> : int64, number of records in the training data that fall into this node.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>result</strong> – Returns a pandas DataFrame of the parsed model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_set</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fobj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.update" title="Permalink to this definition"></a></dt>
+<dd><p>Update Booster for one iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_set</strong> (<a class="reference internal" href="lightgbm.Dataset.html#lightgbm.Dataset" title="lightgbm.Dataset"><em>Dataset</em></a><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Training data.
+If None, last training data is used.</p></li>
+<li><p><strong>fobj</strong> (<em>callable</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Customized objective function.
+Should accept two parameters: preds, train_data,
+and return (grad, hess).</p>
+<blockquote>
+<div><dl class="simple">
+<dt>preds<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The predicted values.
+Predicted values are returned before any transformation,
+e.g. they are raw margin instead of probability of positive class for binary task.</p>
+</dd>
+<dt>train_data<span class="classifier">Dataset</span></dt><dd><p>The training dataset.</p>
+</dd>
+<dt>grad<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The value of the first order derivative (gradient) of the loss
+with respect to the elements of preds for each sample point.</p>
+</dd>
+<dt>hess<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The value of the second order derivative (Hessian) of the loss
+with respect to the elements of preds for each sample point.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>For multi-class task, the preds is group by class_id first, then group by row_id.
+If you want to get i-th row preds in j-th class, the access way is score[j * num_data + i]
+and you should group grad and hess in this way as well.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>is_finished</strong> – Whether the update was successfully finished.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Booster.upper_bound">
+<span class="sig-name descname"><span class="pre">upper_bound</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Booster.upper_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Booster.upper_bound" title="Permalink to this definition"></a></dt>
+<dd><p>Get upper bound value of a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>upper_bound</strong> – Upper bound value of the model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lightgbm.Dataset.html" class="btn btn-neutral float-left" title="lightgbm.Dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lightgbm.CVBooster.html" class="btn btn-neutral float-right" title="lightgbm.CVBooster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

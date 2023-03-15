@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiments &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters" href="Parameters.html" />
+    <link rel="prev" title="Features" href="Features.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Experiments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#comparison-experiment">Comparison Experiment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#history">History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment">Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#baseline">Baseline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#settings">Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#result">Result</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#speed">Speed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#accuracy">Accuracy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#memory-consumption">Memory Consumption</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#parallel-experiment">Parallel Experiment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">History</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#results">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gpu-experiments">GPU Experiments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Experiments</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Experiments.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="experiments">
+<h1>Experiments<a class="headerlink" href="#experiments" title="Permalink to this heading"></a></h1>
+<section id="comparison-experiment">
+<h2>Comparison Experiment<a class="headerlink" href="#comparison-experiment" title="Permalink to this heading"></a></h2>
+<p>For the detailed experiment scripts and output logs, please refer to this <a class="reference external" href="https://github.com/guolinke/boosting_tree_benchmarks">repo</a>.</p>
+<section id="history">
+<h3>History<a class="headerlink" href="#history" title="Permalink to this heading"></a></h3>
+<p>08 Mar, 2020: update according to the latest master branch (<a class="reference external" href="https://github.com/dmlc/xgboost/commit/1b97eaf7a74315bfa2c132d59f937a35408bcfd1">1b97eaf</a> for XGBoost, <a class="reference external" href="https://github.com/microsoft/LightGBM/commit/bcad692e263e0317cab11032dd017c78f9e58e5f">bcad692</a> for LightGBM). (<code class="docutils literal notranslate"><span class="pre">xgboost_exact</span></code> is not updated for it is too slow.)</p>
+<p>27 Feb, 2017: first version.</p>
+</section>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Permalink to this heading"></a></h3>
+<p>We used 5 datasets to conduct our comparison experiments. Details of data are listed in the following table:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Data</p></th>
+<th class="head"><p>Task</p></th>
+<th class="head"><p>Link</p></th>
+<th class="head"><p>#Train_Set</p></th>
+<th class="head"><p>#Feature</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Higgs</p></td>
+<td><p>Binary classification</p></td>
+<td><p><a class="reference external" href="https://archive.ics.uci.edu/ml/datasets/HIGGS">link</a></p></td>
+<td><p>10,500,000</p></td>
+<td><p>28</p></td>
+<td><p>last 500,000 samples were used as test set</p></td>
+</tr>
+<tr class="row-odd"><td><p>Yahoo LTR</p></td>
+<td><p>Learning to rank</p></td>
+<td><p><a class="reference external" href="https://webscope.sandbox.yahoo.com/catalog.php?datatype=c">link</a></p></td>
+<td><p>473,134</p></td>
+<td><p>700</p></td>
+<td><p>set1.train as train, set1.test as test</p></td>
+</tr>
+<tr class="row-even"><td><p>MS LTR</p></td>
+<td><p>Learning to rank</p></td>
+<td><p><a class="reference external" href="http://research.microsoft.com/en-us/projects/mslr/">link</a></p></td>
+<td><p>2,270,296</p></td>
+<td><p>137</p></td>
+<td><p>{S1,S2,S3} as train set, {S5} as test set</p></td>
+</tr>
+<tr class="row-odd"><td><p>Expo</p></td>
+<td><p>Binary classification</p></td>
+<td><p><a class="reference external" href="http://stat-computing.org/dataexpo/2009/">link</a></p></td>
+<td><p>11,000,000</p></td>
+<td><p>700</p></td>
+<td><p>last 1,000,000 samples were used as test set</p></td>
+</tr>
+<tr class="row-even"><td><p>Allstate</p></td>
+<td><p>Binary classification</p></td>
+<td><p><a class="reference external" href="https://www.kaggle.com/c/ClaimPredictionChallenge">link</a></p></td>
+<td><p>13,184,290</p></td>
+<td><p>4228</p></td>
+<td><p>last 1,000,000 samples were used as test set</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="environment">
+<h3>Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h3>
+<p>We ran all experiments on a single Linux server (Azure ND24s) with the following specifications:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>OS</p></th>
+<th class="head"><p>CPU</p></th>
+<th class="head"><p>Memory</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ubuntu 16.04 LTS</p></td>
+<td><p>2 * E5-2690 v4</p></td>
+<td><p>448GB</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="baseline">
+<h3>Baseline<a class="headerlink" href="#baseline" title="Permalink to this heading"></a></h3>
+<p>We used <a class="reference external" href="https://github.com/dmlc/xgboost">xgboost</a> as a baseline.</p>
+<p>Both xgboost and LightGBM were built with OpenMP support.</p>
+</section>
+<section id="settings">
+<h3>Settings<a class="headerlink" href="#settings" title="Permalink to this heading"></a></h3>
+<p>We set up total 3 settings for experiments. The parameters of these settings are:</p>
+<ol class="arabic">
+<li><p>xgboost:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eta</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">max_depth</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">num_round</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">nthread</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">tree_method</span> <span class="o">=</span> <span class="n">exact</span>
+<span class="n">min_child_weight</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</li>
+<li><p>xgboost_hist (using histogram based algorithm):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eta</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">num_round</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">nthread</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">min_child_weight</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">tree_method</span> <span class="o">=</span> <span class="n">hist</span>
+<span class="n">grow_policy</span> <span class="o">=</span> <span class="n">lossguide</span>
+<span class="n">max_depth</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">max_leaves</span> <span class="o">=</span> <span class="mi">255</span>
+</pre></div>
+</div>
+</li>
+<li><p>LightGBM:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">num_leaves</span> <span class="o">=</span> <span class="mi">255</span>
+<span class="n">num_trees</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">num_threads</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">min_data_in_leaf</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">min_sum_hessian_in_leaf</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>xgboost grows trees depth-wise and controls model complexity by <code class="docutils literal notranslate"><span class="pre">max_depth</span></code>.
+LightGBM uses a leaf-wise algorithm instead and controls model complexity by <code class="docutils literal notranslate"><span class="pre">num_leaves</span></code>.
+So we cannot compare them in the exact same model setting. For the tradeoff, we use xgboost with <code class="docutils literal notranslate"><span class="pre">max_depth=8</span></code>, which will have max number leaves to 255, to compare with LightGBM with <code class="docutils literal notranslate"><span class="pre">num_leaves=255</span></code>.</p>
+<p>Other parameters are default values.</p>
+</section>
+<section id="result">
+<h3>Result<a class="headerlink" href="#result" title="Permalink to this heading"></a></h3>
+<section id="speed">
+<h4>Speed<a class="headerlink" href="#speed" title="Permalink to this heading"></a></h4>
+<p>We compared speed using only the training task without any test or metric output. We didn’t count the time for IO.
+For the ranking tasks, since XGBoost and LightGBM implement different ranking objective functions, we used <code class="docutils literal notranslate"><span class="pre">regression</span></code> objective for speed benchmark, for the fair comparison.</p>
+<p>The following table is the comparison of time cost:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Data</p></th>
+<th class="head"><p>xgboost</p></th>
+<th class="head"><p>xgboost_hist</p></th>
+<th class="head"><p>LightGBM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Higgs</p></td>
+<td><p>3794.34 s</p></td>
+<td><p>165.575 s</p></td>
+<td><p><strong>130.094 s</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Yahoo LTR</p></td>
+<td><p>674.322 s</p></td>
+<td><p>131.462 s</p></td>
+<td><p><strong>76.229 s</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>MS LTR</p></td>
+<td><p>1251.27 s</p></td>
+<td><p>98.386 s</p></td>
+<td><p><strong>70.417 s</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Expo</p></td>
+<td><p>1607.35 s</p></td>
+<td><p>137.65 s</p></td>
+<td><p><strong>62.607 s</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>Allstate</p></td>
+<td><p>2867.22 s</p></td>
+<td><p>315.256 s</p></td>
+<td><p><strong>148.231 s</strong></p></td>
+</tr>
+</tbody>
+</table>
+<p>LightGBM ran faster than xgboost on all experiment data sets.</p>
+</section>
+<section id="accuracy">
+<h4>Accuracy<a class="headerlink" href="#accuracy" title="Permalink to this heading"></a></h4>
+<p>We computed all accuracy metrics only on the test data set.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Data</p></th>
+<th class="head"><p>Metric</p></th>
+<th class="head"><p>xgboost</p></th>
+<th class="head"><p>xgboost_hist</p></th>
+<th class="head"><p>LightGBM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Higgs</p></td>
+<td><p>AUC</p></td>
+<td><p>0.839593</p></td>
+<td><p>0.845314</p></td>
+<td><p><strong>0.845724</strong></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>Yahoo LTR</p></td>
+<td><p>NDCG<sub>1</sub></p></td>
+<td><p>0.719748</p></td>
+<td><p>0.720049</p></td>
+<td><p><strong>0.732981</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>NDCG<sub>3</sub></p></td>
+<td><p>0.717813</p></td>
+<td><p>0.722573</p></td>
+<td><p><strong>0.735689</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>NDCG<sub>5</sub></p></td>
+<td><p>0.737849</p></td>
+<td><p>0.740899</p></td>
+<td><p><strong>0.75352</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>NDCG<sub>10</sub></p></td>
+<td><p>0.78089</p></td>
+<td><p>0.782957</p></td>
+<td><p><strong>0.793498</strong></p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>MS LTR</p></td>
+<td><p>NDCG<sub>1</sub></p></td>
+<td><p>0.483956</p></td>
+<td><p>0.485115</p></td>
+<td><p><strong>0.517767</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>NDCG<sub>3</sub></p></td>
+<td><p>0.467951</p></td>
+<td><p>0.47313</p></td>
+<td><p><strong>0.501063</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>NDCG<sub>5</sub></p></td>
+<td><p>0.472476</p></td>
+<td><p>0.476375</p></td>
+<td><p><strong>0.504648</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>NDCG<sub>10</sub></p></td>
+<td><p>0.492429</p></td>
+<td><p>0.496553</p></td>
+<td><p><strong>0.524252</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Expo</p></td>
+<td><p>AUC</p></td>
+<td><p>0.756713</p></td>
+<td><p>0.776224</p></td>
+<td><p><strong>0.776935</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>Allstate</p></td>
+<td><p>AUC</p></td>
+<td><p>0.607201</p></td>
+<td><p><strong>0.609465</strong></p></td>
+<td><p>0.609072</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="memory-consumption">
+<h4>Memory Consumption<a class="headerlink" href="#memory-consumption" title="Permalink to this heading"></a></h4>
+<p>We monitored RES while running training task. And we set <code class="docutils literal notranslate"><span class="pre">two_round=true</span></code> (this will increase data-loading time and
+reduce peak memory usage but not affect training speed or accuracy) in LightGBM to reduce peak memory usage.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Data</p></th>
+<th class="head"><p>xgboost</p></th>
+<th class="head"><p>xgboost_hist</p></th>
+<th class="head"><p>LightGBM (col-wise)</p></th>
+<th class="head"><p>LightGBM (row-wise)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Higgs</p></td>
+<td><p>4.853GB</p></td>
+<td><p>7.335GB</p></td>
+<td><p><strong>0.897GB</strong></p></td>
+<td><p>1.401GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>Yahoo LTR</p></td>
+<td><p>1.907GB</p></td>
+<td><p>4.023GB</p></td>
+<td><p><strong>1.741GB</strong></p></td>
+<td><p>2.161GB</p></td>
+</tr>
+<tr class="row-even"><td><p>MS LTR</p></td>
+<td><p>5.469GB</p></td>
+<td><p>7.491GB</p></td>
+<td><p><strong>0.940GB</strong></p></td>
+<td><p>1.296GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>Expo</p></td>
+<td><p>1.553GB</p></td>
+<td><p>2.606GB</p></td>
+<td><p><strong>0.555GB</strong></p></td>
+<td><p>0.711GB</p></td>
+</tr>
+<tr class="row-even"><td><p>Allstate</p></td>
+<td><p>6.237GB</p></td>
+<td><p>12.090GB</p></td>
+<td><p><strong>1.116GB</strong></p></td>
+<td><p>1.755GB</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="parallel-experiment">
+<h2>Parallel Experiment<a class="headerlink" href="#parallel-experiment" title="Permalink to this heading"></a></h2>
+<section id="id1">
+<h3>History<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>27 Feb, 2017: first version.</p>
+</section>
+<section id="id2">
+<h3>Data<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<p>We used a terabyte click log dataset to conduct parallel experiments. Details are listed in following table:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Data</p></th>
+<th class="head"><p>Task</p></th>
+<th class="head"><p>Link</p></th>
+<th class="head"><p>#Data</p></th>
+<th class="head"><p>#Feature</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Criteo</p></td>
+<td><p>Binary classification</p></td>
+<td><p><a class="reference external" href="http://labs.criteo.com/2013/12/download-terabyte-click-logs/">link</a></p></td>
+<td><p>1,700,000,000</p></td>
+<td><p>67</p></td>
+</tr>
+</tbody>
+</table>
+<p>This data contains 13 integer features and 26 categorical features for 24 days of click logs.
+We statisticized the click-through rate (CTR) and count for these 26 categorical features from the first ten days.
+Then we used next ten days’ data, after replacing the categorical features by the corresponding CTR and count, as training data.
+The processed training data have a total of 1.7 billions records and 67 features.</p>
+</section>
+<section id="id3">
+<h3>Environment<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<p>We ran our experiments on 16 Windows servers with the following specifications:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>OS</p></th>
+<th class="head"><p>CPU</p></th>
+<th class="head"><p>Memory</p></th>
+<th class="head"><p>Network Adapter</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Windows Server 2012</p></td>
+<td><p>2 * E5-2670 v2</p></td>
+<td><p>DDR3 1600Mhz, 256GB</p></td>
+<td><p>Mellanox ConnectX-3, 54Gbps, RDMA support</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h3>Settings<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">num_leaves</span> <span class="o">=</span> <span class="mi">255</span>
+<span class="n">num_trees</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">num_thread</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">tree_learner</span> <span class="o">=</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>We used data parallel here because this data is large in <code class="docutils literal notranslate"><span class="pre">#data</span></code> but small in <code class="docutils literal notranslate"><span class="pre">#feature</span></code>. Other parameters were default values.</p>
+</section>
+<section id="results">
+<h3>Results<a class="headerlink" href="#results" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>#Machine</p></th>
+<th class="head"><p>Time per Tree</p></th>
+<th class="head"><p>Memory Usage(per Machine)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>627.8 s</p></td>
+<td><p>176GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>311 s</p></td>
+<td><p>87GB</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>156 s</p></td>
+<td><p>43GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>80 s</p></td>
+<td><p>22GB</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>42 s</p></td>
+<td><p>11GB</p></td>
+</tr>
+</tbody>
+</table>
+<p>The results show that LightGBM achieves a linear speedup with distributed learning.</p>
+</section>
+</section>
+<section id="gpu-experiments">
+<h2>GPU Experiments<a class="headerlink" href="#gpu-experiments" title="Permalink to this heading"></a></h2>
+<p>Refer to <a class="reference external" href="./GPU-Performance.html">GPU Performance</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Features.html" class="btn btn-neutral float-left" title="Features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Parameters.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

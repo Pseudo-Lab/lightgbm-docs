@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parameters &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters Tuning" href="Parameters-Tuning.html" />
+    <link rel="prev" title="Experiments" href="Experiments.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiments.html">Experiments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#parameters-format">Parameters Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-parameters">Core Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#learning-control-parameters">Learning Control Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#io-parameters">IO Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dataset-parameters">Dataset Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#predict-parameters">Predict Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#convert-parameters">Convert Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#objective-parameters">Objective Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metric-parameters">Metric Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-parameters">Network Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gpu-parameters">GPU Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#others">Others</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#continued-training-with-input-score">Continued Training with Input Score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#weight-data">Weight Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#query-data">Query Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Parameters</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Parameters.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="parameters">
+<h1>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h1>
+<p>This page contains descriptions of all parameters in LightGBM.</p>
+<p><strong>List of other helpful links</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="./Python-API.html">Python API</a></p></li>
+<li><p><a class="reference external" href="./Parameters-Tuning.html">Parameters Tuning</a></p></li>
+</ul>
+<p><strong>External Links</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://sites.google.com/view/lauraepp/parameters">Laurae++ Interactive Documentation</a></p></li>
+</ul>
+<section id="parameters-format">
+<h2>Parameters Format<a class="headerlink" href="#parameters-format" title="Permalink to this heading"></a></h2>
+<p>The parameters format is <code class="docutils literal notranslate"><span class="pre">key1=value1</span> <span class="pre">key2=value2</span> <span class="pre">...</span></code>.
+Parameters can be set both in config file and command line.
+By using command line, parameters should not have spaces before and after <code class="docutils literal notranslate"><span class="pre">=</span></code>.
+By using config files, one line can only contain one parameter. You can use <code class="docutils literal notranslate"><span class="pre">#</span></code> to comment.</p>
+<p>If one parameter appears in both command line and config file, LightGBM will use the parameter from the command line.</p>
+<p>For the Python and R packages, any parameters that accept a list of values (usually they have <code class="docutils literal notranslate"><span class="pre">multi-xxx</span></code> type, e.g. <code class="docutils literal notranslate"><span class="pre">multi-int</span></code> or <code class="docutils literal notranslate"><span class="pre">multi-double</span></code>) can be specified in those languages’ default array types.
+For example, <code class="docutils literal notranslate"><span class="pre">monotone_constraints</span></code> can be specified as follows.</p>
+<p><strong>Python</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="s2">&quot;monotone_constraints&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>R</strong></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span>
+   <span class="n">monotone_constraints</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="core-parameters">
+<h2>Core Parameters<a class="headerlink" href="#core-parameters" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">config</span></code> <span class="raw-html"><a id="config" title="Permalink to this parameter" href="#config">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">config_file</span></code></p>
+<ul>
+<li><p>path of config file</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">task</span></code> <span class="raw-html"><a id="task" title="Permalink to this parameter" href="#task">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">train</span></code>, type = enum, options: <code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code>, <code class="docutils literal notranslate"><span class="pre">convert_model</span></code>, <code class="docutils literal notranslate"><span class="pre">refit</span></code>, aliases: <code class="docutils literal notranslate"><span class="pre">task_type</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">train</span></code>, for training, aliases: <code class="docutils literal notranslate"><span class="pre">training</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict</span></code>, for prediction, aliases: <code class="docutils literal notranslate"><span class="pre">prediction</span></code>, <code class="docutils literal notranslate"><span class="pre">test</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">convert_model</span></code>, for converting model file into if-else format, see more information in <a class="reference external" href="#convert-parameters">Convert Parameters</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">refit</span></code>, for refitting existing models with new data, aliases: <code class="docutils literal notranslate"><span class="pre">refit_tree</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">save_binary</span></code>, load train (and validation) data then save dataset to binary file. Typical usage: <code class="docutils literal notranslate"><span class="pre">save_binary</span></code> first, then run multiple <code class="docutils literal notranslate"><span class="pre">train</span></code> tasks in parallel using the saved binary file</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version; for language-specific packages you can use the correspondent functions</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">objective</span></code> <span class="raw-html"><a id="objective" title="Permalink to this parameter" href="#objective">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">regression</span></code>, type = enum, options: <code class="docutils literal notranslate"><span class="pre">regression</span></code>, <code class="docutils literal notranslate"><span class="pre">regression_l1</span></code>, <code class="docutils literal notranslate"><span class="pre">huber</span></code>, <code class="docutils literal notranslate"><span class="pre">fair</span></code>, <code class="docutils literal notranslate"><span class="pre">poisson</span></code>, <code class="docutils literal notranslate"><span class="pre">quantile</span></code>, <code class="docutils literal notranslate"><span class="pre">mape</span></code>, <code class="docutils literal notranslate"><span class="pre">gamma</span></code>, <code class="docutils literal notranslate"><span class="pre">tweedie</span></code>, <code class="docutils literal notranslate"><span class="pre">binary</span></code>, <code class="docutils literal notranslate"><span class="pre">multiclass</span></code>, <code class="docutils literal notranslate"><span class="pre">multiclassova</span></code>, <code class="docutils literal notranslate"><span class="pre">cross_entropy</span></code>, <code class="docutils literal notranslate"><span class="pre">cross_entropy_lambda</span></code>, <code class="docutils literal notranslate"><span class="pre">lambdarank</span></code>, <code class="docutils literal notranslate"><span class="pre">rank_xendcg</span></code>, aliases: <code class="docutils literal notranslate"><span class="pre">objective_type</span></code>, <code class="docutils literal notranslate"><span class="pre">app</span></code>, <code class="docutils literal notranslate"><span class="pre">application</span></code>, <code class="docutils literal notranslate"><span class="pre">loss</span></code></p>
+<ul>
+<li><p>regression application</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">regression</span></code>, L2 loss, aliases: <code class="docutils literal notranslate"><span class="pre">regression_l2</span></code>, <code class="docutils literal notranslate"><span class="pre">l2</span></code>, <code class="docutils literal notranslate"><span class="pre">mean_squared_error</span></code>, <code class="docutils literal notranslate"><span class="pre">mse</span></code>, <code class="docutils literal notranslate"><span class="pre">l2_root</span></code>, <code class="docutils literal notranslate"><span class="pre">root_mean_squared_error</span></code>, <code class="docutils literal notranslate"><span class="pre">rmse</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">regression_l1</span></code>, L1 loss, aliases: <code class="docutils literal notranslate"><span class="pre">l1</span></code>, <code class="docutils literal notranslate"><span class="pre">mean_absolute_error</span></code>, <code class="docutils literal notranslate"><span class="pre">mae</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">huber</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Huber_loss">Huber loss</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fair</span></code>, <a class="reference external" href="https://www.kaggle.com/c/allstate-claims-severity/discussion/24520">Fair loss</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">poisson</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Poisson_regression">Poisson regression</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quantile</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Quantile_regression">Quantile regression</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mape</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_absolute_percentage_error">MAPE loss</a>, aliases: <code class="docutils literal notranslate"><span class="pre">mean_absolute_percentage_error</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gamma</span></code>, Gamma regression with log-link. It might be useful, e.g., for modeling insurance claims severity, or for any target that might be <a class="reference external" href="https://en.wikipedia.org/wiki/Gamma_distribution#Occurrence_and_applications">gamma-distributed</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tweedie</span></code>, Tweedie regression with log-link. It might be useful, e.g., for modeling total loss in insurance, or for any target that might be <a class="reference external" href="https://en.wikipedia.org/wiki/Tweedie_distribution#Occurrence_and_applications">tweedie-distributed</a></p></li>
+</ul>
+</li>
+<li><p>binary classification application</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">binary</span></code>, binary <a class="reference external" href="https://en.wikipedia.org/wiki/Cross_entropy">log loss</a> classification (or logistic regression)</p></li>
+<li><p>requires labels in {0, 1}; see <code class="docutils literal notranslate"><span class="pre">cross-entropy</span></code> application for general probability labels in [0, 1]</p></li>
+</ul>
+</li>
+<li><p>multi-class classification application</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">multiclass</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Softmax_function">softmax</a> objective function, aliases: <code class="docutils literal notranslate"><span class="pre">softmax</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multiclassova</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest">One-vs-All</a> binary objective function, aliases: <code class="docutils literal notranslate"><span class="pre">multiclass_ova</span></code>, <code class="docutils literal notranslate"><span class="pre">ova</span></code>, <code class="docutils literal notranslate"><span class="pre">ovr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_class</span></code> should be set as well</p></li>
+</ul>
+</li>
+<li><p>cross-entropy application</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">cross_entropy</span></code>, objective function for cross-entropy (with optional linear weights), aliases: <code class="docutils literal notranslate"><span class="pre">xentropy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cross_entropy_lambda</span></code>, alternative parameterization of cross-entropy, aliases: <code class="docutils literal notranslate"><span class="pre">xentlambda</span></code></p></li>
+<li><p>label is anything in interval [0, 1]</p></li>
+</ul>
+</li>
+<li><p>ranking application</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambdarank</span></code>, <a class="reference external" href="https://papers.nips.cc/paper/2971-learning-to-rank-with-nonsmooth-cost-functions.pdf">lambdarank</a> objective. <a class="reference external" href="#label_gain">label_gain</a> can be used to set the gain (weight) of <code class="docutils literal notranslate"><span class="pre">int</span></code> label and all values in <code class="docutils literal notranslate"><span class="pre">label</span></code> must be smaller than number of elements in <code class="docutils literal notranslate"><span class="pre">label_gain</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rank_xendcg</span></code>, <a class="reference external" href="https://arxiv.org/abs/1911.09798">XE_NDCG_MART</a> ranking objective function, aliases: <code class="docutils literal notranslate"><span class="pre">xendcg</span></code>, <code class="docutils literal notranslate"><span class="pre">xe_ndcg</span></code>, <code class="docutils literal notranslate"><span class="pre">xe_ndcg_mart</span></code>, <code class="docutils literal notranslate"><span class="pre">xendcg_mart</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rank_xendcg</span></code> is faster than and achieves the similar performance as <code class="docutils literal notranslate"><span class="pre">lambdarank</span></code></p></li>
+<li><p>label should be <code class="docutils literal notranslate"><span class="pre">int</span></code> type, and larger number represents the higher relevance (e.g. 0:bad, 1:fair, 2:good, 3:perfect)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">boosting</span></code> <span class="raw-html"><a id="boosting" title="Permalink to this parameter" href="#boosting">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">gbdt</span></code>, type = enum, options: <code class="docutils literal notranslate"><span class="pre">gbdt</span></code>, <code class="docutils literal notranslate"><span class="pre">rf</span></code>, <code class="docutils literal notranslate"><span class="pre">dart</span></code>, <code class="docutils literal notranslate"><span class="pre">goss</span></code>, aliases: <code class="docutils literal notranslate"><span class="pre">boosting_type</span></code>, <code class="docutils literal notranslate"><span class="pre">boost</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">gbdt</span></code>, traditional Gradient Boosting Decision Tree, aliases: <code class="docutils literal notranslate"><span class="pre">gbrt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rf</span></code>, Random Forest, aliases: <code class="docutils literal notranslate"><span class="pre">random_forest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dart</span></code>, <a class="reference external" href="https://arxiv.org/abs/1505.01866">Dropouts meet Multiple Additive Regression Trees</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">goss</span></code>, Gradient-based One-Side Sampling</p>
+<ul>
+<li><p><strong>Note</strong>: internally, LightGBM uses <code class="docutils literal notranslate"><span class="pre">gbdt</span></code> mode for the first <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">/</span> <span class="pre">learning_rate</span></code> iterations</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> <span class="raw-html"><a id="data" title="Permalink to this parameter" href="#data">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">train</span></code>, <code class="docutils literal notranslate"><span class="pre">train_data</span></code>, <code class="docutils literal notranslate"><span class="pre">train_data_file</span></code>, <code class="docutils literal notranslate"><span class="pre">data_filename</span></code></p>
+<ul>
+<li><p>path of training data, LightGBM will train from this data</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">valid</span></code> <span class="raw-html"><a id="valid" title="Permalink to this parameter" href="#valid">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">test</span></code>, <code class="docutils literal notranslate"><span class="pre">valid_data</span></code>, <code class="docutils literal notranslate"><span class="pre">valid_data_file</span></code>, <code class="docutils literal notranslate"><span class="pre">test_data</span></code>, <code class="docutils literal notranslate"><span class="pre">test_data_file</span></code>, <code class="docutils literal notranslate"><span class="pre">valid_filenames</span></code></p>
+<ul>
+<li><p>path(s) of validation/test data, LightGBM will output metrics for these data</p></li>
+<li><p>support multiple validation data, separated by <code class="docutils literal notranslate"><span class="pre">,</span></code></p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_iterations</span></code> <span class="raw-html"><a id="num_iterations" title="Permalink to this parameter" href="#num_iterations">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">100</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">num_iteration</span></code>, <code class="docutils literal notranslate"><span class="pre">n_iter</span></code>, <code class="docutils literal notranslate"><span class="pre">num_tree</span></code>, <code class="docutils literal notranslate"><span class="pre">num_trees</span></code>, <code class="docutils literal notranslate"><span class="pre">num_round</span></code>, <code class="docutils literal notranslate"><span class="pre">num_rounds</span></code>, <code class="docutils literal notranslate"><span class="pre">num_boost_round</span></code>, <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code>, <code class="docutils literal notranslate"><span class="pre">max_iter</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">num_iterations</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>number of boosting iterations</p></li>
+<li><p><strong>Note</strong>: internally, LightGBM constructs <code class="docutils literal notranslate"><span class="pre">num_class</span> <span class="pre">*</span> <span class="pre">num_iterations</span></code> trees for multi-class classification problems</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> <span class="raw-html"><a id="learning_rate" title="Permalink to this parameter" href="#learning_rate">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.1</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">shrinkage_rate</span></code>, <code class="docutils literal notranslate"><span class="pre">eta</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">learning_rate</span> <span class="pre">&gt;</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>shrinkage rate</p></li>
+<li><p>in <code class="docutils literal notranslate"><span class="pre">dart</span></code>, it also affects on normalization weights of dropped trees</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_leaves</span></code> <span class="raw-html"><a id="num_leaves" title="Permalink to this parameter" href="#num_leaves">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">31</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">num_leaf</span></code>, <code class="docutils literal notranslate"><span class="pre">max_leaves</span></code>, <code class="docutils literal notranslate"><span class="pre">max_leaf</span></code>, <code class="docutils literal notranslate"><span class="pre">max_leaf_nodes</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;</span> <span class="pre">num_leaves</span> <span class="pre">&lt;=</span> <span class="pre">131072</span></code></p>
+<ul>
+<li><p>max number of leaves in one tree</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tree_learner</span></code> <span class="raw-html"><a id="tree_learner" title="Permalink to this parameter" href="#tree_learner">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">serial</span></code>, type = enum, options: <code class="docutils literal notranslate"><span class="pre">serial</span></code>, <code class="docutils literal notranslate"><span class="pre">feature</span></code>, <code class="docutils literal notranslate"><span class="pre">data</span></code>, <code class="docutils literal notranslate"><span class="pre">voting</span></code>, aliases: <code class="docutils literal notranslate"><span class="pre">tree</span></code>, <code class="docutils literal notranslate"><span class="pre">tree_type</span></code>, <code class="docutils literal notranslate"><span class="pre">tree_learner_type</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">serial</span></code>, single machine tree learner</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature</span></code>, feature parallel tree learner, aliases: <code class="docutils literal notranslate"><span class="pre">feature_parallel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>, data parallel tree learner, aliases: <code class="docutils literal notranslate"><span class="pre">data_parallel</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">voting</span></code>, voting parallel tree learner, aliases: <code class="docutils literal notranslate"><span class="pre">voting_parallel</span></code></p></li>
+<li><p>refer to <a class="reference external" href="./Parallel-Learning-Guide.html">Distributed Learning Guide</a> to get more details</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_threads</span></code> <span class="raw-html"><a id="num_threads" title="Permalink to this parameter" href="#num_threads">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">num_thread</span></code>, <code class="docutils literal notranslate"><span class="pre">nthread</span></code>, <code class="docutils literal notranslate"><span class="pre">nthreads</span></code>, <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code></p>
+<ul>
+<li><p>number of threads for LightGBM</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> means default number of threads in OpenMP</p></li>
+<li><p>for the best speed, set this to the number of <strong>real CPU cores</strong>, not the number of threads (most CPUs use <a class="reference external" href="https://en.wikipedia.org/wiki/Hyper-threading">hyper-threading</a> to generate 2 threads per CPU core)</p></li>
+<li><p>do not set it too large if your dataset is small (for instance, do not use 64 threads for a dataset with 10,000 rows)</p></li>
+<li><p>be aware a task manager or any similar CPU monitoring tool might report that cores not being fully utilized. <strong>This is normal</strong></p></li>
+<li><p>for distributed learning, do not use all CPU cores because this will cause poor performance for the network communication</p></li>
+<li><p><strong>Note</strong>: please <strong>don’t</strong> change this during training, especially when running multiple jobs simultaneously by external packages, otherwise it may cause undesirable errors</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_type</span></code> <span class="raw-html"><a id="device_type" title="Permalink to this parameter" href="#device_type">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">cpu</span></code>, type = enum, options: <code class="docutils literal notranslate"><span class="pre">cpu</span></code>, <code class="docutils literal notranslate"><span class="pre">gpu</span></code>, <code class="docutils literal notranslate"><span class="pre">cuda</span></code>, aliases: <code class="docutils literal notranslate"><span class="pre">device</span></code></p>
+<ul>
+<li><p>device for the tree learning, you can use GPU to achieve the faster learning</p></li>
+<li><p><strong>Note</strong>: it is recommended to use the smaller <code class="docutils literal notranslate"><span class="pre">max_bin</span></code> (e.g. 63) to get the better speed up</p></li>
+<li><p><strong>Note</strong>: for the faster speed, GPU uses 32-bit float point to sum up by default, so this may affect the accuracy for some tasks. You can set <code class="docutils literal notranslate"><span class="pre">gpu_use_dp=true</span></code> to enable 64-bit float point, but it will slow down the training</p></li>
+<li><p><strong>Note</strong>: refer to <a class="reference external" href="./Installation-Guide.html#build-gpu-version">Installation Guide</a> to build LightGBM with GPU support</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seed</span></code> <span class="raw-html"><a id="seed" title="Permalink to this parameter" href="#seed">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">None</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">random_seed</span></code>, <code class="docutils literal notranslate"><span class="pre">random_state</span></code></p>
+<ul>
+<li><p>this seed is used to generate other seeds, e.g. <code class="docutils literal notranslate"><span class="pre">data_random_seed</span></code>, <code class="docutils literal notranslate"><span class="pre">feature_fraction_seed</span></code>, etc.</p></li>
+<li><p>by default, this seed is unused in favor of default values of other seeds</p></li>
+<li><p>this seed has lower priority in comparison with other seeds, which means that it will be overridden, if you set other seeds explicitly</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deterministic</span></code> <span class="raw-html"><a id="deterministic" title="Permalink to this parameter" href="#deterministic">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>used only with <code class="docutils literal notranslate"><span class="pre">cpu</span></code> device type</p></li>
+<li><p>setting this to <code class="docutils literal notranslate"><span class="pre">true</span></code> should ensure the stable results when using the same data and the same parameters (and different <code class="docutils literal notranslate"><span class="pre">num_threads</span></code>)</p></li>
+<li><p>when you use the different seeds, different LightGBM versions, the binaries compiled by different compilers, or in different systems, the results are expected to be different</p></li>
+<li><p>you can <a class="reference external" href="https://github.com/microsoft/LightGBM/issues">raise issues</a> in LightGBM GitHub repo when you meet the unstable results</p></li>
+<li><p><strong>Note</strong>: setting this to <code class="docutils literal notranslate"><span class="pre">true</span></code> may slow down the training</p></li>
+<li><p><strong>Note</strong>: to avoid potential instability due to numerical issues, please set <code class="docutils literal notranslate"><span class="pre">force_col_wise=true</span></code> or <code class="docutils literal notranslate"><span class="pre">force_row_wise=true</span></code> when setting <code class="docutils literal notranslate"><span class="pre">deterministic=true</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="learning-control-parameters">
+<h2>Learning Control Parameters<a class="headerlink" href="#learning-control-parameters" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">force_col_wise</span></code> <span class="raw-html"><a id="force_col_wise" title="Permalink to this parameter" href="#force_col_wise">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>used only with <code class="docutils literal notranslate"><span class="pre">cpu</span></code> device type</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to force col-wise histogram building</p></li>
+<li><p>enabling this is recommended when:</p>
+<ul>
+<li><p>the number of columns is large, or the total number of bins is large</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_threads</span></code> is large, e.g. <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">20</span></code></p></li>
+<li><p>you want to reduce memory cost</p></li>
+</ul>
+</li>
+<li><p><strong>Note</strong>: when both <code class="docutils literal notranslate"><span class="pre">force_col_wise</span></code> and <code class="docutils literal notranslate"><span class="pre">force_row_wise</span></code> are <code class="docutils literal notranslate"><span class="pre">false</span></code>, LightGBM will firstly try them both, and then use the faster one. To remove the overhead of testing set the faster one to <code class="docutils literal notranslate"><span class="pre">true</span></code> manually</p></li>
+<li><p><strong>Note</strong>: this parameter cannot be used at the same time with <code class="docutils literal notranslate"><span class="pre">force_row_wise</span></code>, choose only one of them</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">force_row_wise</span></code> <span class="raw-html"><a id="force_row_wise" title="Permalink to this parameter" href="#force_row_wise">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>used only with <code class="docutils literal notranslate"><span class="pre">cpu</span></code> device type</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to force row-wise histogram building</p></li>
+<li><p>enabling this is recommended when:</p>
+<ul>
+<li><p>the number of data points is large, and the total number of bins is relatively small</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_threads</span></code> is relatively small, e.g. <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">16</span></code></p></li>
+<li><p>you want to use small <code class="docutils literal notranslate"><span class="pre">bagging_fraction</span></code> or <code class="docutils literal notranslate"><span class="pre">goss</span></code> boosting to speed up</p></li>
+</ul>
+</li>
+<li><p><strong>Note</strong>: setting this to <code class="docutils literal notranslate"><span class="pre">true</span></code> will double the memory cost for Dataset object. If you have not enough memory, you can try setting <code class="docutils literal notranslate"><span class="pre">force_col_wise=true</span></code></p></li>
+<li><p><strong>Note</strong>: when both <code class="docutils literal notranslate"><span class="pre">force_col_wise</span></code> and <code class="docutils literal notranslate"><span class="pre">force_row_wise</span></code> are <code class="docutils literal notranslate"><span class="pre">false</span></code>, LightGBM will firstly try them both, and then use the faster one. To remove the overhead of testing set the faster one to <code class="docutils literal notranslate"><span class="pre">true</span></code> manually</p></li>
+<li><p><strong>Note</strong>: this parameter cannot be used at the same time with <code class="docutils literal notranslate"><span class="pre">force_col_wise</span></code>, choose only one of them</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">histogram_pool_size</span></code> <span class="raw-html"><a id="histogram_pool_size" title="Permalink to this parameter" href="#histogram_pool_size">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">-1.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">hist_pool_size</span></code></p>
+<ul>
+<li><p>max cache size in MB for historical histogram</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">0</span></code> means no limit</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_depth</span></code> <span class="raw-html"><a id="max_depth" title="Permalink to this parameter" href="#max_depth">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">-1</span></code>, type = int</p>
+<ul>
+<li><p>limit the max depth for tree model. This is used to deal with over-fitting when <code class="docutils literal notranslate"><span class="pre">#data</span></code> is small. Tree still grows leaf-wise</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">0</span></code> means no limit</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_data_in_leaf</span></code> <span class="raw-html"><a id="min_data_in_leaf" title="Permalink to this parameter" href="#min_data_in_leaf">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">20</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">min_data_per_leaf</span></code>, <code class="docutils literal notranslate"><span class="pre">min_data</span></code>, <code class="docutils literal notranslate"><span class="pre">min_child_samples</span></code>, <code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">min_data_in_leaf</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>minimal number of data in one leaf. Can be used to deal with over-fitting</p></li>
+<li><p><strong>Note</strong>: this is an approximation based on the Hessian, so occasionally you may observe splits which produce leaf nodes that have less than this many observations</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_sum_hessian_in_leaf</span></code> <span class="raw-html"><a id="min_sum_hessian_in_leaf" title="Permalink to this parameter" href="#min_sum_hessian_in_leaf">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1e-3</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">min_sum_hessian_per_leaf</span></code>, <code class="docutils literal notranslate"><span class="pre">min_sum_hessian</span></code>, <code class="docutils literal notranslate"><span class="pre">min_hessian</span></code>, <code class="docutils literal notranslate"><span class="pre">min_child_weight</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">min_sum_hessian_in_leaf</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>minimal sum hessian in one leaf. Like <code class="docutils literal notranslate"><span class="pre">min_data_in_leaf</span></code>, it can be used to deal with over-fitting</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bagging_fraction</span></code> <span class="raw-html"><a id="bagging_fraction" title="Permalink to this parameter" href="#bagging_fraction">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">sub_row</span></code>, <code class="docutils literal notranslate"><span class="pre">subsample</span></code>, <code class="docutils literal notranslate"><span class="pre">bagging</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;</span> <span class="pre">bagging_fraction</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>like <code class="docutils literal notranslate"><span class="pre">feature_fraction</span></code>, but this will randomly select part of data without resampling</p></li>
+<li><p>can be used to speed up training</p></li>
+<li><p>can be used to deal with over-fitting</p></li>
+<li><p><strong>Note</strong>: to enable bagging, <code class="docutils literal notranslate"><span class="pre">bagging_freq</span></code> should be set to a non zero value as well</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pos_bagging_fraction</span></code> <span class="raw-html"><a id="pos_bagging_fraction" title="Permalink to this parameter" href="#pos_bagging_fraction">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">pos_sub_row</span></code>, <code class="docutils literal notranslate"><span class="pre">pos_subsample</span></code>, <code class="docutils literal notranslate"><span class="pre">pos_bagging</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;</span> <span class="pre">pos_bagging_fraction</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">binary</span></code> application</p></li>
+<li><p>used for imbalanced binary classification problem, will randomly sample <code class="docutils literal notranslate"><span class="pre">#pos_samples</span> <span class="pre">*</span> <span class="pre">pos_bagging_fraction</span></code> positive samples in bagging</p></li>
+<li><p>should be used together with <code class="docutils literal notranslate"><span class="pre">neg_bagging_fraction</span></code></p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> to disable</p></li>
+<li><p><strong>Note</strong>: to enable this, you need to set <code class="docutils literal notranslate"><span class="pre">bagging_freq</span></code> and <code class="docutils literal notranslate"><span class="pre">neg_bagging_fraction</span></code> as well</p></li>
+<li><p><strong>Note</strong>: if both <code class="docutils literal notranslate"><span class="pre">pos_bagging_fraction</span></code> and <code class="docutils literal notranslate"><span class="pre">neg_bagging_fraction</span></code> are set to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>,  balanced bagging is disabled</p></li>
+<li><p><strong>Note</strong>: if balanced bagging is enabled, <code class="docutils literal notranslate"><span class="pre">bagging_fraction</span></code> will be ignored</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">neg_bagging_fraction</span></code> <span class="raw-html"><a id="neg_bagging_fraction" title="Permalink to this parameter" href="#neg_bagging_fraction">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">neg_sub_row</span></code>, <code class="docutils literal notranslate"><span class="pre">neg_subsample</span></code>, <code class="docutils literal notranslate"><span class="pre">neg_bagging</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;</span> <span class="pre">neg_bagging_fraction</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">binary</span></code> application</p></li>
+<li><p>used for imbalanced binary classification problem, will randomly sample <code class="docutils literal notranslate"><span class="pre">#neg_samples</span> <span class="pre">*</span> <span class="pre">neg_bagging_fraction</span></code> negative samples in bagging</p></li>
+<li><p>should be used together with <code class="docutils literal notranslate"><span class="pre">pos_bagging_fraction</span></code></p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> to disable</p></li>
+<li><p><strong>Note</strong>: to enable this, you need to set <code class="docutils literal notranslate"><span class="pre">bagging_freq</span></code> and <code class="docutils literal notranslate"><span class="pre">pos_bagging_fraction</span></code> as well</p></li>
+<li><p><strong>Note</strong>: if both <code class="docutils literal notranslate"><span class="pre">pos_bagging_fraction</span></code> and <code class="docutils literal notranslate"><span class="pre">neg_bagging_fraction</span></code> are set to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>,  balanced bagging is disabled</p></li>
+<li><p><strong>Note</strong>: if balanced bagging is enabled, <code class="docutils literal notranslate"><span class="pre">bagging_fraction</span></code> will be ignored</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bagging_freq</span></code> <span class="raw-html"><a id="bagging_freq" title="Permalink to this parameter" href="#bagging_freq">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">subsample_freq</span></code></p>
+<ul>
+<li><p>frequency for bagging</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> means disable bagging; <code class="docutils literal notranslate"><span class="pre">k</span></code> means perform bagging at every <code class="docutils literal notranslate"><span class="pre">k</span></code> iteration. Every <code class="docutils literal notranslate"><span class="pre">k</span></code>-th iteration, LightGBM will randomly select <code class="docutils literal notranslate"><span class="pre">bagging_fraction</span> <span class="pre">*</span> <span class="pre">100</span> <span class="pre">%</span></code> of the data to use for the next <code class="docutils literal notranslate"><span class="pre">k</span></code> iterations</p></li>
+<li><p><strong>Note</strong>: to enable bagging, <code class="docutils literal notranslate"><span class="pre">bagging_fraction</span></code> should be set to value smaller than <code class="docutils literal notranslate"><span class="pre">1.0</span></code> as well</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bagging_seed</span></code> <span class="raw-html"><a id="bagging_seed" title="Permalink to this parameter" href="#bagging_seed">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">3</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">bagging_fraction_seed</span></code></p>
+<ul>
+<li><p>random seed for bagging</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_fraction</span></code> <span class="raw-html"><a id="feature_fraction" title="Permalink to this parameter" href="#feature_fraction">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">sub_feature</span></code>, <code class="docutils literal notranslate"><span class="pre">colsample_bytree</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;</span> <span class="pre">feature_fraction</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>LightGBM will randomly select a subset of features on each iteration (tree) if <code class="docutils literal notranslate"><span class="pre">feature_fraction</span></code> is smaller than <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. For example, if you set it to <code class="docutils literal notranslate"><span class="pre">0.8</span></code>, LightGBM will select 80% of features before training each tree</p></li>
+<li><p>can be used to speed up training</p></li>
+<li><p>can be used to deal with over-fitting</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_fraction_bynode</span></code> <span class="raw-html"><a id="feature_fraction_bynode" title="Permalink to this parameter" href="#feature_fraction_bynode">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">sub_feature_bynode</span></code>, <code class="docutils literal notranslate"><span class="pre">colsample_bynode</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;</span> <span class="pre">feature_fraction_bynode</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>LightGBM will randomly select a subset of features on each tree node if <code class="docutils literal notranslate"><span class="pre">feature_fraction_bynode</span></code> is smaller than <code class="docutils literal notranslate"><span class="pre">1.0</span></code>. For example, if you set it to <code class="docutils literal notranslate"><span class="pre">0.8</span></code>, LightGBM will select 80% of features at each tree node</p></li>
+<li><p>can be used to deal with over-fitting</p></li>
+<li><p><strong>Note</strong>: unlike <code class="docutils literal notranslate"><span class="pre">feature_fraction</span></code>, this cannot speed up training</p></li>
+<li><p><strong>Note</strong>: if both <code class="docutils literal notranslate"><span class="pre">feature_fraction</span></code> and <code class="docutils literal notranslate"><span class="pre">feature_fraction_bynode</span></code> are smaller than <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, the final fraction of each node is <code class="docutils literal notranslate"><span class="pre">feature_fraction</span> <span class="pre">*</span> <span class="pre">feature_fraction_bynode</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_fraction_seed</span></code> <span class="raw-html"><a id="feature_fraction_seed" title="Permalink to this parameter" href="#feature_fraction_seed">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">2</span></code>, type = int</p>
+<ul>
+<li><p>random seed for <code class="docutils literal notranslate"><span class="pre">feature_fraction</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">extra_trees</span></code> <span class="raw-html"><a id="extra_trees" title="Permalink to this parameter" href="#extra_trees">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">extra_tree</span></code></p>
+<ul>
+<li><p>use extremely randomized trees</p></li>
+<li><p>if set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, when evaluating node splits LightGBM will check only one randomly-chosen threshold for each feature</p></li>
+<li><p>can be used to speed up training</p></li>
+<li><p>can be used to deal with over-fitting</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">extra_seed</span></code> <span class="raw-html"><a id="extra_seed" title="Permalink to this parameter" href="#extra_seed">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">6</span></code>, type = int</p>
+<ul>
+<li><p>random seed for selecting thresholds when <code class="docutils literal notranslate"><span class="pre">extra_trees</span></code> is true</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">early_stopping_round</span></code> <span class="raw-html"><a id="early_stopping_round" title="Permalink to this parameter" href="#early_stopping_round">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">early_stopping_rounds</span></code>, <code class="docutils literal notranslate"><span class="pre">early_stopping</span></code>, <code class="docutils literal notranslate"><span class="pre">n_iter_no_change</span></code></p>
+<ul>
+<li><p>will stop training if one metric of one validation data doesn’t improve in last <code class="docutils literal notranslate"><span class="pre">early_stopping_round</span></code> rounds</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">0</span></code> means disable</p></li>
+<li><p>can be used to speed up training</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">first_metric_only</span></code> <span class="raw-html"><a id="first_metric_only" title="Permalink to this parameter" href="#first_metric_only">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>LightGBM allows you to provide multiple evaluation metrics. Set this to <code class="docutils literal notranslate"><span class="pre">true</span></code>, if you want to use only the first metric for early stopping</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_delta_step</span></code> <span class="raw-html"><a id="max_delta_step" title="Permalink to this parameter" href="#max_delta_step">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">max_tree_output</span></code>, <code class="docutils literal notranslate"><span class="pre">max_leaf_output</span></code></p>
+<ul>
+<li><p>used to limit the max output of tree leaves</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">0</span></code> means no constraint</p></li>
+<li><p>the final max output of leaves is <code class="docutils literal notranslate"><span class="pre">learning_rate</span> <span class="pre">*</span> <span class="pre">max_delta_step</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda_l1</span></code> <span class="raw-html"><a id="lambda_l1" title="Permalink to this parameter" href="#lambda_l1">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">reg_alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">l1_regularization</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">lambda_l1</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>L1 regularization</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambda_l2</span></code> <span class="raw-html"><a id="lambda_l2" title="Permalink to this parameter" href="#lambda_l2">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">reg_lambda</span></code>, <code class="docutils literal notranslate"><span class="pre">lambda</span></code>, <code class="docutils literal notranslate"><span class="pre">l2_regularization</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">lambda_l2</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>L2 regularization</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linear_lambda</span></code> <span class="raw-html"><a id="linear_lambda" title="Permalink to this parameter" href="#linear_lambda">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">linear_lambda</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>linear tree regularization, corresponds to the parameter <code class="docutils literal notranslate"><span class="pre">lambda</span></code> in Eq. 3 of <a class="reference external" href="https://arxiv.org/pdf/1802.05640.pdf">Gradient Boosting with Piece-Wise Linear Regression Trees</a></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_gain_to_split</span></code> <span class="raw-html"><a id="min_gain_to_split" title="Permalink to this parameter" href="#min_gain_to_split">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">min_split_gain</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">min_gain_to_split</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>the minimal gain to perform split</p></li>
+<li><p>can be used to speed up training</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">drop_rate</span></code> <span class="raw-html"><a id="drop_rate" title="Permalink to this parameter" href="#drop_rate">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.1</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">rate_drop</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;=</span> <span class="pre">drop_rate</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">dart</span></code></p></li>
+<li><p>dropout rate: a fraction of previous trees to drop during the dropout</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_drop</span></code> <span class="raw-html"><a id="max_drop" title="Permalink to this parameter" href="#max_drop">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">50</span></code>, type = int</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">dart</span></code></p></li>
+<li><p>max number of dropped trees during one boosting iteration</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;=0</span></code> means no limit</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">skip_drop</span></code> <span class="raw-html"><a id="skip_drop" title="Permalink to this parameter" href="#skip_drop">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.5</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;=</span> <span class="pre">skip_drop</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">dart</span></code></p></li>
+<li><p>probability of skipping the dropout procedure during a boosting iteration</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xgboost_dart_mode</span></code> <span class="raw-html"><a id="xgboost_dart_mode" title="Permalink to this parameter" href="#xgboost_dart_mode">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">dart</span></code></p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code>, if you want to use xgboost dart mode</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uniform_drop</span></code> <span class="raw-html"><a id="uniform_drop" title="Permalink to this parameter" href="#uniform_drop">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">dart</span></code></p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code>, if you want to use uniform drop</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">drop_seed</span></code> <span class="raw-html"><a id="drop_seed" title="Permalink to this parameter" href="#drop_seed">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">4</span></code>, type = int</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">dart</span></code></p></li>
+<li><p>random seed to choose dropping models</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">top_rate</span></code> <span class="raw-html"><a id="top_rate" title="Permalink to this parameter" href="#top_rate">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.2</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;=</span> <span class="pre">top_rate</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">goss</span></code></p></li>
+<li><p>the retain ratio of large gradient data</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">other_rate</span></code> <span class="raw-html"><a id="other_rate" title="Permalink to this parameter" href="#other_rate">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.1</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;=</span> <span class="pre">other_rate</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">goss</span></code></p></li>
+<li><p>the retain ratio of small gradient data</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_data_per_group</span></code> <span class="raw-html"><a id="min_data_per_group" title="Permalink to this parameter" href="#min_data_per_group">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">100</span></code>, type = int, constraints: <code class="docutils literal notranslate"><span class="pre">min_data_per_group</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>minimal number of data per categorical group</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_cat_threshold</span></code> <span class="raw-html"><a id="max_cat_threshold" title="Permalink to this parameter" href="#max_cat_threshold">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">32</span></code>, type = int, constraints: <code class="docutils literal notranslate"><span class="pre">max_cat_threshold</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>used for the categorical features</p></li>
+<li><p>limit number of split points considered for categorical features. See <a class="reference external" href="./Features.html#optimal-split-for-categorical-features">the documentation on how LightGBM finds optimal splits for categorical features</a> for more details</p></li>
+<li><p>can be used to speed up training</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cat_l2</span></code> <span class="raw-html"><a id="cat_l2" title="Permalink to this parameter" href="#cat_l2">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">cat_l2</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>used for the categorical features</p></li>
+<li><p>L2 regularization in categorical split</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cat_smooth</span></code> <span class="raw-html"><a id="cat_smooth" title="Permalink to this parameter" href="#cat_smooth">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">cat_smooth</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>used for the categorical features</p></li>
+<li><p>this can reduce the effect of noises in categorical features, especially for categories with few data</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_cat_to_onehot</span></code> <span class="raw-html"><a id="max_cat_to_onehot" title="Permalink to this parameter" href="#max_cat_to_onehot">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">4</span></code>, type = int, constraints: <code class="docutils literal notranslate"><span class="pre">max_cat_to_onehot</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>when number of categories of one feature smaller than or equal to <code class="docutils literal notranslate"><span class="pre">max_cat_to_onehot</span></code>, one-vs-other split algorithm will be used</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">top_k</span></code> <span class="raw-html"><a id="top_k" title="Permalink to this parameter" href="#top_k">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">20</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">topk</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">top_k</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">voting</span></code> tree learner, refer to <a class="reference external" href="./Parallel-Learning-Guide.html#choose-appropriate-parallel-algorithm">Voting parallel</a></p></li>
+<li><p>set this to larger value for more accurate result, but it will slow down the training speed</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">monotone_constraints</span></code> <span class="raw-html"><a id="monotone_constraints" title="Permalink to this parameter" href="#monotone_constraints">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">None</span></code>, type = multi-int, aliases: <code class="docutils literal notranslate"><span class="pre">mc</span></code>, <code class="docutils literal notranslate"><span class="pre">monotone_constraint</span></code>, <code class="docutils literal notranslate"><span class="pre">monotonic_cst</span></code></p>
+<ul>
+<li><p>used for constraints of monotonic features</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code> means increasing, <code class="docutils literal notranslate"><span class="pre">-1</span></code> means decreasing, <code class="docutils literal notranslate"><span class="pre">0</span></code> means non-constraint</p></li>
+<li><p>you need to specify all features in order. For example, <code class="docutils literal notranslate"><span class="pre">mc=-1,0,1</span></code> means decreasing for 1st feature, non-constraint for 2nd feature and increasing for the 3rd feature</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">monotone_constraints_method</span></code> <span class="raw-html"><a id="monotone_constraints_method" title="Permalink to this parameter" href="#monotone_constraints_method">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">basic</span></code>, type = enum, options: <code class="docutils literal notranslate"><span class="pre">basic</span></code>, <code class="docutils literal notranslate"><span class="pre">intermediate</span></code>, <code class="docutils literal notranslate"><span class="pre">advanced</span></code>, aliases: <code class="docutils literal notranslate"><span class="pre">monotone_constraining_method</span></code>, <code class="docutils literal notranslate"><span class="pre">mc_method</span></code></p>
+<ul>
+<li><p>used only if <code class="docutils literal notranslate"><span class="pre">monotone_constraints</span></code> is set</p></li>
+<li><p>monotone constraints method</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">basic</span></code>, the most basic monotone constraints method. It does not slow the library at all, but over-constrains the predictions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">intermediate</span></code>, a <a class="reference external" href="https://hal.archives-ouvertes.fr/hal-02862802/document">more advanced method</a>, which may slow the library very slightly. However, this method is much less constraining than the basic method and should significantly improve the results</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">advanced</span></code>, an <a class="reference external" href="https://hal.archives-ouvertes.fr/hal-02862802/document">even more advanced method</a>, which may slow the library. However, this method is even less constraining than the intermediate method and should again significantly improve the results</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">monotone_penalty</span></code> <span class="raw-html"><a id="monotone_penalty" title="Permalink to this parameter" href="#monotone_penalty">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.0</span></code>, type = double, aliases: <code class="docutils literal notranslate"><span class="pre">monotone_splits_penalty</span></code>, <code class="docutils literal notranslate"><span class="pre">ms_penalty</span></code>, <code class="docutils literal notranslate"><span class="pre">mc_penalty</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">monotone_penalty</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>used only if <code class="docutils literal notranslate"><span class="pre">monotone_constraints</span></code> is set</p></li>
+<li><p><a class="reference external" href="https://hal.archives-ouvertes.fr/hal-02862802/document">monotone penalty</a>: a penalization parameter X forbids any monotone splits on the first X (rounded down) level(s) of the tree. The penalty applied to monotone splits on a given depth is a continuous, increasing function the penalization parameter</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">0.0</span></code> (the default), no penalization is applied</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_contri</span></code> <span class="raw-html"><a id="feature_contri" title="Permalink to this parameter" href="#feature_contri">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">None</span></code>, type = multi-double, aliases: <code class="docutils literal notranslate"><span class="pre">feature_contrib</span></code>, <code class="docutils literal notranslate"><span class="pre">fc</span></code>, <code class="docutils literal notranslate"><span class="pre">fp</span></code>, <code class="docutils literal notranslate"><span class="pre">feature_penalty</span></code></p>
+<ul>
+<li><p>used to control feature’s split gain, will use <code class="docutils literal notranslate"><span class="pre">gain[i]</span> <span class="pre">=</span> <span class="pre">max(0,</span> <span class="pre">feature_contri[i])</span> <span class="pre">*</span> <span class="pre">gain[i]</span></code> to replace the split gain of i-th feature</p></li>
+<li><p>you need to specify all features in order</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">forcedsplits_filename</span></code> <span class="raw-html"><a id="forcedsplits_filename" title="Permalink to this parameter" href="#forcedsplits_filename">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">fs</span></code>, <code class="docutils literal notranslate"><span class="pre">forced_splits_filename</span></code>, <code class="docutils literal notranslate"><span class="pre">forced_splits_file</span></code>, <code class="docutils literal notranslate"><span class="pre">forced_splits</span></code></p>
+<ul>
+<li><p>path to a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file that specifies splits to force at the top of every decision tree before best-first learning commences</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.json</span></code> file can be arbitrarily nested, and each split contains <code class="docutils literal notranslate"><span class="pre">feature</span></code>, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> fields, as well as <code class="docutils literal notranslate"><span class="pre">left</span></code> and <code class="docutils literal notranslate"><span class="pre">right</span></code> fields representing subsplits</p></li>
+<li><p>categorical splits are forced in a one-hot fashion, with <code class="docutils literal notranslate"><span class="pre">left</span></code> representing the split containing the feature value and <code class="docutils literal notranslate"><span class="pre">right</span></code> representing other values</p></li>
+<li><p><strong>Note</strong>: the forced split logic will be ignored, if the split makes gain worse</p></li>
+<li><p>see <a class="reference external" href="https://github.com/microsoft/LightGBM/tree/master/examples/binary_classification/forced_splits.json">this file</a> as an example</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">refit_decay_rate</span></code> <span class="raw-html"><a id="refit_decay_rate" title="Permalink to this parameter" href="#refit_decay_rate">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.9</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;=</span> <span class="pre">refit_decay_rate</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code></p>
+<ul>
+<li><p>decay rate of <code class="docutils literal notranslate"><span class="pre">refit</span></code> task, will use <code class="docutils literal notranslate"><span class="pre">leaf_output</span> <span class="pre">=</span> <span class="pre">refit_decay_rate</span> <span class="pre">*</span> <span class="pre">old_leaf_output</span> <span class="pre">+</span> <span class="pre">(1.0</span> <span class="pre">-</span> <span class="pre">refit_decay_rate)</span> <span class="pre">*</span> <span class="pre">new_leaf_output</span></code> to refit trees</p></li>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">refit</span></code> task in CLI version or as argument in <code class="docutils literal notranslate"><span class="pre">refit</span></code> function in language-specific package</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cegb_tradeoff</span></code> <span class="raw-html"><a id="cegb_tradeoff" title="Permalink to this parameter" href="#cegb_tradeoff">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">cegb_tradeoff</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>cost-effective gradient boosting multiplier for all penalties</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cegb_penalty_split</span></code> <span class="raw-html"><a id="cegb_penalty_split" title="Permalink to this parameter" href="#cegb_penalty_split">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">cegb_penalty_split</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>cost-effective gradient-boosting penalty for splitting a node</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cegb_penalty_feature_lazy</span></code> <span class="raw-html"><a id="cegb_penalty_feature_lazy" title="Permalink to this parameter" href="#cegb_penalty_feature_lazy">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0,0,...,0</span></code>, type = multi-double</p>
+<ul>
+<li><p>cost-effective gradient boosting penalty for using a feature</p></li>
+<li><p>applied per data point</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cegb_penalty_feature_coupled</span></code> <span class="raw-html"><a id="cegb_penalty_feature_coupled" title="Permalink to this parameter" href="#cegb_penalty_feature_coupled">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0,0,...,0</span></code>, type = multi-double</p>
+<ul>
+<li><p>cost-effective gradient boosting penalty for using a feature</p></li>
+<li><p>applied once per forest</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path_smooth</span></code> <span class="raw-html"><a id="path_smooth" title="Permalink to this parameter" href="#path_smooth">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">path_smooth</span> <span class="pre">&gt;=</span>&#160; <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>controls smoothing applied to tree nodes</p></li>
+<li><p>helps prevent overfitting on leaves with few samples</p></li>
+<li><p>if set to zero, no smoothing is applied</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">path_smooth</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> then <code class="docutils literal notranslate"><span class="pre">min_data_in_leaf</span></code> must be at least <code class="docutils literal notranslate"><span class="pre">2</span></code></p></li>
+<li><p>larger values give stronger regularization</p>
+<ul>
+<li><p>the weight of each node is <code class="docutils literal notranslate"><span class="pre">(n</span> <span class="pre">/</span> <span class="pre">path_smooth)</span> <span class="pre">*</span> <span class="pre">w</span> <span class="pre">+</span> <span class="pre">w_p</span> <span class="pre">/</span> <span class="pre">(n</span> <span class="pre">/</span> <span class="pre">path_smooth</span> <span class="pre">+</span> <span class="pre">1)</span></code>, where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of samples in the node, <code class="docutils literal notranslate"><span class="pre">w</span></code> is the optimal node weight to minimise the loss (approximately <code class="docutils literal notranslate"><span class="pre">-sum_gradients</span> <span class="pre">/</span> <span class="pre">sum_hessians</span></code>), and <code class="docutils literal notranslate"><span class="pre">w_p</span></code> is the weight of the parent node</p></li>
+<li><p>note that the parent output <code class="docutils literal notranslate"><span class="pre">w_p</span></code> itself has smoothing applied, unless it is the root node, so that the smoothing effect accumulates with the tree depth</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">interaction_constraints</span></code> <span class="raw-html"><a id="interaction_constraints" title="Permalink to this parameter" href="#interaction_constraints">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string</p>
+<ul>
+<li><p>controls which features can appear in the same branch</p></li>
+<li><p>by default interaction constraints are disabled, to enable them you can specify</p>
+<ul>
+<li><p>for CLI, lists separated by commas, e.g. <code class="docutils literal notranslate"><span class="pre">[0,1,2],[2,3]</span></code></p></li>
+<li><p>for Python-package, list of lists, e.g. <code class="docutils literal notranslate"><span class="pre">[[0,</span> <span class="pre">1,</span> <span class="pre">2],</span> <span class="pre">[2,</span> <span class="pre">3]]</span></code></p></li>
+<li><p>for R-package, list of character or numeric vectors, e.g. <code class="docutils literal notranslate"><span class="pre">list(c(&quot;var1&quot;,</span> <span class="pre">&quot;var2&quot;,</span> <span class="pre">&quot;var3&quot;),</span> <span class="pre">c(&quot;var3&quot;,</span> <span class="pre">&quot;var4&quot;))</span></code> or <code class="docutils literal notranslate"><span class="pre">list(c(1L,</span> <span class="pre">2L,</span> <span class="pre">3L),</span> <span class="pre">c(3L,</span> <span class="pre">4L))</span></code>. Numeric vectors should use 1-based indexing, where <code class="docutils literal notranslate"><span class="pre">1L</span></code> is the first feature, <code class="docutils literal notranslate"><span class="pre">2L</span></code> is the second feature, etc</p></li>
+</ul>
+</li>
+<li><p>any two features can only appear in the same branch only if there exists a constraint containing both features</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbosity</span></code> <span class="raw-html"><a id="verbosity" title="Permalink to this parameter" href="#verbosity">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">verbose</span></code></p>
+<ul>
+<li><p>controls the level of LightGBM’s verbosity</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">0</span></code>: Fatal, <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">0</span></code>: Error (Warning), <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">1</span></code>: Info, <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">1</span></code>: Debug</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input_model</span></code> <span class="raw-html"><a id="input_model" title="Permalink to this parameter" href="#input_model">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">model_input</span></code>, <code class="docutils literal notranslate"><span class="pre">model_in</span></code></p>
+<ul>
+<li><p>filename of input model</p></li>
+<li><p>for <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task, this model will be applied to prediction data</p></li>
+<li><p>for <code class="docutils literal notranslate"><span class="pre">train</span></code> task, training will be continued from this model</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_model</span></code> <span class="raw-html"><a id="output_model" title="Permalink to this parameter" href="#output_model">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">LightGBM_model.txt</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">model_output</span></code>, <code class="docutils literal notranslate"><span class="pre">model_out</span></code></p>
+<ul>
+<li><p>filename of output model in training</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">saved_feature_importance_type</span></code> <span class="raw-html"><a id="saved_feature_importance_type" title="Permalink to this parameter" href="#saved_feature_importance_type">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0</span></code>, type = int</p>
+<ul>
+<li><p>the feature importance type in the saved model file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: count-based feature importance (numbers of splits are counted); <code class="docutils literal notranslate"><span class="pre">1</span></code>: gain-based feature importance (values of gain are counted)</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">snapshot_freq</span></code> <span class="raw-html"><a id="snapshot_freq" title="Permalink to this parameter" href="#snapshot_freq">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">-1</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">save_period</span></code></p>
+<ul>
+<li><p>frequency of saving model file snapshot</p></li>
+<li><p>set this to positive value to enable this function. For example, the model file will be snapshotted at each iteration if <code class="docutils literal notranslate"><span class="pre">snapshot_freq=1</span></code></p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="io-parameters">
+<h2>IO Parameters<a class="headerlink" href="#io-parameters" title="Permalink to this heading"></a></h2>
+<section id="dataset-parameters">
+<h3>Dataset Parameters<a class="headerlink" href="#dataset-parameters" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">linear_tree</span></code> <span class="raw-html"><a id="linear_tree" title="Permalink to this parameter" href="#linear_tree">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">linear_trees</span></code></p>
+<ul>
+<li><p>fit piecewise linear gradient boosting tree</p>
+<ul>
+<li><p>tree splits are chosen in the usual way, but the model at each leaf is linear instead of constant</p></li>
+<li><p>the linear model at each leaf includes all the numerical features in that leaf’s branch</p></li>
+<li><p>categorical features are used for splits as normal but are not used in the linear models</p></li>
+<li><p>missing values should not be encoded as <code class="docutils literal notranslate"><span class="pre">0</span></code>. Use <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> for Python, <code class="docutils literal notranslate"><span class="pre">NA</span></code> for the CLI, and <code class="docutils literal notranslate"><span class="pre">NA</span></code>, <code class="docutils literal notranslate"><span class="pre">NA_real_</span></code>, or <code class="docutils literal notranslate"><span class="pre">NA_integer_</span></code> for R</p></li>
+<li><p>it is recommended to rescale data before training so that features have similar mean and standard deviation</p></li>
+<li><p><strong>Note</strong>: only works with CPU and <code class="docutils literal notranslate"><span class="pre">serial</span></code> tree learner</p></li>
+<li><p><strong>Note</strong>: <code class="docutils literal notranslate"><span class="pre">regression_l1</span></code> objective is not supported with linear tree boosting</p></li>
+<li><p><strong>Note</strong>: setting <code class="docutils literal notranslate"><span class="pre">linear_tree=true</span></code> significantly increases the memory use of LightGBM</p></li>
+<li><p><strong>Note</strong>: if you specify <code class="docutils literal notranslate"><span class="pre">monotone_constraints</span></code>, constraints will be enforced when choosing the split points, but not when fitting the linear models on leaves</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_bin</span></code> <span class="raw-html"><a id="max_bin" title="Permalink to this parameter" href="#max_bin">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">255</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">max_bins</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">max_bin</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></p>
+<ul>
+<li><p>max number of bins that feature values will be bucketed in</p></li>
+<li><p>small number of bins may reduce training accuracy but may increase general power (deal with over-fitting)</p></li>
+<li><p>LightGBM will auto compress memory according to <code class="docutils literal notranslate"><span class="pre">max_bin</span></code>. For example, LightGBM will use <code class="docutils literal notranslate"><span class="pre">uint8_t</span></code> for feature value if <code class="docutils literal notranslate"><span class="pre">max_bin=255</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_bin_by_feature</span></code> <span class="raw-html"><a id="max_bin_by_feature" title="Permalink to this parameter" href="#max_bin_by_feature">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">None</span></code>, type = multi-int</p>
+<ul>
+<li><p>max number of bins for each feature</p></li>
+<li><p>if not specified, will use <code class="docutils literal notranslate"><span class="pre">max_bin</span></code> for all features</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_data_in_bin</span></code> <span class="raw-html"><a id="min_data_in_bin" title="Permalink to this parameter" href="#min_data_in_bin">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">3</span></code>, type = int, constraints: <code class="docutils literal notranslate"><span class="pre">min_data_in_bin</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>minimal number of data inside one bin</p></li>
+<li><p>use this to avoid one-data-one-bin (potential over-fitting)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bin_construct_sample_cnt</span></code> <span class="raw-html"><a id="bin_construct_sample_cnt" title="Permalink to this parameter" href="#bin_construct_sample_cnt">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">200000</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">subsample_for_bin</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">bin_construct_sample_cnt</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>number of data that sampled to construct feature discrete bins</p></li>
+<li><p>setting this to larger value will give better training result, but may increase data loading time</p></li>
+<li><p>set this to larger value if data is very sparse</p></li>
+<li><p><strong>Note</strong>: don’t set this to small values, otherwise, you may encounter unexpected errors and poor accuracy</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_random_seed</span></code> <span class="raw-html"><a id="data_random_seed" title="Permalink to this parameter" href="#data_random_seed">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">data_seed</span></code></p>
+<ul>
+<li><p>random seed for sampling data to construct histogram bins</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_enable_sparse</span></code> <span class="raw-html"><a id="is_enable_sparse" title="Permalink to this parameter" href="#is_enable_sparse">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">is_sparse</span></code>, <code class="docutils literal notranslate"><span class="pre">enable_sparse</span></code>, <code class="docutils literal notranslate"><span class="pre">sparse</span></code></p>
+<ul>
+<li><p>used to enable/disable sparse optimization</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_bundle</span></code> <span class="raw-html"><a id="enable_bundle" title="Permalink to this parameter" href="#enable_bundle">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">is_enable_bundle</span></code>, <code class="docutils literal notranslate"><span class="pre">bundle</span></code></p>
+<ul>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">false</span></code> to disable Exclusive Feature Bundling (EFB), which is described in <a class="reference external" href="https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree">LightGBM: A Highly Efficient Gradient Boosting Decision Tree</a></p></li>
+<li><p><strong>Note</strong>: disabling this may cause the slow training speed for sparse datasets</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_missing</span></code> <span class="raw-html"><a id="use_missing" title="Permalink to this parameter" href="#use_missing">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>, type = bool</p>
+<ul>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">false</span></code> to disable the special handle of missing value</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zero_as_missing</span></code> <span class="raw-html"><a id="zero_as_missing" title="Permalink to this parameter" href="#zero_as_missing">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to treat all zero as missing values (including the unshown values in LibSVM / sparse matrices)</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">false</span></code> to use <code class="docutils literal notranslate"><span class="pre">na</span></code> for representing missing values</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_pre_filter</span></code> <span class="raw-html"><a id="feature_pre_filter" title="Permalink to this parameter" href="#feature_pre_filter">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>, type = bool</p>
+<ul>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> (the default) to tell LightGBM to ignore the features that are unsplittable based on <code class="docutils literal notranslate"><span class="pre">min_data_in_leaf</span></code></p></li>
+<li><p>as dataset object is initialized only once and cannot be changed after that, you may need to set this to <code class="docutils literal notranslate"><span class="pre">false</span></code> when searching parameters with <code class="docutils literal notranslate"><span class="pre">min_data_in_leaf</span></code>, otherwise features are filtered by <code class="docutils literal notranslate"><span class="pre">min_data_in_leaf</span></code> firstly if you don’t reconstruct dataset object</p></li>
+<li><p><strong>Note</strong>: setting this to <code class="docutils literal notranslate"><span class="pre">false</span></code> may slow down the training</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pre_partition</span></code> <span class="raw-html"><a id="pre_partition" title="Permalink to this parameter" href="#pre_partition">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">is_pre_partition</span></code></p>
+<ul>
+<li><p>used for distributed learning (excluding the <code class="docutils literal notranslate"><span class="pre">feature_parallel</span></code> mode)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if training data are pre-partitioned, and different machines use different partitions</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">two_round</span></code> <span class="raw-html"><a id="two_round" title="Permalink to this parameter" href="#two_round">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">two_round_loading</span></code>, <code class="docutils literal notranslate"><span class="pre">use_two_round_loading</span></code></p>
+<ul>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> if data file is too big to fit in memory</p></li>
+<li><p>by default, LightGBM will map data file to memory and load features from memory. This will provide faster data loading speed, but may cause run out of memory error when the data file is very big</p></li>
+<li><p><strong>Note</strong>: works only in case of loading data directly from text file</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">header</span></code> <span class="raw-html"><a id="header" title="Permalink to this parameter" href="#header">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">has_header</span></code></p>
+<ul>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> if input data has header</p></li>
+<li><p><strong>Note</strong>: works only in case of loading data directly from text file</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label_column</span></code> <span class="raw-html"><a id="label_column" title="Permalink to this parameter" href="#label_column">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = int or string, aliases: <code class="docutils literal notranslate"><span class="pre">label</span></code></p>
+<ul>
+<li><p>used to specify the label column</p></li>
+<li><p>use number for index, e.g. <code class="docutils literal notranslate"><span class="pre">label=0</span></code> means column_0 is the label</p></li>
+<li><p>add a prefix <code class="docutils literal notranslate"><span class="pre">name:</span></code> for column name, e.g. <code class="docutils literal notranslate"><span class="pre">label=name:is_click</span></code></p></li>
+<li><p>if omitted, the first column in the training data is used as the label</p></li>
+<li><p><strong>Note</strong>: works only in case of loading data directly from text file</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weight_column</span></code> <span class="raw-html"><a id="weight_column" title="Permalink to this parameter" href="#weight_column">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = int or string, aliases: <code class="docutils literal notranslate"><span class="pre">weight</span></code></p>
+<ul>
+<li><p>used to specify the weight column</p></li>
+<li><p>use number for index, e.g. <code class="docutils literal notranslate"><span class="pre">weight=0</span></code> means column_0 is the weight</p></li>
+<li><p>add a prefix <code class="docutils literal notranslate"><span class="pre">name:</span></code> for column name, e.g. <code class="docutils literal notranslate"><span class="pre">weight=name:weight</span></code></p></li>
+<li><p><strong>Note</strong>: works only in case of loading data directly from text file</p></li>
+<li><p><strong>Note</strong>: index starts from <code class="docutils literal notranslate"><span class="pre">0</span></code> and it doesn’t count the label column when passing type is <code class="docutils literal notranslate"><span class="pre">int</span></code>, e.g. when label is column_0, and weight is column_1, the correct parameter is <code class="docutils literal notranslate"><span class="pre">weight=0</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">group_column</span></code> <span class="raw-html"><a id="group_column" title="Permalink to this parameter" href="#group_column">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = int or string, aliases: <code class="docutils literal notranslate"><span class="pre">group</span></code>, <code class="docutils literal notranslate"><span class="pre">group_id</span></code>, <code class="docutils literal notranslate"><span class="pre">query_column</span></code>, <code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">query_id</span></code></p>
+<ul>
+<li><p>used to specify the query/group id column</p></li>
+<li><p>use number for index, e.g. <code class="docutils literal notranslate"><span class="pre">query=0</span></code> means column_0 is the query id</p></li>
+<li><p>add a prefix <code class="docutils literal notranslate"><span class="pre">name:</span></code> for column name, e.g. <code class="docutils literal notranslate"><span class="pre">query=name:query_id</span></code></p></li>
+<li><p><strong>Note</strong>: works only in case of loading data directly from text file</p></li>
+<li><p><strong>Note</strong>: data should be grouped by query_id, for more information, see <a class="reference external" href="#query-data">Query Data</a></p></li>
+<li><p><strong>Note</strong>: index starts from <code class="docutils literal notranslate"><span class="pre">0</span></code> and it doesn’t count the label column when passing type is <code class="docutils literal notranslate"><span class="pre">int</span></code>, e.g. when label is column_0 and query_id is column_1, the correct parameter is <code class="docutils literal notranslate"><span class="pre">query=0</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ignore_column</span></code> <span class="raw-html"><a id="ignore_column" title="Permalink to this parameter" href="#ignore_column">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = multi-int or string, aliases: <code class="docutils literal notranslate"><span class="pre">ignore_feature</span></code>, <code class="docutils literal notranslate"><span class="pre">blacklist</span></code></p>
+<ul>
+<li><p>used to specify some ignoring columns in training</p></li>
+<li><p>use number for index, e.g. <code class="docutils literal notranslate"><span class="pre">ignore_column=0,1,2</span></code> means column_0, column_1 and column_2 will be ignored</p></li>
+<li><p>add a prefix <code class="docutils literal notranslate"><span class="pre">name:</span></code> for column name, e.g. <code class="docutils literal notranslate"><span class="pre">ignore_column=name:c1,c2,c3</span></code> means c1, c2 and c3 will be ignored</p></li>
+<li><p><strong>Note</strong>: works only in case of loading data directly from text file</p></li>
+<li><p><strong>Note</strong>: index starts from <code class="docutils literal notranslate"><span class="pre">0</span></code> and it doesn’t count the label column when passing type is <code class="docutils literal notranslate"><span class="pre">int</span></code></p></li>
+<li><p><strong>Note</strong>: despite the fact that specified columns will be completely ignored during the training, they still should have a valid format allowing LightGBM to load file successfully</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">categorical_feature</span></code> <span class="raw-html"><a id="categorical_feature" title="Permalink to this parameter" href="#categorical_feature">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = multi-int or string, aliases: <code class="docutils literal notranslate"><span class="pre">cat_feature</span></code>, <code class="docutils literal notranslate"><span class="pre">categorical_column</span></code>, <code class="docutils literal notranslate"><span class="pre">cat_column</span></code>, <code class="docutils literal notranslate"><span class="pre">categorical_features</span></code></p>
+<ul>
+<li><p>used to specify categorical features</p></li>
+<li><p>use number for index, e.g. <code class="docutils literal notranslate"><span class="pre">categorical_feature=0,1,2</span></code> means column_0, column_1 and column_2 are categorical features</p></li>
+<li><p>add a prefix <code class="docutils literal notranslate"><span class="pre">name:</span></code> for column name, e.g. <code class="docutils literal notranslate"><span class="pre">categorical_feature=name:c1,c2,c3</span></code> means c1, c2 and c3 are categorical features</p></li>
+<li><p><strong>Note</strong>: only supports categorical with <code class="docutils literal notranslate"><span class="pre">int</span></code> type (not applicable for data represented as pandas DataFrame in Python-package)</p></li>
+<li><p><strong>Note</strong>: index starts from <code class="docutils literal notranslate"><span class="pre">0</span></code> and it doesn’t count the label column when passing type is <code class="docutils literal notranslate"><span class="pre">int</span></code></p></li>
+<li><p><strong>Note</strong>: all values should be less than <code class="docutils literal notranslate"><span class="pre">Int32.MaxValue</span></code> (2147483647)</p></li>
+<li><p><strong>Note</strong>: using large values could be memory consuming. Tree decision rule works best when categorical features are presented by consecutive integers starting from zero</p></li>
+<li><p><strong>Note</strong>: all negative values will be treated as <strong>missing values</strong></p></li>
+<li><p><strong>Note</strong>: the output cannot be monotonically constrained with respect to a categorical feature</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">forcedbins_filename</span></code> <span class="raw-html"><a id="forcedbins_filename" title="Permalink to this parameter" href="#forcedbins_filename">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string</p>
+<ul>
+<li><p>path to a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file that specifies bin upper bounds for some or all features</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.json</span></code> file should contain an array of objects, each containing the word <code class="docutils literal notranslate"><span class="pre">feature</span></code> (integer feature index) and <code class="docutils literal notranslate"><span class="pre">bin_upper_bound</span></code> (array of thresholds for binning)</p></li>
+<li><p>see <a class="reference external" href="https://github.com/microsoft/LightGBM/tree/master/examples/regression/forced_bins.json">this file</a> as an example</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">save_binary</span></code> <span class="raw-html"><a id="save_binary" title="Permalink to this parameter" href="#save_binary">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">is_save_binary</span></code>, <code class="docutils literal notranslate"><span class="pre">is_save_binary_file</span></code></p>
+<ul>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">true</span></code>, LightGBM will save the dataset (including validation data) to a binary file. This speed ups the data loading for the next time</p></li>
+<li><p><strong>Note</strong>: <code class="docutils literal notranslate"><span class="pre">init_score</span></code> is not saved in binary file</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version; for language-specific packages you can use the correspondent function</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">precise_float_parser</span></code> <span class="raw-html"><a id="precise_float_parser" title="Permalink to this parameter" href="#precise_float_parser">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>use precise floating point number parsing for text parser (e.g. CSV, TSV, LibSVM input)</p></li>
+<li><p><strong>Note</strong>: setting this to <code class="docutils literal notranslate"><span class="pre">true</span></code> may lead to much slower text parsing</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="predict-parameters">
+<h3>Predict Parameters<a class="headerlink" href="#predict-parameters" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">start_iteration_predict</span></code> <span class="raw-html"><a id="start_iteration_predict" title="Permalink to this parameter" href="#start_iteration_predict">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0</span></code>, type = int</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>used to specify from which iteration to start the prediction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">0</span></code> means from the first iteration</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_iteration_predict</span></code> <span class="raw-html"><a id="num_iteration_predict" title="Permalink to this parameter" href="#num_iteration_predict">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">-1</span></code>, type = int</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>used to specify how many trained iterations will be used in prediction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">0</span></code> means no limit</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict_raw_score</span></code> <span class="raw-html"><a id="predict_raw_score" title="Permalink to this parameter" href="#predict_raw_score">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">is_predict_raw_score</span></code>, <code class="docutils literal notranslate"><span class="pre">predict_rawscore</span></code>, <code class="docutils literal notranslate"><span class="pre">raw_score</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to predict only the raw scores</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">false</span></code> to predict transformed scores</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict_leaf_index</span></code> <span class="raw-html"><a id="predict_leaf_index" title="Permalink to this parameter" href="#predict_leaf_index">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">is_predict_leaf_index</span></code>, <code class="docutils literal notranslate"><span class="pre">leaf_index</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to predict with leaf index of all trees</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict_contrib</span></code> <span class="raw-html"><a id="predict_contrib" title="Permalink to this parameter" href="#predict_contrib">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">is_predict_contrib</span></code>, <code class="docutils literal notranslate"><span class="pre">contrib</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to estimate <a class="reference external" href="https://arxiv.org/abs/1706.06060">SHAP values</a>, which represent how each feature contributes to each prediction</p></li>
+<li><p>produces <code class="docutils literal notranslate"><span class="pre">#features</span> <span class="pre">+</span> <span class="pre">1</span></code> values where the last value is the expected value of the model output over the training data</p></li>
+<li><p><strong>Note</strong>: if you want to get more explanation for your model’s predictions using SHAP values like SHAP interaction values, you can install <a class="reference external" href="https://github.com/slundberg/shap">shap package</a></p></li>
+<li><p><strong>Note</strong>: unlike the shap package, with <code class="docutils literal notranslate"><span class="pre">predict_contrib</span></code> we return a matrix with an extra column, where the last column is the expected value</p></li>
+<li><p><strong>Note</strong>: this feature is not implemented for linear trees</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict_disable_shape_check</span></code> <span class="raw-html"><a id="predict_disable_shape_check" title="Permalink to this parameter" href="#predict_disable_shape_check">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>control whether or not LightGBM raises an error when you try to predict on data with a different number of features than the training data</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">false</span></code> (the default), a fatal error will be raised if the number of features in the dataset you predict on differs from the number seen during training</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">true</span></code>, LightGBM will attempt to predict on whatever data you provide. This is dangerous because you might get incorrect predictions, but you could use it in situations where it is difficult or expensive to generate some features and you are very confident that they were never chosen for splits in the model</p></li>
+<li><p><strong>Note</strong>: be very careful setting this parameter to <code class="docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pred_early_stop</span></code> <span class="raw-html"><a id="pred_early_stop" title="Permalink to this parameter" href="#pred_early_stop">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">classification</span></code> and <code class="docutils literal notranslate"><span class="pre">ranking</span></code> applications</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">true</span></code>, will use early-stopping to speed up the prediction. May affect the accuracy</p></li>
+<li><p><strong>Note</strong>: cannot be used with <code class="docutils literal notranslate"><span class="pre">rf</span></code> boosting type or custom objective function</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pred_early_stop_freq</span></code> <span class="raw-html"><a id="pred_early_stop_freq" title="Permalink to this parameter" href="#pred_early_stop_freq">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">10</span></code>, type = int</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>the frequency of checking early-stopping prediction</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pred_early_stop_margin</span></code> <span class="raw-html"><a id="pred_early_stop_margin" title="Permalink to this parameter" href="#pred_early_stop_margin">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">10.0</span></code>, type = double</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>the threshold of margin in early-stopping prediction</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_result</span></code> <span class="raw-html"><a id="output_result" title="Permalink to this parameter" href="#output_result">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">LightGBM_predict_result.txt</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">predict_result</span></code>, <code class="docutils literal notranslate"><span class="pre">prediction_result</span></code>, <code class="docutils literal notranslate"><span class="pre">predict_name</span></code>, <code class="docutils literal notranslate"><span class="pre">prediction_name</span></code>, <code class="docutils literal notranslate"><span class="pre">pred_name</span></code>, <code class="docutils literal notranslate"><span class="pre">name_pred</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">prediction</span></code> task</p></li>
+<li><p>filename of prediction result</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="convert-parameters">
+<h3>Convert Parameters<a class="headerlink" href="#convert-parameters" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">convert_model_language</span></code> <span class="raw-html"><a id="convert_model_language" title="Permalink to this parameter" href="#convert_model_language">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">convert_model</span></code> task</p></li>
+<li><p>only <code class="docutils literal notranslate"><span class="pre">cpp</span></code> is supported yet; for conversion model to other languages consider using <a class="reference external" href="https://github.com/BayesWitnesses/m2cgen">m2cgen</a> utility</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">convert_model_language</span></code> is set and <code class="docutils literal notranslate"><span class="pre">task=train</span></code>, the model will be also converted</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">convert_model</span></code> <span class="raw-html"><a id="convert_model" title="Permalink to this parameter" href="#convert_model">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">gbdt_prediction.cpp</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">convert_model_file</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">convert_model</span></code> task</p></li>
+<li><p>output filename of converted model</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="objective-parameters">
+<h2>Objective Parameters<a class="headerlink" href="#objective-parameters" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">objective_seed</span></code> <span class="raw-html"><a id="objective_seed" title="Permalink to this parameter" href="#objective_seed">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">5</span></code>, type = int</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">rank_xendcg</span></code> objective</p></li>
+<li><p>random seed for objectives, if random process is needed</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_class</span></code> <span class="raw-html"><a id="num_class" title="Permalink to this parameter" href="#num_class">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">num_classes</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">num_class</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">multi-class</span></code> classification application</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_unbalance</span></code> <span class="raw-html"><a id="is_unbalance" title="Permalink to this parameter" href="#is_unbalance">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">unbalance</span></code>, <code class="docutils literal notranslate"><span class="pre">unbalanced_sets</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">binary</span></code> and <code class="docutils literal notranslate"><span class="pre">multiclassova</span></code> applications</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> if training data are unbalanced</p></li>
+<li><p><strong>Note</strong>: while enabling this should increase the overall performance metric of your model, it will also result in poor estimates of the individual class probabilities</p></li>
+<li><p><strong>Note</strong>: this parameter cannot be used at the same time with <code class="docutils literal notranslate"><span class="pre">scale_pos_weight</span></code>, choose only <strong>one</strong> of them</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale_pos_weight</span></code> <span class="raw-html"><a id="scale_pos_weight" title="Permalink to this parameter" href="#scale_pos_weight">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">scale_pos_weight</span> <span class="pre">&gt;</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">binary</span></code> and <code class="docutils literal notranslate"><span class="pre">multiclassova</span></code> applications</p></li>
+<li><p>weight of labels with positive class</p></li>
+<li><p><strong>Note</strong>: while enabling this should increase the overall performance metric of your model, it will also result in poor estimates of the individual class probabilities</p></li>
+<li><p><strong>Note</strong>: this parameter cannot be used at the same time with <code class="docutils literal notranslate"><span class="pre">is_unbalance</span></code>, choose only <strong>one</strong> of them</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sigmoid</span></code> <span class="raw-html"><a id="sigmoid" title="Permalink to this parameter" href="#sigmoid">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">sigmoid</span> <span class="pre">&gt;</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">binary</span></code> and <code class="docutils literal notranslate"><span class="pre">multiclassova</span></code> classification and in <code class="docutils literal notranslate"><span class="pre">lambdarank</span></code> applications</p></li>
+<li><p>parameter for the sigmoid function</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">boost_from_average</span></code> <span class="raw-html"><a id="boost_from_average" title="Permalink to this parameter" href="#boost_from_average">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>, type = bool</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">regression</span></code>, <code class="docutils literal notranslate"><span class="pre">binary</span></code>, <code class="docutils literal notranslate"><span class="pre">multiclassova</span></code> and <code class="docutils literal notranslate"><span class="pre">cross-entropy</span></code> applications</p></li>
+<li><p>adjusts initial score to the mean of labels for faster convergence</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reg_sqrt</span></code> <span class="raw-html"><a id="reg_sqrt" title="Permalink to this parameter" href="#reg_sqrt">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">regression</span></code> application</p></li>
+<li><p>used to fit <code class="docutils literal notranslate"><span class="pre">sqrt(label)</span></code> instead of original values and prediction result will be also automatically converted to <code class="docutils literal notranslate"><span class="pre">prediction^2</span></code></p></li>
+<li><p>might be useful in case of large-range labels</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code> <span class="raw-html"><a id="alpha" title="Permalink to this parameter" href="#alpha">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.9</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">&gt;</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">huber</span></code> and <code class="docutils literal notranslate"><span class="pre">quantile</span></code> <code class="docutils literal notranslate"><span class="pre">regression</span></code> applications</p></li>
+<li><p>parameter for <a class="reference external" href="https://en.wikipedia.org/wiki/Huber_loss">Huber loss</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/Quantile_regression">Quantile regression</a></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fair_c</span></code> <span class="raw-html"><a id="fair_c" title="Permalink to this parameter" href="#fair_c">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">fair_c</span> <span class="pre">&gt;</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">fair</span></code> <code class="docutils literal notranslate"><span class="pre">regression</span></code> application</p></li>
+<li><p>parameter for <a class="reference external" href="https://www.kaggle.com/c/allstate-claims-severity/discussion/24520">Fair loss</a></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">poisson_max_delta_step</span></code> <span class="raw-html"><a id="poisson_max_delta_step" title="Permalink to this parameter" href="#poisson_max_delta_step">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0.7</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">poisson_max_delta_step</span> <span class="pre">&gt;</span> <span class="pre">0.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">poisson</span></code> <code class="docutils literal notranslate"><span class="pre">regression</span></code> application</p></li>
+<li><p>parameter for <a class="reference external" href="https://en.wikipedia.org/wiki/Poisson_regression">Poisson regression</a> to safeguard optimization</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tweedie_variance_power</span></code> <span class="raw-html"><a id="tweedie_variance_power" title="Permalink to this parameter" href="#tweedie_variance_power">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1.5</span></code>, type = double, constraints: <code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">&lt;=</span> <span class="pre">tweedie_variance_power</span> <span class="pre">&lt;</span> <span class="pre">2.0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">tweedie</span></code> <code class="docutils literal notranslate"><span class="pre">regression</span></code> application</p></li>
+<li><p>used to control the variance of the tweedie distribution</p></li>
+<li><p>set this closer to <code class="docutils literal notranslate"><span class="pre">2</span></code> to shift towards a <strong>Gamma</strong> distribution</p></li>
+<li><p>set this closer to <code class="docutils literal notranslate"><span class="pre">1</span></code> to shift towards a <strong>Poisson</strong> distribution</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambdarank_truncation_level</span></code> <span class="raw-html"><a id="lambdarank_truncation_level" title="Permalink to this parameter" href="#lambdarank_truncation_level">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">30</span></code>, type = int, constraints: <code class="docutils literal notranslate"><span class="pre">lambdarank_truncation_level</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">lambdarank</span></code> application</p></li>
+<li><p>controls the number of top-results to focus on during training, refer to “truncation level” in the Sec. 3 of <a class="reference external" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/MSR-TR-2010-82.pdf">LambdaMART paper</a></p></li>
+<li><p>this parameter is closely related to the desirable cutoff <code class="docutils literal notranslate"><span class="pre">k</span></code> in the metric <strong>NDCG&#64;k</strong> that we aim at optimizing the ranker for. The optimal setting for this parameter is likely to be slightly higher than <code class="docutils literal notranslate"><span class="pre">k</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">+</span> <span class="pre">3</span></code>) to include more pairs of documents to train on, but perhaps not too high to avoid deviating too much from the desired target metric <strong>NDCG&#64;k</strong></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lambdarank_norm</span></code> <span class="raw-html"><a id="lambdarank_norm" title="Permalink to this parameter" href="#lambdarank_norm">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>, type = bool</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">lambdarank</span></code> application</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to normalize the lambdas for different queries, and improve the performance for unbalanced data</p></li>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">false</span></code> to enforce the original lambdarank algorithm</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">label_gain</span></code> <span class="raw-html"><a id="label_gain" title="Permalink to this parameter" href="#label_gain">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">0,1,3,7,15,31,63,...,2^30-1</span></code>, type = multi-double</p>
+<ul>
+<li><p>used only in <code class="docutils literal notranslate"><span class="pre">lambdarank</span></code> application</p></li>
+<li><p>relevant gain for labels. For example, the gain of label <code class="docutils literal notranslate"><span class="pre">2</span></code> is <code class="docutils literal notranslate"><span class="pre">3</span></code> in case of default label gains</p></li>
+<li><p>separate by <code class="docutils literal notranslate"><span class="pre">,</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="metric-parameters">
+<h2>Metric Parameters<a class="headerlink" href="#metric-parameters" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">metric</span></code> <span class="raw-html"><a id="metric" title="Permalink to this parameter" href="#metric">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = multi-enum, aliases: <code class="docutils literal notranslate"><span class="pre">metrics</span></code>, <code class="docutils literal notranslate"><span class="pre">metric_types</span></code></p>
+<ul>
+<li><p>metric(s) to be evaluated on the evaluation set(s)</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> (empty string or not specified) means that metric corresponding to specified <code class="docutils literal notranslate"><span class="pre">objective</span></code> will be used (this is possible only for pre-defined objective functions, otherwise no evaluation metric will be added)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code> (string, <strong>not</strong> a <code class="docutils literal notranslate"><span class="pre">None</span></code> value) means that no metric will be registered, aliases: <code class="docutils literal notranslate"><span class="pre">na</span></code>, <code class="docutils literal notranslate"><span class="pre">null</span></code>, <code class="docutils literal notranslate"><span class="pre">custom</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">l1</span></code>, absolute loss, aliases: <code class="docutils literal notranslate"><span class="pre">mean_absolute_error</span></code>, <code class="docutils literal notranslate"><span class="pre">mae</span></code>, <code class="docutils literal notranslate"><span class="pre">regression_l1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">l2</span></code>, square loss, aliases: <code class="docutils literal notranslate"><span class="pre">mean_squared_error</span></code>, <code class="docutils literal notranslate"><span class="pre">mse</span></code>, <code class="docutils literal notranslate"><span class="pre">regression_l2</span></code>, <code class="docutils literal notranslate"><span class="pre">regression</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rmse</span></code>, root square loss, aliases: <code class="docutils literal notranslate"><span class="pre">root_mean_squared_error</span></code>, <code class="docutils literal notranslate"><span class="pre">l2_root</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quantile</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Quantile_regression">Quantile regression</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mape</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_absolute_percentage_error">MAPE loss</a>, aliases: <code class="docutils literal notranslate"><span class="pre">mean_absolute_percentage_error</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">huber</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Huber_loss">Huber loss</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fair</span></code>, <a class="reference external" href="https://www.kaggle.com/c/allstate-claims-severity/discussion/24520">Fair loss</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">poisson</span></code>, negative log-likelihood for <a class="reference external" href="https://en.wikipedia.org/wiki/Poisson_regression">Poisson regression</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gamma</span></code>, negative log-likelihood for <strong>Gamma</strong> regression</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gamma_deviance</span></code>, residual deviance for <strong>Gamma</strong> regression</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tweedie</span></code>, negative log-likelihood for <strong>Tweedie</strong> regression</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ndcg</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG">NDCG</a>, aliases: <code class="docutils literal notranslate"><span class="pre">lambdarank</span></code>, <code class="docutils literal notranslate"><span class="pre">rank_xendcg</span></code>, <code class="docutils literal notranslate"><span class="pre">xendcg</span></code>, <code class="docutils literal notranslate"><span class="pre">xe_ndcg</span></code>, <code class="docutils literal notranslate"><span class="pre">xe_ndcg_mart</span></code>, <code class="docutils literal notranslate"><span class="pre">xendcg_mart</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">map</span></code>, <a class="reference external" href="https://makarandtapaswi.wordpress.com/2012/07/02/intuition-behind-average-precision-and-map/">MAP</a>, aliases: <code class="docutils literal notranslate"><span class="pre">mean_average_precision</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auc</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve">AUC</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">average_precision</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html">average precision score</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">binary_logloss</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Cross_entropy">log loss</a>, aliases: <code class="docutils literal notranslate"><span class="pre">binary</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">binary_error</span></code>, for one sample: <code class="docutils literal notranslate"><span class="pre">0</span></code> for correct classification, <code class="docutils literal notranslate"><span class="pre">1</span></code> for error classification</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auc_mu</span></code>, <a class="reference external" href="http://proceedings.mlr.press/v97/kleiman19a/kleiman19a.pdf">AUC-mu</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multi_logloss</span></code>, log loss for multi-class classification, aliases: <code class="docutils literal notranslate"><span class="pre">multiclass</span></code>, <code class="docutils literal notranslate"><span class="pre">softmax</span></code>, <code class="docutils literal notranslate"><span class="pre">multiclassova</span></code>, <code class="docutils literal notranslate"><span class="pre">multiclass_ova</span></code>, <code class="docutils literal notranslate"><span class="pre">ova</span></code>, <code class="docutils literal notranslate"><span class="pre">ovr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multi_error</span></code>, error rate for multi-class classification</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cross_entropy</span></code>, cross-entropy (with optional linear weights), aliases: <code class="docutils literal notranslate"><span class="pre">xentropy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cross_entropy_lambda</span></code>, “intensity-weighted” cross-entropy, aliases: <code class="docutils literal notranslate"><span class="pre">xentlambda</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kullback_leibler</span></code>, <a class="reference external" href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler divergence</a>, aliases: <code class="docutils literal notranslate"><span class="pre">kldiv</span></code></p></li>
+</ul>
+</li>
+<li><p>support multiple metrics, separated by <code class="docutils literal notranslate"><span class="pre">,</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metric_freq</span></code> <span class="raw-html"><a id="metric_freq" title="Permalink to this parameter" href="#metric_freq">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">output_freq</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">metric_freq</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>frequency for metric output</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_provide_training_metric</span></code> <span class="raw-html"><a id="is_provide_training_metric" title="Permalink to this parameter" href="#is_provide_training_metric">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool, aliases: <code class="docutils literal notranslate"><span class="pre">training_metric</span></code>, <code class="docutils literal notranslate"><span class="pre">is_training_metric</span></code>, <code class="docutils literal notranslate"><span class="pre">train_metric</span></code></p>
+<ul>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to output metric result over training dataset</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">eval_at</span></code> <span class="raw-html"><a id="eval_at" title="Permalink to this parameter" href="#eval_at">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1,2,3,4,5</span></code>, type = multi-int, aliases: <code class="docutils literal notranslate"><span class="pre">ndcg_eval_at</span></code>, <code class="docutils literal notranslate"><span class="pre">ndcg_at</span></code>, <code class="docutils literal notranslate"><span class="pre">map_eval_at</span></code>, <code class="docutils literal notranslate"><span class="pre">map_at</span></code></p>
+<ul>
+<li><p>used only with <code class="docutils literal notranslate"><span class="pre">ndcg</span></code> and <code class="docutils literal notranslate"><span class="pre">map</span></code> metrics</p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG">NDCG</a> and <a class="reference external" href="https://makarandtapaswi.wordpress.com/2012/07/02/intuition-behind-average-precision-and-map/">MAP</a> evaluation positions, separated by <code class="docutils literal notranslate"><span class="pre">,</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multi_error_top_k</span></code> <span class="raw-html"><a id="multi_error_top_k" title="Permalink to this parameter" href="#multi_error_top_k">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1</span></code>, type = int, constraints: <code class="docutils literal notranslate"><span class="pre">multi_error_top_k</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>used only with <code class="docutils literal notranslate"><span class="pre">multi_error</span></code> metric</p></li>
+<li><p>threshold for top-k multi-error metric</p></li>
+<li><p>the error on each sample is <code class="docutils literal notranslate"><span class="pre">0</span></code> if the true class is among the top <code class="docutils literal notranslate"><span class="pre">multi_error_top_k</span></code> predictions, and <code class="docutils literal notranslate"><span class="pre">1</span></code> otherwise</p>
+<ul>
+<li><p>more precisely, the error on a sample is <code class="docutils literal notranslate"><span class="pre">0</span></code> if there are at least <code class="docutils literal notranslate"><span class="pre">num_classes</span> <span class="pre">-</span> <span class="pre">multi_error_top_k</span></code> predictions strictly less than the prediction on the true class</p></li>
+</ul>
+</li>
+<li><p>when <code class="docutils literal notranslate"><span class="pre">multi_error_top_k=1</span></code> this is equivalent to the usual multi-error metric</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auc_mu_weights</span></code> <span class="raw-html"><a id="auc_mu_weights" title="Permalink to this parameter" href="#auc_mu_weights">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">None</span></code>, type = multi-double</p>
+<ul>
+<li><p>used only with <code class="docutils literal notranslate"><span class="pre">auc_mu</span></code> metric</p></li>
+<li><p>list representing flattened matrix (in row-major order) giving loss weights for classification errors</p></li>
+<li><p>list should have <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">*</span> <span class="pre">n</span></code> elements, where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of classes</p></li>
+<li><p>the matrix co-ordinate <code class="docutils literal notranslate"><span class="pre">[i,</span> <span class="pre">j]</span></code> should correspond to the <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">+</span> <span class="pre">j</span></code>-th element of the list</p></li>
+<li><p>if not specified, will use equal weights for all classes</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="network-parameters">
+<h2>Network Parameters<a class="headerlink" href="#network-parameters" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">num_machines</span></code> <span class="raw-html"><a id="num_machines" title="Permalink to this parameter" href="#num_machines">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">num_machine</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">num_machines</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>the number of machines for distributed learning application</p></li>
+<li><p>this parameter is needed to be set in both <strong>socket</strong> and <strong>mpi</strong> versions</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">local_listen_port</span></code> <span class="raw-html"><a id="local_listen_port" title="Permalink to this parameter" href="#local_listen_port">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">12400</span> <span class="pre">(random</span> <span class="pre">for</span> <span class="pre">Dask-package)</span></code>, type = int, aliases: <code class="docutils literal notranslate"><span class="pre">local_port</span></code>, <code class="docutils literal notranslate"><span class="pre">port</span></code>, constraints: <code class="docutils literal notranslate"><span class="pre">local_listen_port</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>TCP listen port for local machines</p></li>
+<li><p><strong>Note</strong>: don’t forget to allow this port in firewall settings before training</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">time_out</span></code> <span class="raw-html"><a id="time_out" title="Permalink to this parameter" href="#time_out">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">120</span></code>, type = int, constraints: <code class="docutils literal notranslate"><span class="pre">time_out</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>socket time-out in minutes</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">machine_list_filename</span></code> <span class="raw-html"><a id="machine_list_filename" title="Permalink to this parameter" href="#machine_list_filename">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">machine_list_file</span></code>, <code class="docutils literal notranslate"><span class="pre">machine_list</span></code>, <code class="docutils literal notranslate"><span class="pre">mlist</span></code></p>
+<ul>
+<li><p>path of file that lists machines for this distributed learning application</p></li>
+<li><p>each line contains one IP and one port for one machine. The format is <code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">port</span></code> (space as a separator)</p></li>
+<li><p><strong>Note</strong>: can be used only in CLI version</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">machines</span></code> <span class="raw-html"><a id="machines" title="Permalink to this parameter" href="#machines">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, type = string, aliases: <code class="docutils literal notranslate"><span class="pre">workers</span></code>, <code class="docutils literal notranslate"><span class="pre">nodes</span></code></p>
+<ul>
+<li><p>list of machines in the following format: <code class="docutils literal notranslate"><span class="pre">ip1:port1,ip2:port2</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="gpu-parameters">
+<h2>GPU Parameters<a class="headerlink" href="#gpu-parameters" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span></code> <span class="raw-html"><a id="gpu_platform_id" title="Permalink to this parameter" href="#gpu_platform_id">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">-1</span></code>, type = int</p>
+<ul>
+<li><p>OpenCL platform ID. Usually each GPU vendor exposes one OpenCL platform</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-1</span></code> means the system-wide default platform</p></li>
+<li><p><strong>Note</strong>: refer to <a class="reference external" href="./GPU-Targets.html#query-opencl-devices-in-your-system">GPU Targets</a> for more details</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpu_device_id</span></code> <span class="raw-html"><a id="gpu_device_id" title="Permalink to this parameter" href="#gpu_device_id">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">-1</span></code>, type = int</p>
+<ul>
+<li><p>OpenCL device ID in the specified platform. Each GPU in the selected platform has a unique device ID</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-1</span></code> means the default device in the selected platform</p></li>
+<li><p><strong>Note</strong>: refer to <a class="reference external" href="./GPU-Targets.html#query-opencl-devices-in-your-system">GPU Targets</a> for more details</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpu_use_dp</span></code> <span class="raw-html"><a id="gpu_use_dp" title="Permalink to this parameter" href="#gpu_use_dp">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>, type = bool</p>
+<ul>
+<li><p>set this to <code class="docutils literal notranslate"><span class="pre">true</span></code> to use double precision math on GPU (by default single precision is used)</p></li>
+<li><p><strong>Note</strong>: can be used only in OpenCL implementation, in CUDA implementation only double precision is currently supported</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_gpu</span></code> <span class="raw-html"><a id="num_gpu" title="Permalink to this parameter" href="#num_gpu">&#x1F517;&#xFE0E;</a></span>, default = <code class="docutils literal notranslate"><span class="pre">1</span></code>, type = int, constraints: <code class="docutils literal notranslate"><span class="pre">num_gpu</span> <span class="pre">&gt;</span> <span class="pre">0</span></code></p>
+<ul>
+<li><p>number of GPUs</p></li>
+<li><p><strong>Note</strong>: can be used only in CUDA implementation</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="others">
+<h2>Others<a class="headerlink" href="#others" title="Permalink to this heading"></a></h2>
+<section id="continued-training-with-input-score">
+<h3>Continued Training with Input Score<a class="headerlink" href="#continued-training-with-input-score" title="Permalink to this heading"></a></h3>
+<p>LightGBM supports continued training with initial scores. It uses an additional file to store these initial scores, like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.5</span>
+<span class="o">-</span><span class="mf">0.1</span>
+<span class="mf">0.9</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>It means the initial score of the first data row is <code class="docutils literal notranslate"><span class="pre">0.5</span></code>, second is <code class="docutils literal notranslate"><span class="pre">-0.1</span></code>, and so on.
+The initial score file corresponds with data file line by line, and has per score per line.</p>
+<p>And if the name of data file is <code class="docutils literal notranslate"><span class="pre">train.txt</span></code>, the initial score file should be named as <code class="docutils literal notranslate"><span class="pre">train.txt.init</span></code> and placed in the same folder as the data file.
+In this case, LightGBM will auto load initial score file if it exists.</p>
+</section>
+<section id="weight-data">
+<h3>Weight Data<a class="headerlink" href="#weight-data" title="Permalink to this heading"></a></h3>
+<p>LightGBM supports weighted training. It uses an additional file to store weight data, like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">1.0</span>
+<span class="mf">0.5</span>
+<span class="mf">0.8</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>It means the weight of the first data row is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, second is <code class="docutils literal notranslate"><span class="pre">0.5</span></code>, and so on.
+The weight file corresponds with data file line by line, and has per weight per line.</p>
+<p>And if the name of data file is <code class="docutils literal notranslate"><span class="pre">train.txt</span></code>, the weight file should be named as <code class="docutils literal notranslate"><span class="pre">train.txt.weight</span></code> and placed in the same folder as the data file.
+In this case, LightGBM will load the weight file automatically if it exists.</p>
+<p>Also, you can include weight column in your data file. Please refer to the <code class="docutils literal notranslate"><span class="pre">weight_column</span></code> <a class="reference external" href="#weight_column">parameter</a> in above.</p>
+</section>
+<section id="query-data">
+<h3>Query Data<a class="headerlink" href="#query-data" title="Permalink to this heading"></a></h3>
+<p>For learning to rank, it needs query information for training data.</p>
+<p>LightGBM uses an additional file to store query data, like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">27</span>
+<span class="mi">18</span>
+<span class="mi">67</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>For wrapper libraries like in Python and R, this information can also be provided as an array-like via the Dataset parameter <code class="docutils literal notranslate"><span class="pre">group</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">27</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For example, if you have a 112-document dataset with <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">=</span> <span class="pre">[27,</span> <span class="pre">18,</span> <span class="pre">67]</span></code>, that means that you have 3 groups, where the first 27 records are in the first group, records 28-45 are in the second group, and records 46-112 are in the third group.</p>
+<p><strong>Note</strong>: data should be ordered by the query.</p>
+<p>If the name of data file is <code class="docutils literal notranslate"><span class="pre">train.txt</span></code>, the query file should be named as <code class="docutils literal notranslate"><span class="pre">train.txt.query</span></code> and placed in the same folder as the data file.
+In this case, LightGBM will load the query file automatically if it exists.</p>
+<p>Also, you can include query/group id column in your data file. Please refer to the <code class="docutils literal notranslate"><span class="pre">group_column</span></code> <a class="reference external" href="#group_column">parameter</a> in above.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Experiments.html" class="btn btn-neutral float-left" title="Experiments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Parameters-Tuning.html" class="btn btn-neutral float-right" title="Parameters Tuning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

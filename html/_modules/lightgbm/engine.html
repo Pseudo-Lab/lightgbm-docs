@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lightgbm.engine &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/js/script.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lightgbm.engine</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lightgbm.engine</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;Library with training routines of LightGBM.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">callback</span>
+<span class="kn">from</span> <span class="nn">.basic</span> <span class="kn">import</span> <span class="n">Booster</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">LightGBMError</span><span class="p">,</span> <span class="n">_ConfigAliases</span><span class="p">,</span> <span class="n">_InnerPredictor</span><span class="p">,</span> <span class="n">_log_warning</span>
+<span class="kn">from</span> <span class="nn">.compat</span> <span class="kn">import</span> <span class="n">SKLEARN_INSTALLED</span><span class="p">,</span> <span class="n">_LGBMGroupKFold</span><span class="p">,</span> <span class="n">_LGBMStratifiedKFold</span>
+
+<span class="n">_LGBM_CustomObjectiveFunction</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span>
+    <span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Dataset</span><span class="p">],</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span>
+<span class="p">]</span>
+<span class="n">_LGBM_CustomMetricFunction</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span>
+    <span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Dataset</span><span class="p">],</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="train"><a class="viewcode-back" href="../../pythonapi/lightgbm.train.html#lightgbm.train">[docs]</a><span class="k">def</span> <span class="nf">train</span><span class="p">(</span>
+    <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">train_set</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">num_boost_round</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">valid_sets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dataset</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">valid_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fobj</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_LGBM_CustomObjectiveFunction</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">feval</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">_LGBM_CustomMetricFunction</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">_LGBM_CustomMetricFunction</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">init_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Booster</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">feature_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+    <span class="n">categorical_feature</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+    <span class="n">early_stopping_rounds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">evals_result</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">verbose_eval</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;warn&#39;</span><span class="p">,</span>
+    <span class="n">learning_rates</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">keep_training_booster</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Booster</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Perform the training with given parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Parameters for training.</span>
+<span class="sd">    train_set : Dataset</span>
+<span class="sd">        Data to be trained on.</span>
+<span class="sd">    num_boost_round : int, optional (default=100)</span>
+<span class="sd">        Number of boosting iterations.</span>
+<span class="sd">    valid_sets : list of Dataset, or None, optional (default=None)</span>
+<span class="sd">        List of data to be evaluated on during training.</span>
+<span class="sd">    valid_names : list of str, or None, optional (default=None)</span>
+<span class="sd">        Names of ``valid_sets``.</span>
+<span class="sd">    fobj : callable or None, optional (default=None)</span>
+<span class="sd">        Customized objective function.</span>
+<span class="sd">        Should accept two parameters: preds, train_data,</span>
+<span class="sd">        and return (grad, hess).</span>
+
+<span class="sd">            preds : list or numpy 1-D array</span>
+<span class="sd">                The predicted values.</span>
+<span class="sd">                Predicted values are returned before any transformation,</span>
+<span class="sd">                e.g. they are raw margin instead of probability of positive class for binary task.</span>
+<span class="sd">            train_data : Dataset</span>
+<span class="sd">                The training dataset.</span>
+<span class="sd">            grad : list or numpy 1-D array</span>
+<span class="sd">                The value of the first order derivative (gradient) of the loss</span>
+<span class="sd">                with respect to the elements of preds for each sample point.</span>
+<span class="sd">            hess : list or numpy 1-D array</span>
+<span class="sd">                The value of the second order derivative (Hessian) of the loss</span>
+<span class="sd">                with respect to the elements of preds for each sample point.</span>
+
+<span class="sd">        For multi-class task, the preds is group by class_id first, then group by row_id.</span>
+<span class="sd">        If you want to get i-th row preds in j-th class, the access way is score[j * num_data + i]</span>
+<span class="sd">        and you should group grad and hess in this way as well.</span>
+
+<span class="sd">    feval : callable, list of callable, or None, optional (default=None)</span>
+<span class="sd">        Customized evaluation function.</span>
+<span class="sd">        Each evaluation function should accept two parameters: preds, train_data,</span>
+<span class="sd">        and return (eval_name, eval_result, is_higher_better) or list of such tuples.</span>
+
+<span class="sd">            preds : list or numpy 1-D array</span>
+<span class="sd">                The predicted values.</span>
+<span class="sd">                If ``fobj`` is specified, predicted values are returned before any transformation,</span>
+<span class="sd">                e.g. they are raw margin instead of probability of positive class for binary task in this case.</span>
+<span class="sd">            train_data : Dataset</span>
+<span class="sd">                The training dataset.</span>
+<span class="sd">            eval_name : str</span>
+<span class="sd">                The name of evaluation function (without whitespaces).</span>
+<span class="sd">            eval_result : float</span>
+<span class="sd">                The eval result.</span>
+<span class="sd">            is_higher_better : bool</span>
+<span class="sd">                Is eval result higher better, e.g. AUC is ``is_higher_better``.</span>
+
+<span class="sd">        For multi-class task, the preds is group by class_id first, then group by row_id.</span>
+<span class="sd">        If you want to get i-th row preds in j-th class, the access way is preds[j * num_data + i].</span>
+<span class="sd">        To ignore the default metric corresponding to the used objective,</span>
+<span class="sd">        set the ``metric`` parameter to the string ``&quot;None&quot;`` in ``params``.</span>
+<span class="sd">    init_model : str, pathlib.Path, Booster or None, optional (default=None)</span>
+<span class="sd">        Filename of LightGBM model or Booster instance used for continue training.</span>
+<span class="sd">    feature_name : list of str, or &#39;auto&#39;, optional (default=&quot;auto&quot;)</span>
+<span class="sd">        Feature names.</span>
+<span class="sd">        If &#39;auto&#39; and data is pandas DataFrame, data columns names are used.</span>
+<span class="sd">    categorical_feature : list of str or int, or &#39;auto&#39;, optional (default=&quot;auto&quot;)</span>
+<span class="sd">        Categorical features.</span>
+<span class="sd">        If list of int, interpreted as indices.</span>
+<span class="sd">        If list of str, interpreted as feature names (need to specify ``feature_name`` as well).</span>
+<span class="sd">        If &#39;auto&#39; and data is pandas DataFrame, pandas unordered categorical columns are used.</span>
+<span class="sd">        All values in categorical features should be less than int32 max value (2147483647).</span>
+<span class="sd">        Large values could be memory consuming. Consider using consecutive integers starting from zero.</span>
+<span class="sd">        All negative values in categorical features will be treated as missing values.</span>
+<span class="sd">        The output cannot be monotonically constrained with respect to a categorical feature.</span>
+<span class="sd">    early_stopping_rounds : int or None, optional (default=None)</span>
+<span class="sd">        Activates early stopping. The model will train until the validation score stops improving.</span>
+<span class="sd">        Validation score needs to improve at least every ``early_stopping_rounds`` round(s)</span>
+<span class="sd">        to continue training.</span>
+<span class="sd">        Requires at least one validation data and one metric.</span>
+<span class="sd">        If there&#39;s more than one, will check all of them. But the training data is ignored anyway.</span>
+<span class="sd">        To check only the first metric, set the ``first_metric_only`` parameter to ``True`` in ``params``.</span>
+<span class="sd">        The index of iteration that has the best performance will be saved in the ``best_iteration`` field</span>
+<span class="sd">        if early stopping logic is enabled by setting ``early_stopping_rounds``.</span>
+<span class="sd">    evals_result : dict or None, optional (default=None)</span>
+<span class="sd">        Dictionary used to store all evaluation results of all the items in ``valid_sets``.</span>
+<span class="sd">        This should be initialized outside of your call to ``train()`` and should be empty.</span>
+<span class="sd">        Any initial contents of the dictionary will be deleted.</span>
+
+<span class="sd">        .. rubric:: Example</span>
+
+<span class="sd">        With a ``valid_sets`` = [valid_set, train_set],</span>
+<span class="sd">        ``valid_names`` = [&#39;eval&#39;, &#39;train&#39;]</span>
+<span class="sd">        and a ``params`` = {&#39;metric&#39;: &#39;logloss&#39;}</span>
+<span class="sd">        returns {&#39;train&#39;: {&#39;logloss&#39;: [&#39;0.48253&#39;, &#39;0.35953&#39;, ...]},</span>
+<span class="sd">        &#39;eval&#39;: {&#39;logloss&#39;: [&#39;0.480385&#39;, &#39;0.357756&#39;, ...]}}.</span>
+
+<span class="sd">    verbose_eval : bool or int, optional (default=True)</span>
+<span class="sd">        Requires at least one validation data.</span>
+<span class="sd">        If True, the eval metric on the valid set is printed at each boosting stage.</span>
+<span class="sd">        If int, the eval metric on the valid set is printed at every ``verbose_eval`` boosting stage.</span>
+<span class="sd">        The last boosting stage or the boosting stage found by using ``early_stopping_rounds`` is also printed.</span>
+
+<span class="sd">        .. rubric:: Example</span>
+
+<span class="sd">        With ``verbose_eval`` = 4 and at least one item in ``valid_sets``,</span>
+<span class="sd">        an evaluation metric is printed every 4 (instead of 1) boosting stages.</span>
+
+<span class="sd">    learning_rates : list, callable or None, optional (default=None)</span>
+<span class="sd">        List of learning rates for each boosting round</span>
+<span class="sd">        or a callable that calculates ``learning_rate``</span>
+<span class="sd">        in terms of current number of round (e.g. yields learning rate decay).</span>
+<span class="sd">    keep_training_booster : bool, optional (default=False)</span>
+<span class="sd">        Whether the returned Booster will be used to keep training.</span>
+<span class="sd">        If False, the returned value will be converted into _InnerPredictor before returning.</span>
+<span class="sd">        This means you won&#39;t be able to use ``eval``, ``eval_train`` or ``eval_valid`` methods of the returned Booster.</span>
+<span class="sd">        When your model is very large and cause the memory error,</span>
+<span class="sd">        you can try to set this param to ``True`` to avoid the model conversion performed during the internal call of ``model_to_string``.</span>
+<span class="sd">        You can still use _InnerPredictor as ``init_model`` for future continue training.</span>
+<span class="sd">    callbacks : list of callable, or None, optional (default=None)</span>
+<span class="sd">        List of callback functions that are applied at each iteration.</span>
+<span class="sd">        See Callbacks in Python API for more information.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    booster : Booster</span>
+<span class="sd">        The trained Booster model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create predictor first</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fobj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">obj_alias</span> <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;objective&quot;</span><span class="p">):</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">obj_alias</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;objective&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;num_iterations&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">num_boost_round</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
+            <span class="n">_log_warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found `</span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">` in params. Will use it instead of argument&quot;</span><span class="p">)</span>
+    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_iterations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_boost_round</span>
+    <span class="c1"># show deprecation warning only for early stop argument, setting early stop via global params should still be possible</span>
+    <span class="k">if</span> <span class="n">early_stopping_rounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">early_stopping_rounds</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">_log_warning</span><span class="p">(</span><span class="s2">&quot;&#39;early_stopping_rounds&#39; argument is deprecated and will be removed in a future release of LightGBM. &quot;</span>
+                     <span class="s2">&quot;Pass &#39;early_stopping()&#39; callback via &#39;callbacks&#39; argument instead.&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;early_stopping_round&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">early_stopping_rounds</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
+    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;early_stopping_round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">early_stopping_rounds</span>
+    <span class="n">first_metric_only</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;first_metric_only&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_boost_round</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;num_boost_round should be greater than zero.&quot;</span><span class="p">)</span>
+    <span class="n">predictor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_InnerPredictor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_model</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="n">predictor</span> <span class="o">=</span> <span class="n">_InnerPredictor</span><span class="p">(</span><span class="n">model_file</span><span class="o">=</span><span class="n">init_model</span><span class="p">,</span> <span class="n">pred_parameter</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_model</span><span class="p">,</span> <span class="n">Booster</span><span class="p">):</span>
+        <span class="n">predictor</span> <span class="o">=</span> <span class="n">init_model</span><span class="o">.</span><span class="n">_to_predictor</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">init_model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">))</span>
+    <span class="n">init_iteration</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">num_total_iteration</span> <span class="k">if</span> <span class="n">predictor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="c1"># check dataset</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Training only accepts Dataset object&quot;</span><span class="p">)</span>
+
+    <span class="n">train_set</span><span class="o">.</span><span class="n">_update_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> \
+             <span class="o">.</span><span class="n">_set_predictor</span><span class="p">(</span><span class="n">predictor</span><span class="p">)</span> \
+             <span class="o">.</span><span class="n">set_feature_name</span><span class="p">(</span><span class="n">feature_name</span><span class="p">)</span> \
+             <span class="o">.</span><span class="n">set_categorical_feature</span><span class="p">(</span><span class="n">categorical_feature</span><span class="p">)</span>
+
+    <span class="n">is_valid_contain_train</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">train_data_name</span> <span class="o">=</span> <span class="s2">&quot;training&quot;</span>
+    <span class="n">reduced_valid_sets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">name_valid_sets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">valid_sets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_sets</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+            <span class="n">valid_sets</span> <span class="o">=</span> <span class="p">[</span><span class="n">valid_sets</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">valid_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">valid_names</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">valid_data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">valid_sets</span><span class="p">):</span>
+            <span class="c1"># reduce cost for prediction training data</span>
+            <span class="k">if</span> <span class="n">valid_data</span> <span class="ow">is</span> <span class="n">train_set</span><span class="p">:</span>
+                <span class="n">is_valid_contain_train</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">valid_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">train_data_name</span> <span class="o">=</span> <span class="n">valid_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_data</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Training only accepts Dataset object&quot;</span><span class="p">)</span>
+            <span class="n">reduced_valid_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valid_data</span><span class="o">.</span><span class="n">_update_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">set_reference</span><span class="p">(</span><span class="n">train_set</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">valid_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">name_valid_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valid_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name_valid_sets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;valid_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="c1"># process callbacks</span>
+    <span class="k">if</span> <span class="n">callbacks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">callbacks</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">callbacks</span><span class="p">):</span>
+            <span class="n">cb</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;order&#39;</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">callbacks</span><span class="p">))</span>
+        <span class="n">callbacks</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">callbacks</span><span class="p">)</span>
+
+    <span class="c1"># Most of legacy advanced options becomes callbacks</span>
+    <span class="k">if</span> <span class="n">verbose_eval</span> <span class="o">!=</span> <span class="s2">&quot;warn&quot;</span><span class="p">:</span>
+        <span class="n">_log_warning</span><span class="p">(</span><span class="s2">&quot;&#39;verbose_eval&#39; argument is deprecated and will be removed in a future release of LightGBM. &quot;</span>
+                     <span class="s2">&quot;Pass &#39;log_evaluation()&#39; callback via &#39;callbacks&#39; argument instead.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">callbacks</span><span class="p">:</span>  <span class="c1"># assume user has already specified log_evaluation callback</span>
+            <span class="n">verbose_eval</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">verbose_eval</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">verbose_eval</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">log_evaluation</span><span class="p">())</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose_eval</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">log_evaluation</span><span class="p">(</span><span class="n">verbose_eval</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">early_stopping_rounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">early_stopping_rounds</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">early_stopping</span><span class="p">(</span><span class="n">early_stopping_rounds</span><span class="p">,</span> <span class="n">first_metric_only</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">verbose_eval</span><span class="p">)))</span>
+
+    <span class="k">if</span> <span class="n">learning_rates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_log_warning</span><span class="p">(</span><span class="s2">&quot;&#39;learning_rates&#39; argument is deprecated and will be removed in a future release of LightGBM. &quot;</span>
+                     <span class="s2">&quot;Pass &#39;reset_parameter()&#39; callback via &#39;callbacks&#39; argument instead.&quot;</span><span class="p">)</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">reset_parameter</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rates</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">evals_result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_log_warning</span><span class="p">(</span><span class="s2">&quot;&#39;evals_result&#39; argument is deprecated and will be removed in a future release of LightGBM. &quot;</span>
+                     <span class="s2">&quot;Pass &#39;record_evaluation()&#39; callback via &#39;callbacks&#39; argument instead.&quot;</span><span class="p">)</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">record_evaluation</span><span class="p">(</span><span class="n">evals_result</span><span class="p">))</span>
+
+    <span class="n">callbacks_before_iter</span> <span class="o">=</span> <span class="p">{</span><span class="n">cb</span> <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="n">callbacks</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="s1">&#39;before_iteration&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)}</span>
+    <span class="n">callbacks_after_iter</span> <span class="o">=</span> <span class="n">callbacks</span> <span class="o">-</span> <span class="n">callbacks_before_iter</span>
+    <span class="n">callbacks_before_iter</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">callbacks_before_iter</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;order&#39;</span><span class="p">))</span>
+    <span class="n">callbacks_after_iter</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">callbacks_after_iter</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;order&#39;</span><span class="p">))</span>
+
+    <span class="c1"># construct booster</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">booster</span> <span class="o">=</span> <span class="n">Booster</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">train_set</span><span class="o">=</span><span class="n">train_set</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_valid_contain_train</span><span class="p">:</span>
+            <span class="n">booster</span><span class="o">.</span><span class="n">set_train_data_name</span><span class="p">(</span><span class="n">train_data_name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">valid_set</span><span class="p">,</span> <span class="n">name_valid_set</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">reduced_valid_sets</span><span class="p">,</span> <span class="n">name_valid_sets</span><span class="p">):</span>
+            <span class="n">booster</span><span class="o">.</span><span class="n">add_valid</span><span class="p">(</span><span class="n">valid_set</span><span class="p">,</span> <span class="n">name_valid_set</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">train_set</span><span class="o">.</span><span class="n">_reverse_update_params</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">valid_set</span> <span class="ow">in</span> <span class="n">reduced_valid_sets</span><span class="p">:</span>
+            <span class="n">valid_set</span><span class="o">.</span><span class="n">_reverse_update_params</span><span class="p">()</span>
+    <span class="n">booster</span><span class="o">.</span><span class="n">best_iteration</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># start training</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">init_iteration</span><span class="p">,</span> <span class="n">init_iteration</span> <span class="o">+</span> <span class="n">num_boost_round</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="n">callbacks_before_iter</span><span class="p">:</span>
+            <span class="n">cb</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">CallbackEnv</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">booster</span><span class="p">,</span>
+                                    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                                    <span class="n">iteration</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                                    <span class="n">begin_iteration</span><span class="o">=</span><span class="n">init_iteration</span><span class="p">,</span>
+                                    <span class="n">end_iteration</span><span class="o">=</span><span class="n">init_iteration</span> <span class="o">+</span> <span class="n">num_boost_round</span><span class="p">,</span>
+                                    <span class="n">evaluation_result_list</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+
+        <span class="n">booster</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fobj</span><span class="o">=</span><span class="n">fobj</span><span class="p">)</span>
+
+        <span class="n">evaluation_result_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># check evaluation result.</span>
+        <span class="k">if</span> <span class="n">valid_sets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_valid_contain_train</span><span class="p">:</span>
+                <span class="n">evaluation_result_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">booster</span><span class="o">.</span><span class="n">eval_train</span><span class="p">(</span><span class="n">feval</span><span class="p">))</span>
+            <span class="n">evaluation_result_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">booster</span><span class="o">.</span><span class="n">eval_valid</span><span class="p">(</span><span class="n">feval</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="n">callbacks_after_iter</span><span class="p">:</span>
+                <span class="n">cb</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">CallbackEnv</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">booster</span><span class="p">,</span>
+                                        <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                                        <span class="n">iteration</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                                        <span class="n">begin_iteration</span><span class="o">=</span><span class="n">init_iteration</span><span class="p">,</span>
+                                        <span class="n">end_iteration</span><span class="o">=</span><span class="n">init_iteration</span> <span class="o">+</span> <span class="n">num_boost_round</span><span class="p">,</span>
+                                        <span class="n">evaluation_result_list</span><span class="o">=</span><span class="n">evaluation_result_list</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">callback</span><span class="o">.</span><span class="n">EarlyStopException</span> <span class="k">as</span> <span class="n">earlyStopException</span><span class="p">:</span>
+            <span class="n">booster</span><span class="o">.</span><span class="n">best_iteration</span> <span class="o">=</span> <span class="n">earlyStopException</span><span class="o">.</span><span class="n">best_iteration</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">evaluation_result_list</span> <span class="o">=</span> <span class="n">earlyStopException</span><span class="o">.</span><span class="n">best_score</span>
+            <span class="k">break</span>
+    <span class="n">booster</span><span class="o">.</span><span class="n">best_score</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">dataset_name</span><span class="p">,</span> <span class="n">eval_name</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">evaluation_result_list</span><span class="p">:</span>
+        <span class="n">booster</span><span class="o">.</span><span class="n">best_score</span><span class="p">[</span><span class="n">dataset_name</span><span class="p">][</span><span class="n">eval_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">score</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_training_booster</span><span class="p">:</span>
+        <span class="n">booster</span><span class="o">.</span><span class="n">model_from_string</span><span class="p">(</span><span class="n">booster</span><span class="o">.</span><span class="n">model_to_string</span><span class="p">(),</span> <span class="n">verbose</span><span class="o">=</span><span class="s1">&#39;_silent_false&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">free_dataset</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">booster</span></div>
+
+
+<div class="viewcode-block" id="CVBooster"><a class="viewcode-back" href="../../pythonapi/lightgbm.CVBooster.html#lightgbm.CVBooster">[docs]</a><span class="k">class</span> <span class="nc">CVBooster</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;CVBooster in LightGBM.</span>
+
+<span class="sd">    Auxiliary data structure to hold and redirect all boosters of ``cv`` function.</span>
+<span class="sd">    This class has the same methods as Booster class.</span>
+<span class="sd">    All method calls are actually performed for underlying Boosters and then all returned results are returned in a list.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    boosters : list of Booster</span>
+<span class="sd">        The list of underlying fitted models.</span>
+<span class="sd">    best_iteration : int</span>
+<span class="sd">        The best iteration of fitted model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CVBooster.__init__"><a class="viewcode-back" href="../../pythonapi/lightgbm.CVBooster.html#lightgbm.CVBooster.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the CVBooster.</span>
+
+<span class="sd">        Generally, no need to instantiate manually.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boosters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_iteration</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></div>
+
+    <span class="k">def</span> <span class="nf">_append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">booster</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a booster to CVBooster.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boosters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">booster</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Redirect methods call of CVBooster.&quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">handler_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Call methods with each booster, and concatenate their results.&quot;&quot;&quot;</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">booster</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">boosters</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">booster</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">return</span> <span class="n">handler_function</span></div>
+
+
+<span class="k">def</span> <span class="nf">_make_n_folds</span><span class="p">(</span><span class="n">full_data</span><span class="p">,</span> <span class="n">folds</span><span class="p">,</span> <span class="n">nfold</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">fpreproc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stratified</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eval_train_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make a n-fold list of Booster from random indices.&quot;&quot;&quot;</span>
+    <span class="n">full_data</span> <span class="o">=</span> <span class="n">full_data</span><span class="o">.</span><span class="n">construct</span><span class="p">()</span>
+    <span class="n">num_data</span> <span class="o">=</span> <span class="n">full_data</span><span class="o">.</span><span class="n">num_data</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">folds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">folds</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">folds</span><span class="p">,</span> <span class="s1">&#39;split&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;folds should be a generator or iterator of (train_idx, test_idx) tuples &quot;</span>
+                                 <span class="s2">&quot;or scikit-learn splitter object with split method&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">folds</span><span class="p">,</span> <span class="s1">&#39;split&#39;</span><span class="p">):</span>
+            <span class="n">group_info</span> <span class="o">=</span> <span class="n">full_data</span><span class="o">.</span><span class="n">get_group</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">group_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">group_info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">group_info</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">flatted_group</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">group_info</span><span class="p">)),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">group_info</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flatted_group</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+            <span class="n">folds</span> <span class="o">=</span> <span class="n">folds</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">num_data</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">full_data</span><span class="o">.</span><span class="n">get_label</span><span class="p">(),</span> <span class="n">groups</span><span class="o">=</span><span class="n">flatted_group</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj_alias</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;lambdarank&quot;</span><span class="p">,</span> <span class="s2">&quot;rank_xendcg&quot;</span><span class="p">,</span> <span class="s2">&quot;xendcg&quot;</span><span class="p">,</span>
+                                             <span class="s2">&quot;xe_ndcg&quot;</span><span class="p">,</span> <span class="s2">&quot;xe_ndcg_mart&quot;</span><span class="p">,</span> <span class="s2">&quot;xendcg_mart&quot;</span><span class="p">}</span>
+               <span class="k">for</span> <span class="n">obj_alias</span> <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;objective&quot;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">SKLEARN_INSTALLED</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">LightGBMError</span><span class="p">(</span><span class="s1">&#39;scikit-learn is required for ranking cv&#39;</span><span class="p">)</span>
+            <span class="c1"># ranking task, split according to groups</span>
+            <span class="n">group_info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">full_data</span><span class="o">.</span><span class="n">get_group</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">flatted_group</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">group_info</span><span class="p">)),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">group_info</span><span class="p">)</span>
+            <span class="n">group_kfold</span> <span class="o">=</span> <span class="n">_LGBMGroupKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">nfold</span><span class="p">)</span>
+            <span class="n">folds</span> <span class="o">=</span> <span class="n">group_kfold</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">num_data</span><span class="p">),</span> <span class="n">groups</span><span class="o">=</span><span class="n">flatted_group</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">stratified</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">SKLEARN_INSTALLED</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">LightGBMError</span><span class="p">(</span><span class="s1">&#39;scikit-learn is required for stratified cv&#39;</span><span class="p">)</span>
+            <span class="n">skf</span> <span class="o">=</span> <span class="n">_LGBMStratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">nfold</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">folds</span> <span class="o">=</span> <span class="n">skf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">num_data</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">full_data</span><span class="o">.</span><span class="n">get_label</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+                <span class="n">randidx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">num_data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">randidx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_data</span><span class="p">)</span>
+            <span class="n">kstep</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_data</span> <span class="o">/</span> <span class="n">nfold</span><span class="p">)</span>
+            <span class="n">test_id</span> <span class="o">=</span> <span class="p">[</span><span class="n">randidx</span><span class="p">[</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">kstep</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_data</span><span class="p">,</span> <span class="n">kstep</span><span class="p">)]</span>
+            <span class="n">train_id</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">test_id</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfold</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfold</span><span class="p">)]</span>
+            <span class="n">folds</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">train_id</span><span class="p">,</span> <span class="n">test_id</span><span class="p">)</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">CVBooster</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">folds</span><span class="p">:</span>
+        <span class="n">train_set</span> <span class="o">=</span> <span class="n">full_data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">train_idx</span><span class="p">))</span>
+        <span class="n">valid_set</span> <span class="o">=</span> <span class="n">full_data</span><span class="o">.</span><span class="n">subset</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">test_idx</span><span class="p">))</span>
+        <span class="c1"># run preprocessing on the data set if needed</span>
+        <span class="k">if</span> <span class="n">fpreproc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_set</span><span class="p">,</span> <span class="n">valid_set</span><span class="p">,</span> <span class="n">tparam</span> <span class="o">=</span> <span class="n">fpreproc</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">valid_set</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tparam</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="n">cvbooster</span> <span class="o">=</span> <span class="n">Booster</span><span class="p">(</span><span class="n">tparam</span><span class="p">,</span> <span class="n">train_set</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">eval_train_metric</span><span class="p">:</span>
+            <span class="n">cvbooster</span><span class="o">.</span><span class="n">add_valid</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">)</span>
+        <span class="n">cvbooster</span><span class="o">.</span><span class="n">add_valid</span><span class="p">(</span><span class="n">valid_set</span><span class="p">,</span> <span class="s1">&#39;valid&#39;</span><span class="p">)</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">_append</span><span class="p">(</span><span class="n">cvbooster</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ret</span>
+
+
+<span class="k">def</span> <span class="nf">_agg_cv_result</span><span class="p">(</span><span class="n">raw_results</span><span class="p">,</span> <span class="n">eval_train_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Aggregate cross-validation results.&quot;&quot;&quot;</span>
+    <span class="n">cvmap</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">()</span>
+    <span class="n">metric_type</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">one_result</span> <span class="ow">in</span> <span class="n">raw_results</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">one_line</span> <span class="ow">in</span> <span class="n">one_result</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">eval_train_metric</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">one_line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">one_line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">one_line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">metric_type</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">one_line</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">cvmap</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">cvmap</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">one_line</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;cv_agg&#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">metric_type</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cvmap</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+
+
+<div class="viewcode-block" id="cv"><a class="viewcode-back" href="../../pythonapi/lightgbm.cv.html#lightgbm.cv">[docs]</a><span class="k">def</span> <span class="nf">cv</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">train_set</span><span class="p">,</span> <span class="n">num_boost_round</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+       <span class="n">folds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nfold</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stratified</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+       <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fobj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+       <span class="n">feature_name</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">categorical_feature</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+       <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fpreproc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+       <span class="n">verbose_eval</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_stdv</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+       <span class="n">callbacks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eval_train_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+       <span class="n">return_cvbooster</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Perform the cross-validation with given parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    params : dict</span>
+<span class="sd">        Parameters for Booster.</span>
+<span class="sd">    train_set : Dataset</span>
+<span class="sd">        Data to be trained on.</span>
+<span class="sd">    num_boost_round : int, optional (default=100)</span>
+<span class="sd">        Number of boosting iterations.</span>
+<span class="sd">    folds : generator or iterator of (train_idx, test_idx) tuples, scikit-learn splitter object or None, optional (default=None)</span>
+<span class="sd">        If generator or iterator, it should yield the train and test indices for each fold.</span>
+<span class="sd">        If object, it should be one of the scikit-learn splitter classes</span>
+<span class="sd">        (https://scikit-learn.org/stable/modules/classes.html#splitter-classes)</span>
+<span class="sd">        and have ``split`` method.</span>
+<span class="sd">        This argument has highest priority over other data split arguments.</span>
+<span class="sd">    nfold : int, optional (default=5)</span>
+<span class="sd">        Number of folds in CV.</span>
+<span class="sd">    stratified : bool, optional (default=True)</span>
+<span class="sd">        Whether to perform stratified sampling.</span>
+<span class="sd">    shuffle : bool, optional (default=True)</span>
+<span class="sd">        Whether to shuffle before splitting data.</span>
+<span class="sd">    metrics : str, list of str, or None, optional (default=None)</span>
+<span class="sd">        Evaluation metrics to be monitored while CV.</span>
+<span class="sd">        If not None, the metric in ``params`` will be overridden.</span>
+<span class="sd">    fobj : callable or None, optional (default=None)</span>
+<span class="sd">        Customized objective function.</span>
+<span class="sd">        Should accept two parameters: preds, train_data,</span>
+<span class="sd">        and return (grad, hess).</span>
+
+<span class="sd">            preds : list or numpy 1-D array</span>
+<span class="sd">                The predicted values.</span>
+<span class="sd">                Predicted values are returned before any transformation,</span>
+<span class="sd">                e.g. they are raw margin instead of probability of positive class for binary task.</span>
+<span class="sd">            train_data : Dataset</span>
+<span class="sd">                The training dataset.</span>
+<span class="sd">            grad : list or numpy 1-D array</span>
+<span class="sd">                The value of the first order derivative (gradient) of the loss</span>
+<span class="sd">                with respect to the elements of preds for each sample point.</span>
+<span class="sd">            hess : list or numpy 1-D array</span>
+<span class="sd">                The value of the second order derivative (Hessian) of the loss</span>
+<span class="sd">                with respect to the elements of preds for each sample point.</span>
+
+<span class="sd">        For multi-class task, the preds is group by class_id first, then group by row_id.</span>
+<span class="sd">        If you want to get i-th row preds in j-th class, the access way is score[j * num_data + i]</span>
+<span class="sd">        and you should group grad and hess in this way as well.</span>
+
+<span class="sd">    feval : callable, list of callable, or None, optional (default=None)</span>
+<span class="sd">        Customized evaluation function.</span>
+<span class="sd">        Each evaluation function should accept two parameters: preds, train_data,</span>
+<span class="sd">        and return (eval_name, eval_result, is_higher_better) or list of such tuples.</span>
+
+<span class="sd">            preds : list or numpy 1-D array</span>
+<span class="sd">                The predicted values.</span>
+<span class="sd">                If ``fobj`` is specified, predicted values are returned before any transformation,</span>
+<span class="sd">                e.g. they are raw margin instead of probability of positive class for binary task in this case.</span>
+<span class="sd">            train_data : Dataset</span>
+<span class="sd">                The training dataset.</span>
+<span class="sd">            eval_name : str</span>
+<span class="sd">                The name of evaluation function (without whitespace).</span>
+<span class="sd">            eval_result : float</span>
+<span class="sd">                The eval result.</span>
+<span class="sd">            is_higher_better : bool</span>
+<span class="sd">                Is eval result higher better, e.g. AUC is ``is_higher_better``.</span>
+
+<span class="sd">        For multi-class task, the preds is group by class_id first, then group by row_id.</span>
+<span class="sd">        If you want to get i-th row preds in j-th class, the access way is preds[j * num_data + i].</span>
+<span class="sd">        To ignore the default metric corresponding to the used objective,</span>
+<span class="sd">        set ``metrics`` to the string ``&quot;None&quot;``.</span>
+<span class="sd">    init_model : str, pathlib.Path, Booster or None, optional (default=None)</span>
+<span class="sd">        Filename of LightGBM model or Booster instance used for continue training.</span>
+<span class="sd">    feature_name : list of str, or &#39;auto&#39;, optional (default=&quot;auto&quot;)</span>
+<span class="sd">        Feature names.</span>
+<span class="sd">        If &#39;auto&#39; and data is pandas DataFrame, data columns names are used.</span>
+<span class="sd">    categorical_feature : list of str or int, or &#39;auto&#39;, optional (default=&quot;auto&quot;)</span>
+<span class="sd">        Categorical features.</span>
+<span class="sd">        If list of int, interpreted as indices.</span>
+<span class="sd">        If list of str, interpreted as feature names (need to specify ``feature_name`` as well).</span>
+<span class="sd">        If &#39;auto&#39; and data is pandas DataFrame, pandas unordered categorical columns are used.</span>
+<span class="sd">        All values in categorical features should be less than int32 max value (2147483647).</span>
+<span class="sd">        Large values could be memory consuming. Consider using consecutive integers starting from zero.</span>
+<span class="sd">        All negative values in categorical features will be treated as missing values.</span>
+<span class="sd">        The output cannot be monotonically constrained with respect to a categorical feature.</span>
+<span class="sd">    early_stopping_rounds : int or None, optional (default=None)</span>
+<span class="sd">        Activates early stopping.</span>
+<span class="sd">        CV score needs to improve at least every ``early_stopping_rounds`` round(s)</span>
+<span class="sd">        to continue.</span>
+<span class="sd">        Requires at least one metric. If there&#39;s more than one, will check all of them.</span>
+<span class="sd">        To check only the first metric, set the ``first_metric_only`` parameter to ``True`` in ``params``.</span>
+<span class="sd">        Last entry in evaluation history is the one from the best iteration.</span>
+<span class="sd">    fpreproc : callable or None, optional (default=None)</span>
+<span class="sd">        Preprocessing function that takes (dtrain, dtest, params)</span>
+<span class="sd">        and returns transformed versions of those.</span>
+<span class="sd">    verbose_eval : bool, int, or None, optional (default=None)</span>
+<span class="sd">        Whether to display the progress.</span>
+<span class="sd">        If True, progress will be displayed at every boosting stage.</span>
+<span class="sd">        If int, progress will be displayed at every given ``verbose_eval`` boosting stage.</span>
+<span class="sd">    show_stdv : bool, optional (default=True)</span>
+<span class="sd">        Whether to display the standard deviation in progress.</span>
+<span class="sd">        Results are not affected by this parameter, and always contain std.</span>
+<span class="sd">    seed : int, optional (default=0)</span>
+<span class="sd">        Seed used to generate the folds (passed to numpy.random.seed).</span>
+<span class="sd">    callbacks : list of callable, or None, optional (default=None)</span>
+<span class="sd">        List of callback functions that are applied at each iteration.</span>
+<span class="sd">        See Callbacks in Python API for more information.</span>
+<span class="sd">    eval_train_metric : bool, optional (default=False)</span>
+<span class="sd">        Whether to display the train metric in progress.</span>
+<span class="sd">        The score of the metric is calculated again after each training step, so there is some impact on performance.</span>
+<span class="sd">    return_cvbooster : bool, optional (default=False)</span>
+<span class="sd">        Whether to return Booster models trained on each fold through ``CVBooster``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    eval_hist : dict</span>
+<span class="sd">        Evaluation history.</span>
+<span class="sd">        The dictionary has the following format:</span>
+<span class="sd">        {&#39;metric1-mean&#39;: [values], &#39;metric1-stdv&#39;: [values],</span>
+<span class="sd">        &#39;metric2-mean&#39;: [values], &#39;metric2-stdv&#39;: [values],</span>
+<span class="sd">        ...}.</span>
+<span class="sd">        If ``return_cvbooster=True``, also returns trained boosters via ``cvbooster`` key.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Training only accepts Dataset object&quot;</span><span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fobj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">obj_alias</span> <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;objective&quot;</span><span class="p">):</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">obj_alias</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;objective&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;num_iterations&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">_log_warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found `</span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">` in params. Will use it instead of argument&quot;</span><span class="p">)</span>
+            <span class="n">num_boost_round</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
+    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;num_iterations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_boost_round</span>
+    <span class="k">if</span> <span class="n">early_stopping_rounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">early_stopping_rounds</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">_log_warning</span><span class="p">(</span><span class="s2">&quot;&#39;early_stopping_rounds&#39; argument is deprecated and will be removed in a future release of LightGBM. &quot;</span>
+                     <span class="s2">&quot;Pass &#39;early_stopping()&#39; callback via &#39;callbacks&#39; argument instead.&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;early_stopping_round&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">early_stopping_rounds</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
+    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;early_stopping_round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">early_stopping_rounds</span>
+    <span class="n">first_metric_only</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;first_metric_only&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_boost_round</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;num_boost_round should be greater than zero.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_model</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="n">predictor</span> <span class="o">=</span> <span class="n">_InnerPredictor</span><span class="p">(</span><span class="n">model_file</span><span class="o">=</span><span class="n">init_model</span><span class="p">,</span> <span class="n">pred_parameter</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_model</span><span class="p">,</span> <span class="n">Booster</span><span class="p">):</span>
+        <span class="n">predictor</span> <span class="o">=</span> <span class="n">init_model</span><span class="o">.</span><span class="n">_to_predictor</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">init_model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">predictor</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">metric_alias</span> <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metric&quot;</span><span class="p">):</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">metric_alias</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;metric&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metrics</span>
+
+    <span class="n">train_set</span><span class="o">.</span><span class="n">_update_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> \
+             <span class="o">.</span><span class="n">_set_predictor</span><span class="p">(</span><span class="n">predictor</span><span class="p">)</span> \
+             <span class="o">.</span><span class="n">set_feature_name</span><span class="p">(</span><span class="n">feature_name</span><span class="p">)</span> \
+             <span class="o">.</span><span class="n">set_categorical_feature</span><span class="p">(</span><span class="n">categorical_feature</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">cvfolds</span> <span class="o">=</span> <span class="n">_make_n_folds</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">folds</span><span class="o">=</span><span class="n">folds</span><span class="p">,</span> <span class="n">nfold</span><span class="o">=</span><span class="n">nfold</span><span class="p">,</span>
+                            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">fpreproc</span><span class="o">=</span><span class="n">fpreproc</span><span class="p">,</span>
+                            <span class="n">stratified</span><span class="o">=</span><span class="n">stratified</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle</span><span class="p">,</span>
+                            <span class="n">eval_train_metric</span><span class="o">=</span><span class="n">eval_train_metric</span><span class="p">)</span>
+
+    <span class="c1"># setup callbacks</span>
+    <span class="k">if</span> <span class="n">callbacks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">callbacks</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">callbacks</span><span class="p">):</span>
+            <span class="n">cb</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;order&#39;</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">callbacks</span><span class="p">))</span>
+        <span class="n">callbacks</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">callbacks</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">early_stopping_rounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">early_stopping_rounds</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">early_stopping</span><span class="p">(</span><span class="n">early_stopping_rounds</span><span class="p">,</span> <span class="n">first_metric_only</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">verbose_eval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_log_warning</span><span class="p">(</span><span class="s2">&quot;&#39;verbose_eval&#39; argument is deprecated and will be removed in a future release of LightGBM. &quot;</span>
+                     <span class="s2">&quot;Pass &#39;log_evaluation()&#39; callback via &#39;callbacks&#39; argument instead.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose_eval</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">log_evaluation</span><span class="p">(</span><span class="n">show_stdv</span><span class="o">=</span><span class="n">show_stdv</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose_eval</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">log_evaluation</span><span class="p">(</span><span class="n">verbose_eval</span><span class="p">,</span> <span class="n">show_stdv</span><span class="o">=</span><span class="n">show_stdv</span><span class="p">))</span>
+
+    <span class="n">callbacks_before_iter</span> <span class="o">=</span> <span class="p">{</span><span class="n">cb</span> <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="n">callbacks</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="s1">&#39;before_iteration&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)}</span>
+    <span class="n">callbacks_after_iter</span> <span class="o">=</span> <span class="n">callbacks</span> <span class="o">-</span> <span class="n">callbacks_before_iter</span>
+    <span class="n">callbacks_before_iter</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">callbacks_before_iter</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;order&#39;</span><span class="p">))</span>
+    <span class="n">callbacks_after_iter</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">callbacks_after_iter</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;order&#39;</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_boost_round</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="n">callbacks_before_iter</span><span class="p">:</span>
+            <span class="n">cb</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">CallbackEnv</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">cvfolds</span><span class="p">,</span>
+                                    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                                    <span class="n">iteration</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                                    <span class="n">begin_iteration</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                    <span class="n">end_iteration</span><span class="o">=</span><span class="n">num_boost_round</span><span class="p">,</span>
+                                    <span class="n">evaluation_result_list</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+        <span class="n">cvfolds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fobj</span><span class="o">=</span><span class="n">fobj</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">_agg_cv_result</span><span class="p">(</span><span class="n">cvfolds</span><span class="o">.</span><span class="n">eval_valid</span><span class="p">(</span><span class="n">feval</span><span class="p">),</span> <span class="n">eval_train_metric</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">std</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">-mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+            <span class="n">results</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">-stdv&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">std</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="n">callbacks_after_iter</span><span class="p">:</span>
+                <span class="n">cb</span><span class="p">(</span><span class="n">callback</span><span class="o">.</span><span class="n">CallbackEnv</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">cvfolds</span><span class="p">,</span>
+                                        <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                                        <span class="n">iteration</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                                        <span class="n">begin_iteration</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                        <span class="n">end_iteration</span><span class="o">=</span><span class="n">num_boost_round</span><span class="p">,</span>
+                                        <span class="n">evaluation_result_list</span><span class="o">=</span><span class="n">res</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">callback</span><span class="o">.</span><span class="n">EarlyStopException</span> <span class="k">as</span> <span class="n">earlyStopException</span><span class="p">:</span>
+            <span class="n">cvfolds</span><span class="o">.</span><span class="n">best_iteration</span> <span class="o">=</span> <span class="n">earlyStopException</span><span class="o">.</span><span class="n">best_iteration</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">][:</span><span class="n">cvfolds</span><span class="o">.</span><span class="n">best_iteration</span><span class="p">]</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">return_cvbooster</span><span class="p">:</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;cvbooster&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cvfolds</span>
+
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

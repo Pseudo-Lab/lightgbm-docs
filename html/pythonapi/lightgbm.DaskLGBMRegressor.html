@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lightgbm.DaskLGBMRegressor &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/js/script.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="lightgbm.DaskLGBMRanker" href="lightgbm.DaskLGBMRanker.html" />
+    <link rel="prev" title="lightgbm.DaskLGBMClassifier" href="lightgbm.DaskLGBMClassifier.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C-API.html">C API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Python-API.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#data-structure-api">Data Structure API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#training-api">Training API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#scikit-learn-api">Scikit-learn API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../Python-API.html#dask-api">Dask API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.DaskLGBMClassifier.html">lightgbm.DaskLGBMClassifier</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">lightgbm.DaskLGBMRegressor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.DaskLGBMRanker.html">lightgbm.DaskLGBMRanker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#callbacks">Callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#plotting">Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../Python-API.html">Python API</a></li>
+      <li class="breadcrumb-item active">lightgbm.DaskLGBMRegressor</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/pythonapi/lightgbm.DaskLGBMRegressor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lightgbm-dasklgbmregressor">
+<h1>lightgbm.DaskLGBMRegressor<a class="headerlink" href="#lightgbm-dasklgbmregressor" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lightgbm.</span></span><span class="sig-name descname"><span class="pre">DaskLGBMRegressor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boosting_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gbdt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_leaves</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_for_bin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_split_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_child_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_child_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsample_bytree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_lambda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'split'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/dask.html#DaskLGBMRegressor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.DaskLGBMRegressor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="lightgbm.LGBMRegressor.html#lightgbm.LGBMRegressor" title="lightgbm.sklearn.LGBMRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">LGBMRegressor</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_DaskLGBMModel</span></code></p>
+<p>Distributed version of lightgbm.LGBMRegressor.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boosting_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gbdt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_leaves</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_for_bin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_split_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_child_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_child_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsample_bytree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_lambda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'split'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/dask.html#DaskLGBMRegressor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Construct a gradient boosting model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>boosting_type</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>default='gbdt'</em><em>)</em>) – ‘gbdt’, traditional Gradient Boosting Decision Tree.
+‘dart’, Dropouts meet Multiple Additive Regression Trees.
+‘goss’, Gradient-based One-Side Sampling.
+‘rf’, Random Forest.</p></li>
+<li><p><strong>num_leaves</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=31</em><em>)</em>) – Maximum tree leaves for base learners.</p></li>
+<li><p><strong>max_depth</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=-1</em><em>)</em>) – Maximum tree depth for base learners, &lt;=0 means no limit.</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.1</em><em>)</em>) – Boosting learning rate.
+You can use <code class="docutils literal notranslate"><span class="pre">callbacks</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">fit</span></code> method to shrink/adapt learning rate
+in training using <code class="docutils literal notranslate"><span class="pre">reset_parameter</span></code> callback.
+Note, that this will ignore the <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> argument in training.</p></li>
+<li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=100</em><em>)</em>) – Number of boosted trees to fit.</p></li>
+<li><p><strong>subsample_for_bin</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=200000</em><em>)</em>) – Number of samples for constructing bins.</p></li>
+<li><p><strong>objective</strong> (<em>str</em><em>, </em><em>callable</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Specify the learning task and the corresponding learning objective or
+a custom objective function to be used (see note below).
+Default: ‘regression’ for LGBMRegressor, ‘binary’ or ‘multiclass’ for LGBMClassifier, ‘lambdarank’ for LGBMRanker.</p></li>
+<li><p><strong>class_weight</strong> (<em>dict</em><em>, </em><em>'balanced'</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Weights associated with classes in the form <code class="docutils literal notranslate"><span class="pre">{class_label:</span> <span class="pre">weight}</span></code>.
+Use this parameter only for multi-class classification task;
+for binary classification task you may use <code class="docutils literal notranslate"><span class="pre">is_unbalance</span></code> or <code class="docutils literal notranslate"><span class="pre">scale_pos_weight</span></code> parameters.
+Note, that the usage of all these parameters will result in poor estimates of the individual class probabilities.
+You may want to consider performing probability calibration
+(<a class="reference external" href="https://scikit-learn.org/stable/modules/calibration.html">https://scikit-learn.org/stable/modules/calibration.html</a>) of your model.
+The ‘balanced’ mode uses the values of y to automatically adjust weights
+inversely proportional to class frequencies in the input data as <code class="docutils literal notranslate"><span class="pre">n_samples</span> <span class="pre">/</span> <span class="pre">(n_classes</span> <span class="pre">*</span> <span class="pre">np.bincount(y))</span></code>.
+If None, all classes are supposed to have weight one.
+Note, that these weights will be multiplied with <code class="docutils literal notranslate"><span class="pre">sample_weight</span></code> (passed through the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method)
+if <code class="docutils literal notranslate"><span class="pre">sample_weight</span></code> is specified.</p></li>
+<li><p><strong>min_split_gain</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.</em><em>)</em>) – Minimum loss reduction required to make a further partition on a leaf node of the tree.</p></li>
+<li><p><strong>min_child_weight</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=1e-3</em><em>)</em>) – Minimum sum of instance weight (hessian) needed in a child (leaf).</p></li>
+<li><p><strong>min_child_samples</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=20</em><em>)</em>) – Minimum number of data needed in a child (leaf).</p></li>
+<li><p><strong>subsample</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=1.</em><em>)</em>) – Subsample ratio of the training instance.</p></li>
+<li><p><strong>subsample_freq</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – Frequency of subsample, &lt;=0 means no enable.</p></li>
+<li><p><strong>colsample_bytree</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=1.</em><em>)</em>) – Subsample ratio of columns when constructing each tree.</p></li>
+<li><p><strong>reg_alpha</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.</em><em>)</em>) – L1 regularization term on weights.</p></li>
+<li><p><strong>reg_lambda</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.</em><em>)</em>) – L2 regularization term on weights.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState object</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Random number seed.
+If int, this number is used to seed the C++ code.
+If RandomState object (numpy), a random integer is picked based on its state to seed the C++ code.
+If None, default seeds in C++ code are used.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=-1</em><em>)</em>) – Number of parallel threads.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Whether to print messages while running boosting.</p></li>
+<li><p><strong>importance_type</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>default='split'</em><em>)</em>) – The type of feature importance to be filled into <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code>.
+If ‘split’, result contains numbers of times the feature is used in a model.
+If ‘gain’, result contains total gains of splits which use the feature.</p></li>
+<li><p><strong>client</strong> (<em>dask.distributed.Client</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Dask client. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">distributed.default_client()</span></code> will be used at runtime. The Dask client used by this class will not be saved if the model object is pickled.</p></li>
+<li><p><strong>**kwargs</strong> – <p>Other parameters for the model.
+Check <a class="reference external" href="http://lightgbm.readthedocs.io/en/latest/Parameters.html">http://lightgbm.readthedocs.io/en/latest/Parameters.html</a> for more parameters.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>**kwargs is not supported in sklearn, it may cause unexpected issues.</p>
+</div>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.__init__" title="lightgbm.DaskLGBMRegressor.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([boosting_type, num_leaves, ...])</p></td>
+<td><p>Construct a gradient boosting model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.fit" title="lightgbm.DaskLGBMRegressor.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(X, y[, sample_weight, init_score, ...])</p></td>
+<td><p>Build a gradient boosting model from the training set (X, y).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.get_params" title="lightgbm.DaskLGBMRegressor.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</p></td>
+<td><p>Get parameters for this estimator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.predict" title="lightgbm.DaskLGBMRegressor.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(X, **kwargs)</p></td>
+<td><p>Return the predicted value for each sample.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.score" title="lightgbm.DaskLGBMRegressor.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(X, y[, sample_weight])</p></td>
+<td><p>Return the coefficient of determination of the prediction.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.set_params" title="lightgbm.DaskLGBMRegressor.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</p></td>
+<td><p>Set the parameters of this estimator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.to_local" title="lightgbm.DaskLGBMRegressor.to_local"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_local</span></code></a>()</p></td>
+<td><p>Create regular version of lightgbm.LGBMRegressor from the distributed version.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.best_iteration_" title="lightgbm.DaskLGBMRegressor.best_iteration_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">best_iteration_</span></code></a></p></td>
+<td><p>The best iteration of fitted model if <code class="docutils literal notranslate"><span class="pre">early_stopping()</span></code> callback has been specified.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.best_score_" title="lightgbm.DaskLGBMRegressor.best_score_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">best_score_</span></code></a></p></td>
+<td><p>The best score of fitted model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.booster_" title="lightgbm.DaskLGBMRegressor.booster_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">booster_</span></code></a></p></td>
+<td><p>The underlying Booster of this model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.client_" title="lightgbm.DaskLGBMRegressor.client_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">client_</span></code></a></p></td>
+<td><p>Dask client.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.evals_result_" title="lightgbm.DaskLGBMRegressor.evals_result_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evals_result_</span></code></a></p></td>
+<td><p>The evaluation results if validation sets have been specified.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.feature_importances_" title="lightgbm.DaskLGBMRegressor.feature_importances_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_importances_</span></code></a></p></td>
+<td><p>The feature importances (the higher, the more important).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.feature_name_" title="lightgbm.DaskLGBMRegressor.feature_name_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_name_</span></code></a></p></td>
+<td><p>The names of features.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.n_features_" title="lightgbm.DaskLGBMRegressor.n_features_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features_</span></code></a></p></td>
+<td><p>The number of features of fitted model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.n_features_in_" title="lightgbm.DaskLGBMRegressor.n_features_in_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_features_in_</span></code></a></p></td>
+<td><p>The number of features of fitted model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.DaskLGBMRegressor.objective_" title="lightgbm.DaskLGBMRegressor.objective_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">objective_</span></code></a></p></td>
+<td><p>The concrete objective used while fitting this model.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.best_iteration_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">best_iteration_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.best_iteration_" title="Permalink to this definition"></a></dt>
+<dd><p>The best iteration of fitted model if <code class="docutils literal notranslate"><span class="pre">early_stopping()</span></code> callback has been specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.best_score_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">best_score_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.best_score_" title="Permalink to this definition"></a></dt>
+<dd><p>The best score of fitted model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.booster_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">booster_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.booster_" title="Permalink to this definition"></a></dt>
+<dd><p>The underlying Booster of this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="lightgbm.Booster.html#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.client_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">client_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.client_" title="Permalink to this definition"></a></dt>
+<dd><p>Dask client.</p>
+<p>This property can be passed in the constructor or updated
+with <code class="docutils literal notranslate"><span class="pre">model.set_params(client=client)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dask.distributed.Client</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.evals_result_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evals_result_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.evals_result_" title="Permalink to this definition"></a></dt>
+<dd><p>The evaluation results if validation sets have been specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.feature_importances_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feature_importances_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.feature_importances_" title="Permalink to this definition"></a></dt>
+<dd><p>The feature importances (the higher, the more important).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">importance_type</span></code> attribute is passed to the function
+to configure the type of importance values to be extracted.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code> of shape = [n_features]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.feature_name_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feature_name_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.feature_name_" title="Permalink to this definition"></a></dt>
+<dd><p>The names of features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code> of shape = [n_features]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_set</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_init_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping_rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/dask.html#DaskLGBMRegressor.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.fit" title="Permalink to this definition"></a></dt>
+<dd><p>Build a gradient boosting model from the training set (X, y).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>Dask Array</em><em> or </em><em>Dask DataFrame of shape =</em><em> [</em><em>n_samples</em><em>, </em><em>n_features</em><em>]</em>) – Input feature matrix.</p></li>
+<li><p><strong>y</strong> (<em>Dask Array</em><em>, </em><em>Dask DataFrame</em><em> or </em><em>Dask Series of shape =</em><em> [</em><em>n_samples</em><em>]</em>) – The target values (class labels in classification, real numbers in regression).</p></li>
+<li><p><strong>sample_weight</strong> (<em>Dask Array</em><em> or </em><em>Dask Series of shape =</em><em> [</em><em>n_samples</em><em>] or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Weights of training data.</p></li>
+<li><p><strong>init_score</strong> (<em>Dask Array</em><em> or </em><em>Dask Series of shape =</em><em> [</em><em>n_samples</em><em>] or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Init score of training data.</p></li>
+<li><p><strong>eval_set</strong> (<em>list</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A list of (X, y) tuple pairs to use as validation sets.</p></li>
+<li><p><strong>eval_names</strong> (<em>list of str</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Names of eval_set.</p></li>
+<li><p><strong>eval_sample_weight</strong> (<em>list of Dask Array</em><em> or </em><em>Dask Series</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Weights of eval data.</p></li>
+<li><p><strong>eval_init_score</strong> (<em>list of Dask Array</em><em> or </em><em>Dask Series</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Init score of eval data.</p></li>
+<li><p><strong>eval_metric</strong> (<em>str</em><em>, </em><em>callable</em><em>, </em><em>list</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If str, it should be a built-in evaluation metric to use.
+If callable, it should be a custom evaluation metric, see note below for more details.
+If list, it can be a list of built-in metrics, a list of custom evaluation metrics, or a mix of both.
+In either case, the <code class="docutils literal notranslate"><span class="pre">metric</span></code> from the model parameters will be evaluated and used as well.
+Default: ‘l2’ for LGBMRegressor, ‘logloss’ for LGBMClassifier, ‘ndcg’ for LGBMRanker.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em> or </em><em>int</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – <p>Requires at least one evaluation data.
+If True, the eval metric on the eval set is printed at each boosting stage.
+If int, the eval metric on the eval set is printed at every <code class="docutils literal notranslate"><span class="pre">verbose</span></code> boosting stage.
+The last boosting stage or the boosting stage found by using <code class="docutils literal notranslate"><span class="pre">early_stopping_rounds</span></code> is also printed.</p>
+<p class="rubric">Example</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">verbose</span></code> = 4 and at least one item in <code class="docutils literal notranslate"><span class="pre">eval_set</span></code>,
+an evaluation metric is printed every 4 (instead of 1) boosting stages.</p>
+</p></li>
+<li><p><strong>feature_name</strong> (<em>list of str</em><em>, or </em><em>'auto'</em><em>, </em><em>optional</em><em> (</em><em>default='auto'</em><em>)</em>) – Feature names.
+If ‘auto’ and data is pandas DataFrame, data columns names are used.</p></li>
+<li><p><strong>categorical_feature</strong> (<em>list of str</em><em> or </em><em>int</em><em>, or </em><em>'auto'</em><em>, </em><em>optional</em><em> (</em><em>default='auto'</em><em>)</em>) – Categorical features.
+If list of int, interpreted as indices.
+If list of str, interpreted as feature names (need to specify <code class="docutils literal notranslate"><span class="pre">feature_name</span></code> as well).
+If ‘auto’ and data is pandas DataFrame, pandas unordered categorical columns are used.
+All values in categorical features should be less than int32 max value (2147483647).
+Large values could be memory consuming. Consider using consecutive integers starting from zero.
+All negative values in categorical features will be treated as missing values.
+The output cannot be monotonically constrained with respect to a categorical feature.</p></li>
+<li><p><strong>**kwargs</strong> – Other parameters passed through to <code class="docutils literal notranslate"><span class="pre">LGBMRegressor.fit()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Custom eval function expects a callable with following signatures:
+<code class="docutils literal notranslate"><span class="pre">func(y_true,</span> <span class="pre">y_pred)</span></code>, <code class="docutils literal notranslate"><span class="pre">func(y_true,</span> <span class="pre">y_pred,</span> <span class="pre">weight)</span></code> or
+<code class="docutils literal notranslate"><span class="pre">func(y_true,</span> <span class="pre">y_pred,</span> <span class="pre">weight,</span> <span class="pre">group)</span></code>
+and returns (eval_name, eval_result, is_higher_better) or
+list of (eval_name, eval_result, is_higher_better):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>y_true<span class="classifier">array-like of shape = [n_samples]</span></dt><dd><p>The target values.</p>
+</dd>
+<dt>y_pred<span class="classifier">array-like of shape = [n_samples] or shape = [n_samples * n_classes] (for multi-class task)</span></dt><dd><p>The predicted values.
+In case of custom <code class="docutils literal notranslate"><span class="pre">objective</span></code>, predicted values are returned before any transformation,
+e.g. they are raw margin instead of probability of positive class for binary task in this case.</p>
+</dd>
+<dt>weight<span class="classifier">array-like of shape = [n_samples]</span></dt><dd><p>The weight of samples.</p>
+</dd>
+<dt>group<span class="classifier">array-like</span></dt><dd><p>Group/query data.
+Only used in the learning-to-rank task.
+sum(group) = n_samples.
+For example, if you have a 100-document dataset with <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">=</span> <span class="pre">[10,</span> <span class="pre">20,</span> <span class="pre">40,</span> <span class="pre">10,</span> <span class="pre">10,</span> <span class="pre">10]</span></code>, that means that you have 6 groups,
+where the first 10 records are in the first group, records 11-30 are in the second group, records 31-70 are in the third group, etc.</p>
+</dd>
+<dt>eval_name<span class="classifier">str</span></dt><dd><p>The name of evaluation function (without whitespace).</p>
+</dd>
+<dt>eval_result<span class="classifier">float</span></dt><dd><p>The eval result.</p>
+</dd>
+<dt>is_higher_better<span class="classifier">bool</span></dt><dd><p>Is eval result higher better, e.g. AUC is <code class="docutils literal notranslate"><span class="pre">is_higher_better</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>For multi-class task, the y_pred is group by class_id first, then group by row_id.
+If you want to get i-th row y_pred in j-th class, the access way is y_pred[j * num_data + i].</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.get_params" title="Permalink to this definition"></a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>deep</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>params</strong> – Parameter names mapped to their values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.n_features_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_features_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.n_features_" title="Permalink to this definition"></a></dt>
+<dd><p>The number of features of fitted model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.n_features_in_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_features_in_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.n_features_in_" title="Permalink to this definition"></a></dt>
+<dd><p>The number of features of fitted model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.objective_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">objective_</span></span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.objective_" title="Permalink to this definition"></a></dt>
+<dd><p>The concrete objective used while fitting this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">callable</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/dask.html#DaskLGBMRegressor.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.predict" title="Permalink to this definition"></a></dt>
+<dd><p>Return the predicted value for each sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>Dask Array</em><em> or </em><em>Dask DataFrame of shape =</em><em> [</em><em>n_samples</em><em>, </em><em>n_features</em><em>]</em>) – Input features matrix.</p></li>
+<li><p><strong>raw_score</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether to predict raw scores.</p></li>
+<li><p><strong>start_iteration</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – Start index of the iteration to predict.
+If &lt;= 0, starts from the first iteration.</p></li>
+<li><p><strong>num_iteration</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Total number of iterations used in the prediction.
+If None, if the best iteration exists and start_iteration &lt;= 0, the best iteration is used;
+otherwise, all iterations from <code class="docutils literal notranslate"><span class="pre">start_iteration</span></code> are used (no limits).
+If &lt;= 0, all iterations from <code class="docutils literal notranslate"><span class="pre">start_iteration</span></code> are used (no limits).</p></li>
+<li><p><strong>pred_leaf</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether to predict leaf index.</p></li>
+<li><p><strong>pred_contrib</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – <p>Whether to predict feature contributions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to get more explanations for your model’s predictions using SHAP values,
+like SHAP interaction values,
+you can install the shap package (<a class="reference external" href="https://github.com/slundberg/shap">https://github.com/slundberg/shap</a>).
+Note that unlike the shap package, with <code class="docutils literal notranslate"><span class="pre">pred_contrib</span></code> we return a matrix with an extra
+column, where the last column is the expected value.</p>
+</div>
+</p></li>
+<li><p><strong>**kwargs</strong> – Other parameters for the prediction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>predicted_result</strong> (<em>Dask Array of shape = [n_samples]</em>) – The predicted values.</p></li>
+<li><p><strong>X_leaves</strong> (<em>Dask Array of shape = [n_samples, n_trees]</em>) – If <code class="docutils literal notranslate"><span class="pre">pred_leaf=True</span></code>, the predicted leaf of every tree for each sample.</p></li>
+<li><p><strong>X_SHAP_values</strong> (<em>Dask Array of shape = [n_samples, n_features + 1]</em>) – If <code class="docutils literal notranslate"><span class="pre">pred_contrib=True</span></code>, the feature contributions for each sample.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.score" title="Permalink to this definition"></a></dt>
+<dd><p>Return the coefficient of determination of the prediction.</p>
+<p>The coefficient of determination <span class="math notranslate nohighlight">\(R^2\)</span> is defined as
+<span class="math notranslate nohighlight">\((1 - \frac{u}{v})\)</span>, where <span class="math notranslate nohighlight">\(u\)</span> is the residual
+sum of squares <code class="docutils literal notranslate"><span class="pre">((y_true</span> <span class="pre">-</span> <span class="pre">y_pred)**</span> <span class="pre">2).sum()</span></code> and <span class="math notranslate nohighlight">\(v\)</span>
+is the total sum of squares <code class="docutils literal notranslate"><span class="pre">((y_true</span> <span class="pre">-</span> <span class="pre">y_true.mean())</span> <span class="pre">**</span> <span class="pre">2).sum()</span></code>.
+The best possible score is 1.0 and it can be negative (because the
+model can be arbitrarily worse). A constant model that always predicts
+the expected value of <cite>y</cite>, disregarding the input features, would get
+a <span class="math notranslate nohighlight">\(R^2\)</span> score of 0.0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Test samples. For some estimators this may be a precomputed
+kernel matrix or a list of generic objects instead with shape
+<code class="docutils literal notranslate"><span class="pre">(n_samples,</span> <span class="pre">n_samples_fitted)</span></code>, where <code class="docutils literal notranslate"><span class="pre">n_samples_fitted</span></code>
+is the number of samples used in the fitting for the estimator.</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_outputs</em><em>)</em>) – True values for <cite>X</cite>.</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>score</strong> – <span class="math notranslate nohighlight">\(R^2\)</span> of <code class="docutils literal notranslate"><span class="pre">self.predict(X)</span></code> wrt. <cite>y</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The <span class="math notranslate nohighlight">\(R^2\)</span> score used when calling <code class="docutils literal notranslate"><span class="pre">score</span></code> on a regressor uses
+<code class="docutils literal notranslate"><span class="pre">multioutput='uniform_average'</span></code> from version 0.23 to keep consistent
+with default value of <code class="xref py py-func docutils literal notranslate"><span class="pre">r2_score()</span></code>.
+This influences the <code class="docutils literal notranslate"><span class="pre">score</span></code> method of all the multioutput
+regressors (except for
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MultiOutputRegressor</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.set_params" title="Permalink to this definition"></a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**params</strong> – Parameter names with their new values.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Returns self.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.DaskLGBMRegressor.to_local">
+<span class="sig-name descname"><span class="pre">to_local</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/dask.html#DaskLGBMRegressor.to_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.DaskLGBMRegressor.to_local" title="Permalink to this definition"></a></dt>
+<dd><p>Create regular version of lightgbm.LGBMRegressor from the distributed version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> – Local underlying model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="lightgbm.LGBMRegressor.html#lightgbm.LGBMRegressor" title="lightgbm.LGBMRegressor">lightgbm.LGBMRegressor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lightgbm.DaskLGBMClassifier.html" class="btn btn-neutral float-left" title="lightgbm.DaskLGBMClassifier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lightgbm.DaskLGBMRanker.html" class="btn btn-neutral float-right" title="lightgbm.DaskLGBMRanker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

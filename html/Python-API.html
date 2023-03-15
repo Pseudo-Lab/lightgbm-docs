@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lightgbm.Dataset" href="pythonapi/lightgbm.Dataset.html" />
+    <link rel="prev" title="C API" href="C-API.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-structure-api">Data Structure API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.Dataset.html">lightgbm.Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.Booster.html">lightgbm.Booster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.CVBooster.html">lightgbm.CVBooster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.Sequence.html">lightgbm.Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#training-api">Training API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.train.html">lightgbm.train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.cv.html">lightgbm.cv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scikit-learn-api">Scikit-learn API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.LGBMModel.html">lightgbm.LGBMModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.LGBMClassifier.html">lightgbm.LGBMClassifier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.LGBMRegressor.html">lightgbm.LGBMRegressor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.LGBMRanker.html">lightgbm.LGBMRanker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dask-api">Dask API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.DaskLGBMClassifier.html">lightgbm.DaskLGBMClassifier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.DaskLGBMRegressor.html">lightgbm.DaskLGBMRegressor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.DaskLGBMRanker.html">lightgbm.DaskLGBMRanker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#callbacks">Callbacks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.early_stopping.html">lightgbm.early_stopping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.log_evaluation.html">lightgbm.log_evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.record_evaluation.html">lightgbm.record_evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.reset_parameter.html">lightgbm.reset_parameter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.plot_importance.html">lightgbm.plot_importance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.plot_split_value_histogram.html">lightgbm.plot_split_value_histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.plot_metric.html">lightgbm.plot_metric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.plot_tree.html">lightgbm.plot_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.create_tree_digraph.html">lightgbm.create_tree_digraph</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pythonapi/lightgbm.register_logger.html">lightgbm.register_logger</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Python-API.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-api">
+<h1>Python API<a class="headerlink" href="#python-api" title="Permalink to this heading"></a></h1>
+<section id="data-structure-api">
+<h2>Data Structure API<a class="headerlink" href="#data-structure-api" title="Permalink to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.Dataset.html#lightgbm.Dataset" title="lightgbm.Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dataset</span></code></a>(data[, label, reference, weight, ...])</p></td>
+<td><p>Dataset in LightGBM.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.Booster.html#lightgbm.Booster" title="lightgbm.Booster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Booster</span></code></a>([params, train_set, model_file, ...])</p></td>
+<td><p>Booster in LightGBM.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.CVBooster.html#lightgbm.CVBooster" title="lightgbm.CVBooster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CVBooster</span></code></a>()</p></td>
+<td><p>CVBooster in LightGBM.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.Sequence.html#lightgbm.Sequence" title="lightgbm.Sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sequence</span></code></a>()</p></td>
+<td><p>Generic data access interface.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="training-api">
+<h2>Training API<a class="headerlink" href="#training-api" title="Permalink to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.train.html#lightgbm.train" title="lightgbm.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(params, train_set[, num_boost_round, ...])</p></td>
+<td><p>Perform the training with given parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.cv.html#lightgbm.cv" title="lightgbm.cv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cv</span></code></a>(params, train_set[, num_boost_round, ...])</p></td>
+<td><p>Perform the cross-validation with given parameters.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="scikit-learn-api">
+<h2>Scikit-learn API<a class="headerlink" href="#scikit-learn-api" title="Permalink to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.LGBMModel.html#lightgbm.LGBMModel" title="lightgbm.LGBMModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LGBMModel</span></code></a>([boosting_type, num_leaves, ...])</p></td>
+<td><p>Implementation of the scikit-learn API for LightGBM.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.LGBMClassifier.html#lightgbm.LGBMClassifier" title="lightgbm.LGBMClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LGBMClassifier</span></code></a>([boosting_type, num_leaves, ...])</p></td>
+<td><p>LightGBM classifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.LGBMRegressor.html#lightgbm.LGBMRegressor" title="lightgbm.LGBMRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LGBMRegressor</span></code></a>([boosting_type, num_leaves, ...])</p></td>
+<td><p>LightGBM regressor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.LGBMRanker.html#lightgbm.LGBMRanker" title="lightgbm.LGBMRanker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LGBMRanker</span></code></a>([boosting_type, num_leaves, ...])</p></td>
+<td><p>LightGBM ranker.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dask-api">
+<h2>Dask API<a class="headerlink" href="#dask-api" title="Permalink to this heading"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.0.</span></p>
+</div>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.DaskLGBMClassifier.html#lightgbm.DaskLGBMClassifier" title="lightgbm.DaskLGBMClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DaskLGBMClassifier</span></code></a>([boosting_type, ...])</p></td>
+<td><p>Distributed version of lightgbm.LGBMClassifier.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.DaskLGBMRegressor.html#lightgbm.DaskLGBMRegressor" title="lightgbm.DaskLGBMRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DaskLGBMRegressor</span></code></a>([boosting_type, ...])</p></td>
+<td><p>Distributed version of lightgbm.LGBMRegressor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.DaskLGBMRanker.html#lightgbm.DaskLGBMRanker" title="lightgbm.DaskLGBMRanker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DaskLGBMRanker</span></code></a>([boosting_type, num_leaves, ...])</p></td>
+<td><p>Distributed version of lightgbm.LGBMRanker.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="callbacks">
+<h2>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.early_stopping.html#lightgbm.early_stopping" title="lightgbm.early_stopping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">early_stopping</span></code></a>(stopping_rounds[, ...])</p></td>
+<td><p>Create a callback that activates early stopping.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.log_evaluation.html#lightgbm.log_evaluation" title="lightgbm.log_evaluation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_evaluation</span></code></a>([period, show_stdv])</p></td>
+<td><p>Create a callback that logs the evaluation results.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.record_evaluation.html#lightgbm.record_evaluation" title="lightgbm.record_evaluation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">record_evaluation</span></code></a>(eval_result)</p></td>
+<td><p>Create a callback that records the evaluation history into <code class="docutils literal notranslate"><span class="pre">eval_result</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.reset_parameter.html#lightgbm.reset_parameter" title="lightgbm.reset_parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_parameter</span></code></a>(**kwargs)</p></td>
+<td><p>Create a callback that resets the parameter after the first iteration.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="plotting">
+<h2>Plotting<a class="headerlink" href="#plotting" title="Permalink to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.plot_importance.html#lightgbm.plot_importance" title="lightgbm.plot_importance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_importance</span></code></a>(booster[, ax, height, xlim, ...])</p></td>
+<td><p>Plot model's feature importances.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.plot_split_value_histogram.html#lightgbm.plot_split_value_histogram" title="lightgbm.plot_split_value_histogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_split_value_histogram</span></code></a>(booster, feature)</p></td>
+<td><p>Plot split value histogram for the specified feature of the model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.plot_metric.html#lightgbm.plot_metric" title="lightgbm.plot_metric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_metric</span></code></a>(booster[, metric, ...])</p></td>
+<td><p>Plot one metric during training.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pythonapi/lightgbm.plot_tree.html#lightgbm.plot_tree" title="lightgbm.plot_tree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_tree</span></code></a>(booster[, ax, tree_index, ...])</p></td>
+<td><p>Plot specified tree.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.create_tree_digraph.html#lightgbm.create_tree_digraph" title="lightgbm.create_tree_digraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_tree_digraph</span></code></a>(booster[, tree_index, ...])</p></td>
+<td><p>Create a digraph representation of specified tree.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pythonapi/lightgbm.register_logger.html#lightgbm.register_logger" title="lightgbm.register_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_logger</span></code></a>(logger)</p></td>
+<td><p>Register custom logger.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="C-API.html" class="btn btn-neutral float-left" title="C API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pythonapi/lightgbm.Dataset.html" class="btn btn-neutral float-right" title="lightgbm.Dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

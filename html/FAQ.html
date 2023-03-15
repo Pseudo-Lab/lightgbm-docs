@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LightGBM FAQ &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Development Guide" href="Development-Guide.html" />
+    <link rel="prev" title="Advanced Topics" href="Advanced-Topics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#critical-issues">Critical Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#general-lightgbm-questions">General LightGBM Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#where-do-i-find-more-details-about-lightgbm-parameters">1. Where do I find more details about LightGBM parameters?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-datasets-with-millions-of-features-training-does-not-start-or-starts-after-a-very-long-time">2. On datasets with millions of features, training does not start (or starts after a very long time).</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-running-lightgbm-on-a-large-dataset-my-computer-runs-out-of-ram">3. When running LightGBM on a large dataset, my computer runs out of RAM.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i-am-using-windows-should-i-use-visual-studio-or-mingw-for-compiling-lightgbm">4. I am using Windows. Should I use Visual Studio or MinGW for compiling LightGBM?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-using-lightgbm-gpu-i-cannot-reproduce-results-over-several-runs">5. When using LightGBM GPU, I cannot reproduce results over several runs.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bagging-is-not-reproducible-when-changing-the-number-of-threads">6. Bagging is not reproducible when changing the number of threads.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i-tried-to-use-random-forest-mode-and-lightgbm-crashes">7. I tried to use Random Forest mode, and LightGBM crashes!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cpu-usage-is-low-like-10-in-windows-when-using-lightgbm-on-very-large-datasets-with-many-core-systems">8. CPU usage is low (like 10%) in Windows when using LightGBM on very large datasets with many-core systems.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-i-m-trying-to-specify-a-categorical-column-with-the-categorical-feature-parameter-i-get-the-following-sequence-of-warnings-but-there-are-no-negative-values-in-the-column">9. When I’m trying to specify a categorical column with the <code class="docutils literal notranslate"><span class="pre">categorical_feature</span></code> parameter, I get the following sequence of warnings, but there are no negative values in the column.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lightgbm-crashes-randomly-with-the-error-like-initializing-libiomp5-dylib-but-found-libomp-dylib-already-initialized">10. LightGBM crashes randomly with the error like: <code class="docutils literal notranslate"><span class="pre">Initializing</span> <span class="pre">libiomp5.dylib,</span> <span class="pre">but</span> <span class="pre">found</span> <span class="pre">libomp.dylib</span> <span class="pre">already</span> <span class="pre">initialized.</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lightgbm-hangs-when-multithreading-openmp-and-using-forking-in-linux-at-the-same-time">11. LightGBM hangs when multithreading (OpenMP) and using forking in Linux at the same time.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-is-early-stopping-not-enabled-by-default-in-lightgbm">12. Why is early stopping not enabled by default in LightGBM?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#does-lightgbm-support-direct-loading-data-from-zero-based-or-one-based-libsvm-format-file">13. Does LightGBM support direct loading data from zero-based or one-based LibSVM format file?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-cmake-cannot-find-the-compiler-when-compiling-lightgbm-with-mingw">14. Why CMake cannot find the compiler when compiling LightGBM with MinGW?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#where-can-i-find-lightgbm-s-logo-to-use-it-in-my-presentation">15. Where can I find LightGBM’s logo to use it in my presentation?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#r-package">R-package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#any-training-command-using-lightgbm-does-not-work-after-an-error-occurred-during-the-training-of-a-previous-lightgbm-model">1. Any training command using LightGBM does not work after an error occurred during the training of a previous LightGBM model.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i-used-setinfo-tried-to-print-my-lgb-dataset-and-now-the-r-console-froze">2. I used <code class="docutils literal notranslate"><span class="pre">setinfo()</span></code>, tried to print my <code class="docutils literal notranslate"><span class="pre">lgb.Dataset</span></code>, and now the R console froze!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#error-in-data-table-data-table-argument-2-is-null">3. <code class="docutils literal notranslate"><span class="pre">error</span> <span class="pre">in</span> <span class="pre">data.table::data.table()...argument</span> <span class="pre">2</span> <span class="pre">is</span> <span class="pre">NULL</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#python-package">Python-package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#error-setup-script-specifies-an-absolute-path-when-installing-from-github-using-python-setup-py-install">1. <code class="docutils literal notranslate"><span class="pre">Error:</span> <span class="pre">setup</span> <span class="pre">script</span> <span class="pre">specifies</span> <span class="pre">an</span> <span class="pre">absolute</span> <span class="pre">path</span></code> when installing from GitHub using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code>.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#error-messages-cannot-before-construct-dataset">2. Error messages: <code class="docutils literal notranslate"><span class="pre">Cannot</span> <span class="pre">...</span> <span class="pre">before</span> <span class="pre">construct</span> <span class="pre">dataset</span></code>.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i-encounter-segmentation-faults-segfaults-randomly-after-installing-lightgbm-from-pypi-using-pip-install-lightgbm">3. I encounter segmentation faults (segfaults) randomly after installing LightGBM from PyPI using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lightgbm</span></code>.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">LightGBM FAQ</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/FAQ.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lightgbm-faq">
+<h1>LightGBM FAQ<a class="headerlink" href="#lightgbm-faq" title="Permalink to this heading"></a></h1>
+<nav class="contents local" id="lightgbm-frequently-asked-questions">
+<p class="topic-title">LightGBM Frequently Asked Questions</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#critical-issues" id="id5">Critical Issues</a></p></li>
+<li><p><a class="reference internal" href="#general-lightgbm-questions" id="id6">General LightGBM Questions</a></p></li>
+<li><p><a class="reference internal" href="#r-package" id="id7">R-package</a></p></li>
+<li><p><a class="reference internal" href="#python-package" id="id8">Python-package</a></p></li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="critical-issues">
+<h2>Critical Issues<a class="headerlink" href="#critical-issues" title="Permalink to this heading"></a></h2>
+<p>A <strong>critical issue</strong> could be a <em>crash</em>, <em>prediction error</em>, <em>nonsense output</em>, or something else requiring immediate attention.</p>
+<p>Please post such an issue in the <a class="reference external" href="https://github.com/microsoft/LightGBM/issues">Microsoft/LightGBM repository</a>.</p>
+<p>You may also ping a member of the core team according to the relevant area of expertise by mentioning them with the arabase (&#64;) symbol:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/guolinke">&#64;guolinke</a> <strong>Guolin Ke</strong> (C++ code / R-package / Python-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/chivee">&#64;chivee</a> <strong>Qiwei Ye</strong> (C++ code / Python-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/shiyu1994">&#64;shiyu1994</a> <strong>Yu Shi</strong> (C++ code / Python-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/btrotta">&#64;btrotta</a> <strong>Belinda Trotta</strong> (C++ code)</p></li>
+<li><p><a class="reference external" href="https://github.com/Laurae2">&#64;Laurae2</a> <strong>Damien Soukhavong</strong> (R-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/jameslamb">&#64;jameslamb</a> <strong>James Lamb</strong> (R-package / Dask-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/jmoralez">&#64;jmoralez</a> <strong>José Morales</strong> (Dask-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/wxchan">&#64;wxchan</a> <strong>Wenxuan Chen</strong> (Python-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/henry0312">&#64;henry0312</a> <strong>Tsukasa Omoto</strong> (Python-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/StrikerRUS">&#64;StrikerRUS</a> <strong>Nikita Titov</strong> (Python-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/huanzhang12">&#64;huanzhang12</a> <strong>Huan Zhang</strong> (GPU support)</p></li>
+<li><p><a class="reference external" href="https://github.com/tongwu-msft">&#64;tongwu-msft</a> <strong>Tong Wu</strong> (C++ code / Python-package)</p></li>
+<li><p><a class="reference external" href="https://github.com/hzy46">&#64;hzy46</a> <strong>Zhiyuan He</strong> (C++ code / Python-package)</p></li>
+</ul>
+<p>Please include as much of the following information as possible when submitting a critical issue:</p>
+<ul class="simple">
+<li><p>Is it reproducible on CLI (command line interface), R, and/or Python?</p></li>
+<li><p>Is it specific to a wrapper? (R or Python?)</p></li>
+<li><p>Is it specific to the compiler? (gcc or Clang version? MinGW or Visual Studio version?)</p></li>
+<li><p>Is it specific to your Operating System? (Windows? Linux? macOS?)</p></li>
+<li><p>Are you able to reproduce this issue with a simple case?</p></li>
+<li><p>Does the issue persist after removing all optimization flags and compiling LightGBM in debug mode?</p></li>
+</ul>
+<p>When submitting issues, please keep in mind that this is largely a volunteer effort, and we may not be available 24/7 to provide support.</p>
+</section>
+<hr class="docutils" />
+<section id="general-lightgbm-questions">
+<h2>General LightGBM Questions<a class="headerlink" href="#general-lightgbm-questions" title="Permalink to this heading"></a></h2>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#where-do-i-find-more-details-about-lightgbm-parameters" id="id9">1. Where do I find more details about LightGBM parameters?</a></p></li>
+<li><p><a class="reference internal" href="#on-datasets-with-millions-of-features-training-does-not-start-or-starts-after-a-very-long-time" id="id10">2. On datasets with millions of features, training does not start (or starts after a very long time).</a></p></li>
+<li><p><a class="reference internal" href="#when-running-lightgbm-on-a-large-dataset-my-computer-runs-out-of-ram" id="id11">3. When running LightGBM on a large dataset, my computer runs out of RAM.</a></p></li>
+<li><p><a class="reference internal" href="#i-am-using-windows-should-i-use-visual-studio-or-mingw-for-compiling-lightgbm" id="id12">4. I am using Windows. Should I use Visual Studio or MinGW for compiling LightGBM?</a></p></li>
+<li><p><a class="reference internal" href="#when-using-lightgbm-gpu-i-cannot-reproduce-results-over-several-runs" id="id13">5. When using LightGBM GPU, I cannot reproduce results over several runs.</a></p></li>
+<li><p><a class="reference internal" href="#bagging-is-not-reproducible-when-changing-the-number-of-threads" id="id14">6. Bagging is not reproducible when changing the number of threads.</a></p></li>
+<li><p><a class="reference internal" href="#i-tried-to-use-random-forest-mode-and-lightgbm-crashes" id="id15">7. I tried to use Random Forest mode, and LightGBM crashes!</a></p></li>
+<li><p><a class="reference internal" href="#cpu-usage-is-low-like-10-in-windows-when-using-lightgbm-on-very-large-datasets-with-many-core-systems" id="id16">8. CPU usage is low (like 10%) in Windows when using LightGBM on very large datasets with many-core systems.</a></p></li>
+<li><p><a class="reference internal" href="#when-i-m-trying-to-specify-a-categorical-column-with-the-categorical-feature-parameter-i-get-the-following-sequence-of-warnings-but-there-are-no-negative-values-in-the-column" id="id17">9. When I’m trying to specify a categorical column with the <code class="docutils literal notranslate"><span class="pre">categorical_feature</span></code> parameter, I get the following sequence of warnings, but there are no negative values in the column.</a></p></li>
+<li><p><a class="reference internal" href="#lightgbm-crashes-randomly-with-the-error-like-initializing-libiomp5-dylib-but-found-libomp-dylib-already-initialized" id="id18">10. LightGBM crashes randomly with the error like: <code class="docutils literal notranslate"><span class="pre">Initializing</span> <span class="pre">libiomp5.dylib,</span> <span class="pre">but</span> <span class="pre">found</span> <span class="pre">libomp.dylib</span> <span class="pre">already</span> <span class="pre">initialized.</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lightgbm-hangs-when-multithreading-openmp-and-using-forking-in-linux-at-the-same-time" id="id19">11. LightGBM hangs when multithreading (OpenMP) and using forking in Linux at the same time.</a></p></li>
+<li><p><a class="reference internal" href="#why-is-early-stopping-not-enabled-by-default-in-lightgbm" id="id20">12. Why is early stopping not enabled by default in LightGBM?</a></p></li>
+<li><p><a class="reference internal" href="#does-lightgbm-support-direct-loading-data-from-zero-based-or-one-based-libsvm-format-file" id="id21">13. Does LightGBM support direct loading data from zero-based or one-based LibSVM format file?</a></p></li>
+<li><p><a class="reference internal" href="#why-cmake-cannot-find-the-compiler-when-compiling-lightgbm-with-mingw" id="id22">14. Why CMake cannot find the compiler when compiling LightGBM with MinGW?</a></p></li>
+<li><p><a class="reference internal" href="#where-can-i-find-lightgbm-s-logo-to-use-it-in-my-presentation" id="id23">15. Where can I find LightGBM’s logo to use it in my presentation?</a></p></li>
+</ul>
+</nav>
+<section id="where-do-i-find-more-details-about-lightgbm-parameters">
+<h3>1. Where do I find more details about LightGBM parameters?<a class="headerlink" href="#where-do-i-find-more-details-about-lightgbm-parameters" title="Permalink to this heading"></a></h3>
+<p>Take a look at <a class="reference external" href="./Parameters.html">Parameters</a> and the <a class="reference external" href="https://sites.google.com/view/lauraepp/parameters">Laurae++/Parameters</a> website.</p>
+</section>
+<section id="on-datasets-with-millions-of-features-training-does-not-start-or-starts-after-a-very-long-time">
+<h3>2. On datasets with millions of features, training does not start (or starts after a very long time).<a class="headerlink" href="#on-datasets-with-millions-of-features-training-does-not-start-or-starts-after-a-very-long-time" title="Permalink to this heading"></a></h3>
+<p>Use a smaller value for <code class="docutils literal notranslate"><span class="pre">bin_construct_sample_cnt</span></code> and a larger value for <code class="docutils literal notranslate"><span class="pre">min_data</span></code>.</p>
+</section>
+<section id="when-running-lightgbm-on-a-large-dataset-my-computer-runs-out-of-ram">
+<h3>3. When running LightGBM on a large dataset, my computer runs out of RAM.<a class="headerlink" href="#when-running-lightgbm-on-a-large-dataset-my-computer-runs-out-of-ram" title="Permalink to this heading"></a></h3>
+<p><strong>Multiple Solutions</strong>: set the <code class="docutils literal notranslate"><span class="pre">histogram_pool_size</span></code> parameter to the MB you want to use for LightGBM (histogram_pool_size + dataset size = approximately RAM used),
+lower <code class="docutils literal notranslate"><span class="pre">num_leaves</span></code> or lower <code class="docutils literal notranslate"><span class="pre">max_bin</span></code> (see <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/562">Microsoft/LightGBM#562</a>).</p>
+</section>
+<section id="i-am-using-windows-should-i-use-visual-studio-or-mingw-for-compiling-lightgbm">
+<h3>4. I am using Windows. Should I use Visual Studio or MinGW for compiling LightGBM?<a class="headerlink" href="#i-am-using-windows-should-i-use-visual-studio-or-mingw-for-compiling-lightgbm" title="Permalink to this heading"></a></h3>
+<p>Visual Studio <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/542">performs best for LightGBM</a>.</p>
+</section>
+<section id="when-using-lightgbm-gpu-i-cannot-reproduce-results-over-several-runs">
+<h3>5. When using LightGBM GPU, I cannot reproduce results over several runs.<a class="headerlink" href="#when-using-lightgbm-gpu-i-cannot-reproduce-results-over-several-runs" title="Permalink to this heading"></a></h3>
+<p>This is normal and expected behaviour, but you may try to use <code class="docutils literal notranslate"><span class="pre">gpu_use_dp</span> <span class="pre">=</span> <span class="pre">true</span></code> for reproducibility
+(see <a class="reference external" href="https://github.com/microsoft/LightGBM/pull/560#issuecomment-304561654">Microsoft/LightGBM#560</a>).
+You may also use the CPU version.</p>
+</section>
+<section id="bagging-is-not-reproducible-when-changing-the-number-of-threads">
+<h3>6. Bagging is not reproducible when changing the number of threads.<a class="headerlink" href="#bagging-is-not-reproducible-when-changing-the-number-of-threads" title="Permalink to this heading"></a></h3>
+<p><span class="raw-html"><strike></span>
+LightGBM bagging is multithreaded, so its output depends on the number of threads used.
+There is <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/632">no workaround currently</a>.
+<span class="raw-html"></strike></span></p>
+<p>Starting from <a class="reference external" href="https://github.com/microsoft/LightGBM/pull/2804">#2804</a> bagging result doesn’t depend on the number of threads.
+So this issue should be solved in the latest version.</p>
+</section>
+<section id="i-tried-to-use-random-forest-mode-and-lightgbm-crashes">
+<h3>7. I tried to use Random Forest mode, and LightGBM crashes!<a class="headerlink" href="#i-tried-to-use-random-forest-mode-and-lightgbm-crashes" title="Permalink to this heading"></a></h3>
+<p>This is expected behaviour for arbitrary parameters. To enable Random Forest,
+you must use <code class="docutils literal notranslate"><span class="pre">bagging_fraction</span></code> and <code class="docutils literal notranslate"><span class="pre">feature_fraction</span></code> different from 1, along with a <code class="docutils literal notranslate"><span class="pre">bagging_freq</span></code>.
+<a class="reference external" href="https://github.com/microsoft/LightGBM/issues/691">This thread</a> includes an example.</p>
+</section>
+<section id="cpu-usage-is-low-like-10-in-windows-when-using-lightgbm-on-very-large-datasets-with-many-core-systems">
+<h3>8. CPU usage is low (like 10%) in Windows when using LightGBM on very large datasets with many-core systems.<a class="headerlink" href="#cpu-usage-is-low-like-10-in-windows-when-using-lightgbm-on-very-large-datasets-with-many-core-systems" title="Permalink to this heading"></a></h3>
+<p>Please use <a class="reference external" href="https://visualstudio.microsoft.com/downloads/">Visual Studio</a>
+as it may be <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/749">10x faster than MinGW</a> especially for very large trees.</p>
+</section>
+<section id="when-i-m-trying-to-specify-a-categorical-column-with-the-categorical-feature-parameter-i-get-the-following-sequence-of-warnings-but-there-are-no-negative-values-in-the-column">
+<h3>9. When I’m trying to specify a categorical column with the <code class="docutils literal notranslate"><span class="pre">categorical_feature</span></code> parameter, I get the following sequence of warnings, but there are no negative values in the column.<a class="headerlink" href="#when-i-m-trying-to-specify-a-categorical-column-with-the-categorical-feature-parameter-i-get-the-following-sequence-of-warnings-but-there-are-no-negative-values-in-the-column" title="Permalink to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN</span>
+<span class="go">[LightGBM] [Warning] There are no meaningful features, as all feature values are constant.</span>
+</pre></div>
+</div>
+<p>The column you’re trying to pass via <code class="docutils literal notranslate"><span class="pre">categorical_feature</span></code> likely contains very large values.
+Categorical features in LightGBM are limited by int32 range,
+so you cannot pass values that are greater than <code class="docutils literal notranslate"><span class="pre">Int32.MaxValue</span></code> (2147483647) as categorical features (see <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/1359">Microsoft/LightGBM#1359</a>).
+You should convert them to integers ranging from zero to the number of categories first.</p>
+</section>
+<section id="lightgbm-crashes-randomly-with-the-error-like-initializing-libiomp5-dylib-but-found-libomp-dylib-already-initialized">
+<h3>10. LightGBM crashes randomly with the error like: <code class="docutils literal notranslate"><span class="pre">Initializing</span> <span class="pre">libiomp5.dylib,</span> <span class="pre">but</span> <span class="pre">found</span> <span class="pre">libomp.dylib</span> <span class="pre">already</span> <span class="pre">initialized.</span></code><a class="headerlink" href="#lightgbm-crashes-randomly-with-the-error-like-initializing-libiomp5-dylib-but-found-libomp-dylib-already-initialized" title="Permalink to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">OMP: Error #15: Initializing libiomp5.dylib, but found libomp.dylib already initialized.</span>
+<span class="go">OMP: Hint: This means that multiple copies of the OpenMP runtime have been linked into the program. That is dangerous, since it can degrade performance or cause incorrect results. The best thing to do is to ensure that only a single OpenMP runtime is linked into the process, e.g. by avoiding static linking of the OpenMP runtime in any library. As an unsafe, unsupported, undocumented workaround you can set the environment variable KMP_DUPLICATE_LIB_OK=TRUE to allow the program to continue to execute, but that may cause crashes or silently produce incorrect results. For more information, please see http://www.intel.com/software/products/support/.</span>
+</pre></div>
+</div>
+<p><strong>Possible Cause</strong>: This error means that you have multiple OpenMP libraries installed on your machine and they conflict with each other.
+(File extensions in the error message may differ depending on the operating system).</p>
+<p>If you are using Python distributed by Conda, then it is highly likely that the error is caused by the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> package from Conda which includes the <code class="docutils literal notranslate"><span class="pre">mkl</span></code> package which in turn conflicts with the system-wide library.
+In this case you can update the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> package in Conda or replace the Conda’s OpenMP library instance with system-wide one by creating a symlink to it in Conda environment folder <code class="docutils literal notranslate"><span class="pre">$CONDA_PREFIX/lib</span></code>.</p>
+<p><strong>Solution</strong>: Assuming you are using macOS with Homebrew, the command which overwrites OpenMP library files in the current active Conda environment with symlinks to the system-wide library ones installed by Homebrew:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -sf <span class="sb">`</span>ls -d <span class="s2">&quot;</span><span class="k">$(</span>brew --cellar libomp<span class="k">)</span><span class="s2">&quot;</span>/*/lib<span class="sb">`</span>/* <span class="nv">$CONDA_PREFIX</span>/lib
+</pre></div>
+</div>
+<p>The described above fix worked fine before the release of OpenMP 8.0.0 version.
+Starting from 8.0.0 version, Homebrew formula for OpenMP includes <code class="docutils literal notranslate"><span class="pre">-DLIBOMP_INSTALL_ALIASES=OFF</span></code> option which leads to that the fix doesn’t work anymore.
+However, you can create symlinks to library aliases manually:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> LIBOMP_ALIAS <span class="k">in</span> libgomp.dylib libiomp5.dylib libomp.dylib<span class="p">;</span> <span class="k">do</span> sudo ln -sf <span class="s2">&quot;</span><span class="k">$(</span>brew --cellar libomp<span class="k">)</span><span class="s2">&quot;</span>/*/lib/libomp.dylib <span class="nv">$CONDA_PREFIX</span>/lib/<span class="nv">$LIBOMP_ALIAS</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+<p>Another workaround would be removing MKL optimizations from Conda’s packages completely:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install nomkl
+</pre></div>
+</div>
+<p>If this is not your case, then you should find conflicting OpenMP library installations on your own and leave only one of them.</p>
+</section>
+<section id="lightgbm-hangs-when-multithreading-openmp-and-using-forking-in-linux-at-the-same-time">
+<h3>11. LightGBM hangs when multithreading (OpenMP) and using forking in Linux at the same time.<a class="headerlink" href="#lightgbm-hangs-when-multithreading-openmp-and-using-forking-in-linux-at-the-same-time" title="Permalink to this heading"></a></h3>
+<p>Use <code class="docutils literal notranslate"><span class="pre">nthreads=1</span></code> to disable multithreading of LightGBM. There is a bug with OpenMP which hangs forked sessions
+with multithreading activated. A more expensive solution is to use new processes instead of using fork, however,
+keep in mind it is creating new processes where you have to copy memory and load libraries (example: if you want to
+fork 16 times your current process, then you will require to make 16 copies of your dataset in memory)
+(see <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/1789#issuecomment-433713383">Microsoft/LightGBM#1789</a>).</p>
+<p>An alternative, if multithreading is really necessary inside the forked sessions, would be to compile LightGBM with
+Intel toolchain. Intel compilers are unaffected by this bug.</p>
+<p>For C/C++ users, any OpenMP feature cannot be used before the fork happens. If an OpenMP feature is used before the
+fork happens (example: using OpenMP for forking), OpenMP will hang inside the forked sessions. Use new processes instead
+and copy memory as required by creating new processes instead of forking (or, use Intel compilers).</p>
+<p>Cloud platform container services may cause LightGBM to hang, if they use Linux fork to run multiple containers on a
+single instance. For example, LightGBM hangs in AWS Batch array jobs, which <a class="reference external" href="https://aws.amazon.com/batch/faqs/#Features">use the ECS agent</a> to manage multiple running jobs. Setting <code class="docutils literal notranslate"><span class="pre">nthreads=1</span></code> mitigates the issue.</p>
+</section>
+<section id="why-is-early-stopping-not-enabled-by-default-in-lightgbm">
+<h3>12. Why is early stopping not enabled by default in LightGBM?<a class="headerlink" href="#why-is-early-stopping-not-enabled-by-default-in-lightgbm" title="Permalink to this heading"></a></h3>
+<p>Early stopping involves choosing a validation set, a special type of holdout which is used to evaluate the current state of the model after each iteration to see if training can stop.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">LightGBM</span></code>, <a class="reference external" href="./Parameters.html#valid">we have decided to require that users specify this set directly</a>. Many options exist for splitting training data into training, test, and validation sets.</p>
+<p>The appropriate splitting strategy depends on the task and domain of the data, information that a modeler has but which <code class="docutils literal notranslate"><span class="pre">LightGBM</span></code> as a general-purpose tool does not.</p>
+</section>
+<section id="does-lightgbm-support-direct-loading-data-from-zero-based-or-one-based-libsvm-format-file">
+<h3>13. Does LightGBM support direct loading data from zero-based or one-based LibSVM format file?<a class="headerlink" href="#does-lightgbm-support-direct-loading-data-from-zero-based-or-one-based-libsvm-format-file" title="Permalink to this heading"></a></h3>
+<p>LightGBM supports loading data from zero-based LibSVM format file directly.</p>
+</section>
+<section id="why-cmake-cannot-find-the-compiler-when-compiling-lightgbm-with-mingw">
+<h3>14. Why CMake cannot find the compiler when compiling LightGBM with MinGW?<a class="headerlink" href="#why-cmake-cannot-find-the-compiler-when-compiling-lightgbm-with-mingw" title="Permalink to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>CMake Error: CMAKE_C_COMPILER not set, after EnableLanguage
+CMake Error: CMAKE_CXX_COMPILER not set, after EnableLanguage
+</pre></div>
+</div>
+<p>This is a known issue of CMake when using MinGW. The easiest solution is to run again your <code class="docutils literal notranslate"><span class="pre">cmake</span></code> command to bypass the one time stopper from CMake. Or you can upgrade your version of CMake to at least version 3.17.0.</p>
+<p>See <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/3060#issuecomment-626338538">Microsoft/LightGBM#3060</a> for more details.</p>
+</section>
+<section id="where-can-i-find-lightgbm-s-logo-to-use-it-in-my-presentation">
+<h3>15. Where can I find LightGBM’s logo to use it in my presentation?<a class="headerlink" href="#where-can-i-find-lightgbm-s-logo-to-use-it-in-my-presentation" title="Permalink to this heading"></a></h3>
+<p>You can find LightGBM’s logo in different file formats and resolutions <a class="reference external" href="https://github.com/microsoft/LightGBM/tree/master/docs/logo">here</a>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="r-package">
+<h2>R-package<a class="headerlink" href="#r-package" title="Permalink to this heading"></a></h2>
+<nav class="contents local" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#any-training-command-using-lightgbm-does-not-work-after-an-error-occurred-during-the-training-of-a-previous-lightgbm-model" id="id24">1. Any training command using LightGBM does not work after an error occurred during the training of a previous LightGBM model.</a></p></li>
+<li><p><a class="reference internal" href="#i-used-setinfo-tried-to-print-my-lgb-dataset-and-now-the-r-console-froze" id="id25">2. I used <code class="docutils literal notranslate"><span class="pre">setinfo()</span></code>, tried to print my <code class="docutils literal notranslate"><span class="pre">lgb.Dataset</span></code>, and now the R console froze!</a></p></li>
+<li><p><a class="reference internal" href="#error-in-data-table-data-table-argument-2-is-null" id="id26">3. <code class="docutils literal notranslate"><span class="pre">error</span> <span class="pre">in</span> <span class="pre">data.table::data.table()...argument</span> <span class="pre">2</span> <span class="pre">is</span> <span class="pre">NULL</span></code></a></p></li>
+</ul>
+</nav>
+<section id="any-training-command-using-lightgbm-does-not-work-after-an-error-occurred-during-the-training-of-a-previous-lightgbm-model">
+<h3>1. Any training command using LightGBM does not work after an error occurred during the training of a previous LightGBM model.<a class="headerlink" href="#any-training-command-using-lightgbm-does-not-work-after-an-error-occurred-during-the-training-of-a-previous-lightgbm-model" title="Permalink to this heading"></a></h3>
+<p>Run <code class="docutils literal notranslate"><span class="pre">lgb.unloader(wipe</span> <span class="pre">=</span> <span class="pre">TRUE)</span></code> in the R console, and recreate the LightGBM datasets (this will wipe all LightGBM-related variables).
+Due to the pointers, choosing to not wipe variables will not fix the error.
+This is a known issue: <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/698">Microsoft/LightGBM#698</a>.</p>
+</section>
+<section id="i-used-setinfo-tried-to-print-my-lgb-dataset-and-now-the-r-console-froze">
+<h3>2. I used <code class="docutils literal notranslate"><span class="pre">setinfo()</span></code>, tried to print my <code class="docutils literal notranslate"><span class="pre">lgb.Dataset</span></code>, and now the R console froze!<a class="headerlink" href="#i-used-setinfo-tried-to-print-my-lgb-dataset-and-now-the-r-console-froze" title="Permalink to this heading"></a></h3>
+<p>Avoid printing the <code class="docutils literal notranslate"><span class="pre">lgb.Dataset</span></code> after using <code class="docutils literal notranslate"><span class="pre">setinfo</span></code>.
+This is a known bug: <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/539">Microsoft/LightGBM#539</a>.</p>
+</section>
+<section id="error-in-data-table-data-table-argument-2-is-null">
+<h3>3. <code class="docutils literal notranslate"><span class="pre">error</span> <span class="pre">in</span> <span class="pre">data.table::data.table()...argument</span> <span class="pre">2</span> <span class="pre">is</span> <span class="pre">NULL</span></code><a class="headerlink" href="#error-in-data-table-data-table-argument-2-is-null" title="Permalink to this heading"></a></h3>
+<p>If you are experiencing this error when running <code class="docutils literal notranslate"><span class="pre">lightgbm</span></code>, you may be facing the same issue reported in <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/2715">#2715</a> and later in <a class="reference external" href="https://github.com/microsoft/LightGBM/pull/2989#issuecomment-614374151">#2989</a>. We have seen that some in some situations, using <code class="docutils literal notranslate"><span class="pre">data.table</span></code> 1.11.x results in this error. To get around this, you can upgrade your version of <code class="docutils literal notranslate"><span class="pre">data.table</span></code> to at least version 1.12.0.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="python-package">
+<h2>Python-package<a class="headerlink" href="#python-package" title="Permalink to this heading"></a></h2>
+<nav class="contents local" id="id4">
+<ul class="simple">
+<li><p><a class="reference internal" href="#error-setup-script-specifies-an-absolute-path-when-installing-from-github-using-python-setup-py-install" id="id27">1. <code class="docutils literal notranslate"><span class="pre">Error:</span> <span class="pre">setup</span> <span class="pre">script</span> <span class="pre">specifies</span> <span class="pre">an</span> <span class="pre">absolute</span> <span class="pre">path</span></code> when installing from GitHub using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code>.</a></p></li>
+<li><p><a class="reference internal" href="#error-messages-cannot-before-construct-dataset" id="id28">2. Error messages: <code class="docutils literal notranslate"><span class="pre">Cannot</span> <span class="pre">...</span> <span class="pre">before</span> <span class="pre">construct</span> <span class="pre">dataset</span></code>.</a></p></li>
+<li><p><a class="reference internal" href="#i-encounter-segmentation-faults-segfaults-randomly-after-installing-lightgbm-from-pypi-using-pip-install-lightgbm" id="id29">3. I encounter segmentation faults (segfaults) randomly after installing LightGBM from PyPI using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lightgbm</span></code>.</a></p></li>
+</ul>
+</nav>
+<section id="error-setup-script-specifies-an-absolute-path-when-installing-from-github-using-python-setup-py-install">
+<h3>1. <code class="docutils literal notranslate"><span class="pre">Error:</span> <span class="pre">setup</span> <span class="pre">script</span> <span class="pre">specifies</span> <span class="pre">an</span> <span class="pre">absolute</span> <span class="pre">path</span></code> when installing from GitHub using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code>.<a class="headerlink" href="#error-setup-script-specifies-an-absolute-path-when-installing-from-github-using-python-setup-py-install" title="Permalink to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">error: Error: setup script specifies an absolute path:</span>
+<span class="go">/Users/Microsoft/LightGBM/python-package/lightgbm/../../lib_lightgbm.so</span>
+<span class="go">setup() arguments must *always* be /-separated paths relative to the setup.py directory, *never* absolute paths.</span>
+</pre></div>
+</div>
+<p>This error should be solved in latest version.
+If you still meet this error, try to remove <code class="docutils literal notranslate"><span class="pre">lightgbm.egg-info</span></code> folder in your Python-package and reinstall,
+or check <a class="reference external" href="http://stackoverflow.com/questions/18085571/pip-install-error-setup-script-specifies-an-absolute-path">this thread on stackoverflow</a>.</p>
+</section>
+<section id="error-messages-cannot-before-construct-dataset">
+<h3>2. Error messages: <code class="docutils literal notranslate"><span class="pre">Cannot</span> <span class="pre">...</span> <span class="pre">before</span> <span class="pre">construct</span> <span class="pre">dataset</span></code>.<a class="headerlink" href="#error-messages-cannot-before-construct-dataset" title="Permalink to this heading"></a></h3>
+<p>I see error messages like…</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Cannot get/set label/weight/init_score/group/num_data/num_feature before construct dataset</span>
+</pre></div>
+</div>
+<p>but I’ve already constructed a dataset by some code like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">lightgbm</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or error messages like</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Cannot set predictor/reference/categorical feature after freed raw data, set free_raw_data=False when construct Dataset to avoid this.</span>
+</pre></div>
+</div>
+<p><strong>Solution</strong>: Because LightGBM constructs bin mappers to build trees, and train and valid Datasets within one Booster share the same bin mappers,
+categorical features and feature names etc., the Dataset objects are constructed when constructing a Booster.
+If you set <code class="docutils literal notranslate"><span class="pre">free_raw_data=True</span></code> (default), the raw data (with Python data struct) will be freed.
+So, if you want to:</p>
+<ul class="simple">
+<li><p>get label (or weight/init_score/group/data) before constructing a dataset, it’s same as get <code class="docutils literal notranslate"><span class="pre">self.label</span></code>;</p></li>
+<li><p>set label (or weight/init_score/group) before constructing a dataset, it’s same as <code class="docutils literal notranslate"><span class="pre">self.label=some_label_array</span></code>;</p></li>
+<li><p>get num_data (or num_feature) before constructing a dataset, you can get data with <code class="docutils literal notranslate"><span class="pre">self.data</span></code>.
+Then, if your data is <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, use some code like <code class="docutils literal notranslate"><span class="pre">self.data.shape</span></code>. But do not do this after subsetting the Dataset, because you’ll get always <code class="docutils literal notranslate"><span class="pre">None</span></code>;</p></li>
+<li><p>set predictor (or reference/categorical feature) after constructing a dataset,
+you should set <code class="docutils literal notranslate"><span class="pre">free_raw_data=False</span></code> or init a Dataset object with the same raw data.</p></li>
+</ul>
+</section>
+<section id="i-encounter-segmentation-faults-segfaults-randomly-after-installing-lightgbm-from-pypi-using-pip-install-lightgbm">
+<h3>3. I encounter segmentation faults (segfaults) randomly after installing LightGBM from PyPI using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lightgbm</span></code>.<a class="headerlink" href="#i-encounter-segmentation-faults-segfaults-randomly-after-installing-lightgbm-from-pypi-using-pip-install-lightgbm" title="Permalink to this heading"></a></h3>
+<p>We are doing our best to provide universal wheels which have high running speed and are compatible with any hardware, OS, compiler, etc. at the same time.
+However, sometimes it’s just impossible to guarantee the possibility of usage of LightGBM in any specific environment (see <a class="reference external" href="https://github.com/microsoft/LightGBM/issues/1743">Microsoft/LightGBM#1743</a>).</p>
+<p>Therefore, the first thing you should try in case of segfaults is <strong>compiling from the source</strong> using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--no-binary</span> <span class="pre">:all:</span> <span class="pre">lightgbm</span></code>.
+For the OS-specific prerequisites see <a class="reference external" href="https://github.com/microsoft/LightGBM/blob/master/python-package/README.rst#user-content-build-from-sources">this guide</a>.</p>
+<p>Also, feel free to post a new issue in our GitHub repository. We always look at each case individually and try to find a root cause.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Advanced-Topics.html" class="btn btn-neutral float-left" title="Advanced Topics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Development-Guide.html" class="btn btn-neutral float-right" title="Development Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

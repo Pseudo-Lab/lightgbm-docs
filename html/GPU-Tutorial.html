@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LightGBM GPU Tutorial &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advanced Topics" href="Advanced-Topics.html" />
+    <link rel="prev" title="Distributed Learning Guide" href="Parallel-Learning-Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GPU Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#gpu-setup">GPU Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-lightgbm">Build LightGBM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-python-interface-optional">Install Python Interface (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dataset-preparation">Dataset Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-your-first-learning-task-on-gpu">Run Your First Learning Task on GPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#further-reading">Further Reading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">LightGBM GPU Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GPU-Tutorial.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lightgbm-gpu-tutorial">
+<h1>LightGBM GPU Tutorial<a class="headerlink" href="#lightgbm-gpu-tutorial" title="Permalink to this heading"></a></h1>
+<p>The purpose of this document is to give you a quick step-by-step tutorial on GPU training.</p>
+<p>For Windows, please see <a class="reference external" href="./GPU-Windows.html">GPU Windows Tutorial</a>.</p>
+<p>We will use the GPU instance on <a class="reference external" href="https://azure.microsoft.com/">Microsoft Azure cloud computing platform</a> for demonstration,
+but you can use any machine with modern AMD or NVIDIA GPUs.</p>
+<section id="gpu-setup">
+<h2>GPU Setup<a class="headerlink" href="#gpu-setup" title="Permalink to this heading"></a></h2>
+<p>You need to launch a <code class="docutils literal notranslate"><span class="pre">NV</span></code> type instance on Azure (available in East US, North Central US, South Central US, West Europe and Southeast Asia zones)
+and select Ubuntu 16.04 LTS as the operating system.</p>
+<p>For testing, the smallest <code class="docutils literal notranslate"><span class="pre">NV6</span></code> type virtual machine is sufficient, which includes 1/2 M60 GPU, with 8 GB memory, 180 GB/s memory bandwidth and 4,825 GFLOPS peak computation power.
+Don’t use the <code class="docutils literal notranslate"><span class="pre">NC</span></code> type instance as the GPUs (K80) are based on an older architecture (Kepler).</p>
+<p>First we need to install minimal NVIDIA drivers and OpenCL development environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">recommends</span> <span class="n">nvidia</span><span class="o">-</span><span class="mi">375</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">recommends</span> <span class="n">nvidia</span><span class="o">-</span><span class="n">opencl</span><span class="o">-</span><span class="n">icd</span><span class="o">-</span><span class="mi">375</span> <span class="n">nvidia</span><span class="o">-</span><span class="n">opencl</span><span class="o">-</span><span class="n">dev</span> <span class="n">opencl</span><span class="o">-</span><span class="n">headers</span>
+</pre></div>
+</div>
+<p>After installing the drivers you need to restart the server.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">init</span> <span class="mi">6</span>
+</pre></div>
+</div>
+<p>After about 30 seconds, the server should be up again.</p>
+<p>If you are using an AMD GPU, you should download and install the <a class="reference external" href="https://www.amd.com/en/support">AMDGPU-Pro</a> driver and also install package <code class="docutils literal notranslate"><span class="pre">ocl-icd-libopencl1</span></code> and <code class="docutils literal notranslate"><span class="pre">ocl-icd-opencl-dev</span></code>.</p>
+</section>
+<section id="build-lightgbm">
+<h2>Build LightGBM<a class="headerlink" href="#build-lightgbm" title="Permalink to this heading"></a></h2>
+<p>Now install necessary building tools and dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">recommends</span> <span class="n">git</span> <span class="n">cmake</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="n">libboost</span><span class="o">-</span><span class="n">dev</span> <span class="n">libboost</span><span class="o">-</span><span class="n">system</span><span class="o">-</span><span class="n">dev</span> <span class="n">libboost</span><span class="o">-</span><span class="n">filesystem</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">NV6</span></code> GPU instance has a 320 GB ultra-fast SSD mounted at <code class="docutils literal notranslate"><span class="pre">/mnt</span></code>.
+Let’s use it as our workspace (skip this if you are using your own machine):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo mkdir -p /mnt/workspace
+sudo chown $(whoami):$(whoami) /mnt/workspace
+cd /mnt/workspace
+</pre></div>
+</div>
+<p>Now we are ready to checkout LightGBM and compile it with GPU support:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>git clone --recursive https://github.com/microsoft/LightGBM
+cd LightGBM
+mkdir build
+cd build
+cmake -DUSE_GPU=1 ..
+# if you have installed NVIDIA CUDA to a customized location, you should specify paths to OpenCL headers and library like the following:
+# cmake -DUSE_GPU=1 -DOpenCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so -DOpenCL_INCLUDE_DIR=/usr/local/cuda/include/ ..
+make -j$(nproc)
+cd ..
+</pre></div>
+</div>
+<p>You will see two binaries are generated, <code class="docutils literal notranslate"><span class="pre">lightgbm</span></code> and <code class="docutils literal notranslate"><span class="pre">lib_lightgbm.so</span></code>.</p>
+<p>If you are building on macOS, you probably need to remove macro <code class="docutils literal notranslate"><span class="pre">BOOST_COMPUTE_USE_OFFLINE_CACHE</span></code> in <code class="docutils literal notranslate"><span class="pre">src/treelearner/gpu_tree_learner.h</span></code> to avoid a known crash bug in Boost.Compute.</p>
+</section>
+<section id="install-python-interface-optional">
+<h2>Install Python Interface (optional)<a class="headerlink" href="#install-python-interface-optional" title="Permalink to this heading"></a></h2>
+<p>If you want to use the Python interface of LightGBM, you can install it now (along with some necessary Python-package dependencies):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">pip</span>
+<span class="n">sudo</span> <span class="o">-</span><span class="n">H</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">setuptools</span> <span class="n">numpy</span> <span class="n">scipy</span> <span class="n">scikit</span><span class="o">-</span><span class="n">learn</span> <span class="o">-</span><span class="n">U</span>
+<span class="n">cd</span> <span class="n">python</span><span class="o">-</span><span class="n">package</span><span class="o">/</span>
+<span class="n">sudo</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">precompile</span>
+<span class="n">cd</span> <span class="o">..</span>
+</pre></div>
+</div>
+<p>You need to set an additional parameter <code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span> <span class="pre">:</span> <span class="pre">&quot;gpu&quot;</span></code> (along with your other options like <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code>, <code class="docutils literal notranslate"><span class="pre">num_leaves</span></code>, etc) to use GPU in Python.</p>
+<p>You can read our <a class="reference external" href="https://github.com/microsoft/LightGBM/tree/master/examples/python-guide">Python-package Examples</a> for more information on how to use the Python interface.</p>
+</section>
+<section id="dataset-preparation">
+<h2>Dataset Preparation<a class="headerlink" href="#dataset-preparation" title="Permalink to this heading"></a></h2>
+<p>Using the following commands to prepare the Higgs dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">guolinke</span><span class="o">/</span><span class="n">boosting_tree_benchmarks</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">boosting_tree_benchmarks</span><span class="o">/</span><span class="n">data</span>
+<span class="n">wget</span> <span class="s2">&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/00280/HIGGS.csv.gz&quot;</span>
+<span class="n">gunzip</span> <span class="n">HIGGS</span><span class="o">.</span><span class="n">csv</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">python</span> <span class="n">higgs2libsvm</span><span class="o">.</span><span class="n">py</span>
+<span class="n">cd</span> <span class="o">../..</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">boosting_tree_benchmarks</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">higgs</span><span class="o">.</span><span class="n">train</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">boosting_tree_benchmarks</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">higgs</span><span class="o">.</span><span class="n">test</span>
+</pre></div>
+</div>
+<p>Now we create a configuration file for LightGBM by running the following commands (please copy the entire block and run it as a whole):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">&gt;</span> <span class="n">lightgbm_gpu</span><span class="o">.</span><span class="n">conf</span> <span class="o">&lt;&lt;</span><span class="n">EOF</span>
+<span class="n">max_bin</span> <span class="o">=</span> <span class="mi">63</span>
+<span class="n">num_leaves</span> <span class="o">=</span> <span class="mi">255</span>
+<span class="n">num_iterations</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">tree_learner</span> <span class="o">=</span> <span class="n">serial</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">train</span>
+<span class="n">is_training_metric</span> <span class="o">=</span> <span class="n">false</span>
+<span class="n">min_data_in_leaf</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">min_sum_hessian_in_leaf</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">ndcg_eval_at</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">gpu</span>
+<span class="n">gpu_platform_id</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">gpu_device_id</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">EOF</span>
+<span class="n">echo</span> <span class="s2">&quot;num_threads=$(nproc)&quot;</span> <span class="o">&gt;&gt;</span> <span class="n">lightgbm_gpu</span><span class="o">.</span><span class="n">conf</span>
+</pre></div>
+</div>
+<p>GPU is enabled in the configuration file we just created by setting <code class="docutils literal notranslate"><span class="pre">device=gpu</span></code>.
+In this configuration we use the first GPU installed on the system (<code class="docutils literal notranslate"><span class="pre">gpu_platform_id=0</span></code> and <code class="docutils literal notranslate"><span class="pre">gpu_device_id=0</span></code>). If <code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span></code> or <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span></code> is not set, the default platform and GPU will be selected.
+You might have multiple platforms (AMD/Intel/NVIDIA) or GPUs. You can use the <a class="reference external" href="https://github.com/Oblomov/clinfo">clinfo</a> utility to identify the GPUs on each platform. On Ubuntu, you can install <code class="docutils literal notranslate"><span class="pre">clinfo</span></code> by executing <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">clinfo</span></code>. If you have a discrete GPU by AMD/NVIDIA and an integrated GPU by Intel, make sure to select the correct <code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span></code> to use the discrete GPU.</p>
+</section>
+<section id="run-your-first-learning-task-on-gpu">
+<h2>Run Your First Learning Task on GPU<a class="headerlink" href="#run-your-first-learning-task-on-gpu" title="Permalink to this heading"></a></h2>
+<p>Now we are ready to start GPU training!</p>
+<p>First we want to verify the GPU works correctly.
+Run the following command to train on GPU, and take a note of the AUC after 50 iterations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">lightgbm</span> <span class="n">config</span><span class="o">=</span><span class="n">lightgbm_gpu</span><span class="o">.</span><span class="n">conf</span> <span class="n">data</span><span class="o">=</span><span class="n">higgs</span><span class="o">.</span><span class="n">train</span> <span class="n">valid</span><span class="o">=</span><span class="n">higgs</span><span class="o">.</span><span class="n">test</span> <span class="n">objective</span><span class="o">=</span><span class="n">binary</span> <span class="n">metric</span><span class="o">=</span><span class="n">auc</span>
+</pre></div>
+</div>
+<p>Now train the same dataset on CPU using the following command. You should observe a similar AUC:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">lightgbm</span> <span class="n">config</span><span class="o">=</span><span class="n">lightgbm_gpu</span><span class="o">.</span><span class="n">conf</span> <span class="n">data</span><span class="o">=</span><span class="n">higgs</span><span class="o">.</span><span class="n">train</span> <span class="n">valid</span><span class="o">=</span><span class="n">higgs</span><span class="o">.</span><span class="n">test</span> <span class="n">objective</span><span class="o">=</span><span class="n">binary</span> <span class="n">metric</span><span class="o">=</span><span class="n">auc</span> <span class="n">device</span><span class="o">=</span><span class="n">cpu</span>
+</pre></div>
+</div>
+<p>Now we can make a speed test on GPU without calculating AUC after each iteration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">lightgbm</span> <span class="n">config</span><span class="o">=</span><span class="n">lightgbm_gpu</span><span class="o">.</span><span class="n">conf</span> <span class="n">data</span><span class="o">=</span><span class="n">higgs</span><span class="o">.</span><span class="n">train</span> <span class="n">objective</span><span class="o">=</span><span class="n">binary</span> <span class="n">metric</span><span class="o">=</span><span class="n">auc</span>
+</pre></div>
+</div>
+<p>Speed test on CPU:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">lightgbm</span> <span class="n">config</span><span class="o">=</span><span class="n">lightgbm_gpu</span><span class="o">.</span><span class="n">conf</span> <span class="n">data</span><span class="o">=</span><span class="n">higgs</span><span class="o">.</span><span class="n">train</span> <span class="n">objective</span><span class="o">=</span><span class="n">binary</span> <span class="n">metric</span><span class="o">=</span><span class="n">auc</span> <span class="n">device</span><span class="o">=</span><span class="n">cpu</span>
+</pre></div>
+</div>
+<p>You should observe over three times speedup on this GPU.</p>
+<p>The GPU acceleration can be used on other tasks/metrics (regression, multi-class classification, ranking, etc) as well.
+For example, we can train the Higgs dataset on GPU as a regression task:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">lightgbm</span> <span class="n">config</span><span class="o">=</span><span class="n">lightgbm_gpu</span><span class="o">.</span><span class="n">conf</span> <span class="n">data</span><span class="o">=</span><span class="n">higgs</span><span class="o">.</span><span class="n">train</span> <span class="n">objective</span><span class="o">=</span><span class="n">regression_l2</span> <span class="n">metric</span><span class="o">=</span><span class="n">l2</span>
+</pre></div>
+</div>
+<p>Also, you can compare the training speed with CPU:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">lightgbm</span> <span class="n">config</span><span class="o">=</span><span class="n">lightgbm_gpu</span><span class="o">.</span><span class="n">conf</span> <span class="n">data</span><span class="o">=</span><span class="n">higgs</span><span class="o">.</span><span class="n">train</span> <span class="n">objective</span><span class="o">=</span><span class="n">regression_l2</span> <span class="n">metric</span><span class="o">=</span><span class="n">l2</span> <span class="n">device</span><span class="o">=</span><span class="n">cpu</span>
+</pre></div>
+</div>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="./GPU-Performance.html">GPU Tuning Guide and Performance Comparison</a></p></li>
+<li><p><a class="reference external" href="./GPU-Targets.html">GPU SDK Correspondence and Device Targeting Table</a></p></li>
+<li><p><a class="reference external" href="./GPU-Windows.html">GPU Windows Tutorial</a></p></li>
+</ul>
+</section>
+<section id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this heading"></a></h2>
+<p>Please kindly cite the following article in your publications if you find the GPU acceleration useful:</p>
+<p>Huan Zhang, Si Si and Cho-Jui Hsieh. “<a class="reference external" href="https://arxiv.org/abs/1706.08359">GPU Acceleration for Large-scale Tree Boosting</a>.” SysML Conference, 2018.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Parallel-Learning-Guide.html" class="btn btn-neutral float-left" title="Distributed Learning Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Advanced-Topics.html" class="btn btn-neutral float-right" title="Advanced Topics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

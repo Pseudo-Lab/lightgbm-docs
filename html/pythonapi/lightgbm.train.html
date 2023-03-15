@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lightgbm.train &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="lightgbm.cv" href="lightgbm.cv.html" />
+    <link rel="prev" title="lightgbm.Sequence" href="lightgbm.Sequence.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C-API.html">C API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Python-API.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#data-structure-api">Data Structure API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../Python-API.html#training-api">Training API</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">lightgbm.train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.cv.html">lightgbm.cv</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#scikit-learn-api">Scikit-learn API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#dask-api">Dask API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#callbacks">Callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#plotting">Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../Python-API.html">Python API</a></li>
+      <li class="breadcrumb-item active">lightgbm.train</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/pythonapi/lightgbm.train.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lightgbm-train">
+<h1>lightgbm.train<a class="headerlink" href="#lightgbm-train" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="lightgbm.train">
+<span class="sig-prename descclassname"><span class="pre">lightgbm.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_boost_round</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_sets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fobj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_feature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stopping_rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evals_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose_eval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_training_booster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/engine.html#train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.train" title="Permalink to this definition"></a></dt>
+<dd><p>Perform the training with given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>dict</em>) – Parameters for training.</p></li>
+<li><p><strong>train_set</strong> (<a class="reference internal" href="lightgbm.Dataset.html#lightgbm.Dataset" title="lightgbm.Dataset"><em>Dataset</em></a>) – Data to be trained on.</p></li>
+<li><p><strong>num_boost_round</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=100</em><em>)</em>) – Number of boosting iterations.</p></li>
+<li><p><strong>valid_sets</strong> (<em>list of Dataset</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – List of data to be evaluated on during training.</p></li>
+<li><p><strong>valid_names</strong> (<em>list of str</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Names of <code class="docutils literal notranslate"><span class="pre">valid_sets</span></code>.</p></li>
+<li><p><strong>fobj</strong> (<em>callable</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Customized objective function.
+Should accept two parameters: preds, train_data,
+and return (grad, hess).</p>
+<blockquote>
+<div><dl class="simple">
+<dt>preds<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The predicted values.
+Predicted values are returned before any transformation,
+e.g. they are raw margin instead of probability of positive class for binary task.</p>
+</dd>
+<dt>train_data<span class="classifier">Dataset</span></dt><dd><p>The training dataset.</p>
+</dd>
+<dt>grad<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The value of the first order derivative (gradient) of the loss
+with respect to the elements of preds for each sample point.</p>
+</dd>
+<dt>hess<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The value of the second order derivative (Hessian) of the loss
+with respect to the elements of preds for each sample point.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>For multi-class task, the preds is group by class_id first, then group by row_id.
+If you want to get i-th row preds in j-th class, the access way is score[j * num_data + i]
+and you should group grad and hess in this way as well.</p>
+</p></li>
+<li><p><strong>feval</strong> (<em>callable</em><em>, </em><em>list of callable</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Customized evaluation function.
+Each evaluation function should accept two parameters: preds, train_data,
+and return (eval_name, eval_result, is_higher_better) or list of such tuples.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>preds<span class="classifier">list or numpy 1-D array</span></dt><dd><p>The predicted values.
+If <code class="docutils literal notranslate"><span class="pre">fobj</span></code> is specified, predicted values are returned before any transformation,
+e.g. they are raw margin instead of probability of positive class for binary task in this case.</p>
+</dd>
+<dt>train_data<span class="classifier">Dataset</span></dt><dd><p>The training dataset.</p>
+</dd>
+<dt>eval_name<span class="classifier">str</span></dt><dd><p>The name of evaluation function (without whitespaces).</p>
+</dd>
+<dt>eval_result<span class="classifier">float</span></dt><dd><p>The eval result.</p>
+</dd>
+<dt>is_higher_better<span class="classifier">bool</span></dt><dd><p>Is eval result higher better, e.g. AUC is <code class="docutils literal notranslate"><span class="pre">is_higher_better</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>For multi-class task, the preds is group by class_id first, then group by row_id.
+If you want to get i-th row preds in j-th class, the access way is preds[j * num_data + i].
+To ignore the default metric corresponding to the used objective,
+set the <code class="docutils literal notranslate"><span class="pre">metric</span></code> parameter to the string <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code> in <code class="docutils literal notranslate"><span class="pre">params</span></code>.</p>
+</p></li>
+<li><p><strong>init_model</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, </em><a class="reference internal" href="lightgbm.Booster.html#lightgbm.Booster" title="lightgbm.Booster"><em>Booster</em></a><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Filename of LightGBM model or Booster instance used for continue training.</p></li>
+<li><p><strong>feature_name</strong> (<em>list of str</em><em>, or </em><em>'auto'</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;auto&quot;</em><em>)</em>) – Feature names.
+If ‘auto’ and data is pandas DataFrame, data columns names are used.</p></li>
+<li><p><strong>categorical_feature</strong> (<em>list of str</em><em> or </em><em>int</em><em>, or </em><em>'auto'</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;auto&quot;</em><em>)</em>) – Categorical features.
+If list of int, interpreted as indices.
+If list of str, interpreted as feature names (need to specify <code class="docutils literal notranslate"><span class="pre">feature_name</span></code> as well).
+If ‘auto’ and data is pandas DataFrame, pandas unordered categorical columns are used.
+All values in categorical features should be less than int32 max value (2147483647).
+Large values could be memory consuming. Consider using consecutive integers starting from zero.
+All negative values in categorical features will be treated as missing values.
+The output cannot be monotonically constrained with respect to a categorical feature.</p></li>
+<li><p><strong>early_stopping_rounds</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Activates early stopping. The model will train until the validation score stops improving.
+Validation score needs to improve at least every <code class="docutils literal notranslate"><span class="pre">early_stopping_rounds</span></code> round(s)
+to continue training.
+Requires at least one validation data and one metric.
+If there’s more than one, will check all of them. But the training data is ignored anyway.
+To check only the first metric, set the <code class="docutils literal notranslate"><span class="pre">first_metric_only</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code> in <code class="docutils literal notranslate"><span class="pre">params</span></code>.
+The index of iteration that has the best performance will be saved in the <code class="docutils literal notranslate"><span class="pre">best_iteration</span></code> field
+if early stopping logic is enabled by setting <code class="docutils literal notranslate"><span class="pre">early_stopping_rounds</span></code>.</p></li>
+<li><p><strong>evals_result</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Dictionary used to store all evaluation results of all the items in <code class="docutils literal notranslate"><span class="pre">valid_sets</span></code>.
+This should be initialized outside of your call to <code class="docutils literal notranslate"><span class="pre">train()</span></code> and should be empty.
+Any initial contents of the dictionary will be deleted.</p>
+<p class="rubric">Example</p>
+<p>With a <code class="docutils literal notranslate"><span class="pre">valid_sets</span></code> = [valid_set, train_set],
+<code class="docutils literal notranslate"><span class="pre">valid_names</span></code> = [‘eval’, ‘train’]
+and a <code class="docutils literal notranslate"><span class="pre">params</span></code> = {‘metric’: ‘logloss’}
+returns {‘train’: {‘logloss’: [‘0.48253’, ‘0.35953’, …]},
+‘eval’: {‘logloss’: [‘0.480385’, ‘0.357756’, …]}}.</p>
+</p></li>
+<li><p><strong>verbose_eval</strong> (<em>bool</em><em> or </em><em>int</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – <p>Requires at least one validation data.
+If True, the eval metric on the valid set is printed at each boosting stage.
+If int, the eval metric on the valid set is printed at every <code class="docutils literal notranslate"><span class="pre">verbose_eval</span></code> boosting stage.
+The last boosting stage or the boosting stage found by using <code class="docutils literal notranslate"><span class="pre">early_stopping_rounds</span></code> is also printed.</p>
+<p class="rubric">Example</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">verbose_eval</span></code> = 4 and at least one item in <code class="docutils literal notranslate"><span class="pre">valid_sets</span></code>,
+an evaluation metric is printed every 4 (instead of 1) boosting stages.</p>
+</p></li>
+<li><p><strong>learning_rates</strong> (<em>list</em><em>, </em><em>callable</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – List of learning rates for each boosting round
+or a callable that calculates <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code>
+in terms of current number of round (e.g. yields learning rate decay).</p></li>
+<li><p><strong>keep_training_booster</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether the returned Booster will be used to keep training.
+If False, the returned value will be converted into _InnerPredictor before returning.
+This means you won’t be able to use <code class="docutils literal notranslate"><span class="pre">eval</span></code>, <code class="docutils literal notranslate"><span class="pre">eval_train</span></code> or <code class="docutils literal notranslate"><span class="pre">eval_valid</span></code> methods of the returned Booster.
+When your model is very large and cause the memory error,
+you can try to set this param to <code class="docutils literal notranslate"><span class="pre">True</span></code> to avoid the model conversion performed during the internal call of <code class="docutils literal notranslate"><span class="pre">model_to_string</span></code>.
+You can still use _InnerPredictor as <code class="docutils literal notranslate"><span class="pre">init_model</span></code> for future continue training.</p></li>
+<li><p><strong>callbacks</strong> (<em>list of callable</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – List of callback functions that are applied at each iteration.
+See Callbacks in Python API for more information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>booster</strong> – The trained Booster model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="lightgbm.Booster.html#lightgbm.Booster" title="lightgbm.Booster">Booster</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lightgbm.Sequence.html" class="btn btn-neutral float-left" title="lightgbm.Sequence" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lightgbm.cv.html" class="btn btn-neutral float-right" title="lightgbm.cv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

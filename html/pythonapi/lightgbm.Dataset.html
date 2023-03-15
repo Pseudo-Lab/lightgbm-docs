@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lightgbm.Dataset &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="lightgbm.Booster" href="lightgbm.Booster.html" />
+    <link rel="prev" title="Python API" href="../Python-API.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C-API.html">C API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Python-API.html">Python API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Python-API.html#data-structure-api">Data Structure API</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">lightgbm.Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.Booster.html">lightgbm.Booster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.CVBooster.html">lightgbm.CVBooster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.Sequence.html">lightgbm.Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#training-api">Training API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#scikit-learn-api">Scikit-learn API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#dask-api">Dask API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#callbacks">Callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#plotting">Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../Python-API.html">Python API</a></li>
+      <li class="breadcrumb-item active">lightgbm.Dataset</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/pythonapi/lightgbm.Dataset.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lightgbm-dataset">
+<h1>lightgbm.Dataset<a class="headerlink" href="#lightgbm-dataset" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lightgbm.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lightgbm.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_feature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_raw_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Dataset in LightGBM.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_feature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_raw_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, </em><em>numpy array</em><em>, </em><em>pandas DataFrame</em><em>, </em><em>H2O DataTable's Frame</em><em>, </em><em>scipy.sparse</em><em>, </em><a class="reference internal" href="lightgbm.Sequence.html#lightgbm.Sequence" title="lightgbm.Sequence"><em>Sequence</em></a><em>, </em><em>list of Sequence</em><em> or </em><em>list of numpy array</em>) – Data source of Dataset.
+If str or pathlib.Path, it represents the path to a text file (CSV, TSV, or LibSVM) or a LightGBM Dataset binary file.</p></li>
+<li><p><strong>label</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series / one-column DataFrame</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Label of the data.</p></li>
+<li><p><strong>reference</strong> (<a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset"><em>Dataset</em></a><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – If this is Dataset for validation, training data should be used as reference.</p></li>
+<li><p><strong>weight</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Weight for each instance.</p></li>
+<li><p><strong>group</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Group/query data.
+Only used in the learning-to-rank task.
+sum(group) = n_samples.
+For example, if you have a 100-document dataset with <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">=</span> <span class="pre">[10,</span> <span class="pre">20,</span> <span class="pre">40,</span> <span class="pre">10,</span> <span class="pre">10,</span> <span class="pre">10]</span></code>, that means that you have 6 groups,
+where the first 10 records are in the first group, records 11-30 are in the second group, records 31-70 are in the third group, etc.</p></li>
+<li><p><strong>init_score</strong> (<em>list</em><em>, </em><em>list of lists</em><em> (</em><em>for multi-class task</em><em>)</em><em>, </em><em>numpy array</em><em>, </em><em>pandas Series</em><em>, </em><em>pandas DataFrame</em><em> (</em><em>for multi-class task</em><em>)</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Init score for Dataset.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether to print messages during construction.</p></li>
+<li><p><strong>feature_name</strong> (<em>list of str</em><em>, or </em><em>'auto'</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;auto&quot;</em><em>)</em>) – Feature names.
+If ‘auto’ and data is pandas DataFrame, data columns names are used.</p></li>
+<li><p><strong>categorical_feature</strong> (<em>list of str</em><em> or </em><em>int</em><em>, or </em><em>'auto'</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;auto&quot;</em><em>)</em>) – Categorical features.
+If list of int, interpreted as indices.
+If list of str, interpreted as feature names (need to specify <code class="docutils literal notranslate"><span class="pre">feature_name</span></code> as well).
+If ‘auto’ and data is pandas DataFrame, pandas unordered categorical columns are used.
+All values in categorical features should be less than int32 max value (2147483647).
+Large values could be memory consuming. Consider using consecutive integers starting from zero.
+All negative values in categorical features will be treated as missing values.
+The output cannot be monotonically constrained with respect to a categorical feature.</p></li>
+<li><p><strong>params</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Other parameters for Dataset.</p></li>
+<li><p><strong>free_raw_data</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – If True, raw data is freed after constructing inner Dataset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.__init__" title="lightgbm.Dataset.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(data[, label, reference, weight, ...])</p></td>
+<td><p>Initialize Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.add_features_from" title="lightgbm.Dataset.add_features_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_features_from</span></code></a>(other)</p></td>
+<td><p>Add features from other Dataset to the current Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.construct" title="lightgbm.Dataset.construct"><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct</span></code></a>()</p></td>
+<td><p>Lazy init.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.create_valid" title="lightgbm.Dataset.create_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_valid</span></code></a>(data[, label, weight, group, ...])</p></td>
+<td><p>Create validation data align with current Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_data" title="lightgbm.Dataset.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a>()</p></td>
+<td><p>Get the raw data of the Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_feature_name" title="lightgbm.Dataset.get_feature_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_feature_name</span></code></a>()</p></td>
+<td><p>Get the names of columns (features) in the Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_field" title="lightgbm.Dataset.get_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_field</span></code></a>(field_name)</p></td>
+<td><p>Get property from the Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_group" title="lightgbm.Dataset.get_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_group</span></code></a>()</p></td>
+<td><p>Get the group of the Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_init_score" title="lightgbm.Dataset.get_init_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_init_score</span></code></a>()</p></td>
+<td><p>Get the initial score of the Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_label" title="lightgbm.Dataset.get_label"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_label</span></code></a>()</p></td>
+<td><p>Get the label of the Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_params" title="lightgbm.Dataset.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>()</p></td>
+<td><p>Get the used parameters in the Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_ref_chain" title="lightgbm.Dataset.get_ref_chain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ref_chain</span></code></a>([ref_limit])</p></td>
+<td><p>Get a chain of Dataset objects.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.get_weight" title="lightgbm.Dataset.get_weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_weight</span></code></a>()</p></td>
+<td><p>Get the weight of the Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.num_data" title="lightgbm.Dataset.num_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_data</span></code></a>()</p></td>
+<td><p>Get the number of rows in the Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.num_feature" title="lightgbm.Dataset.num_feature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_feature</span></code></a>()</p></td>
+<td><p>Get the number of columns (features) in the Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.save_binary" title="lightgbm.Dataset.save_binary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_binary</span></code></a>(filename)</p></td>
+<td><p>Save Dataset to a binary file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.set_categorical_feature" title="lightgbm.Dataset.set_categorical_feature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_categorical_feature</span></code></a>(categorical_feature)</p></td>
+<td><p>Set categorical features.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.set_feature_name" title="lightgbm.Dataset.set_feature_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_feature_name</span></code></a>(feature_name)</p></td>
+<td><p>Set feature name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.set_field" title="lightgbm.Dataset.set_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_field</span></code></a>(field_name, data)</p></td>
+<td><p>Set property into the Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.set_group" title="lightgbm.Dataset.set_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_group</span></code></a>(group)</p></td>
+<td><p>Set group size of Dataset (used for ranking).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.set_init_score" title="lightgbm.Dataset.set_init_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_init_score</span></code></a>(init_score)</p></td>
+<td><p>Set init score of Booster to start from.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.set_label" title="lightgbm.Dataset.set_label"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_label</span></code></a>(label)</p></td>
+<td><p>Set label of Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.set_reference" title="lightgbm.Dataset.set_reference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_reference</span></code></a>(reference)</p></td>
+<td><p>Set reference Dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lightgbm.Dataset.set_weight" title="lightgbm.Dataset.set_weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weight</span></code></a>(weight)</p></td>
+<td><p>Set weight of each instance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lightgbm.Dataset.subset" title="lightgbm.Dataset.subset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subset</span></code></a>(used_indices[, params])</p></td>
+<td><p>Get subset of current Dataset.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.add_features_from">
+<span class="sig-name descname"><span class="pre">add_features_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.add_features_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.add_features_from" title="Permalink to this definition"></a></dt>
+<dd><p>Add features from other Dataset to the current Dataset.</p>
+<p>Both Datasets must be constructed before calling this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset"><em>Dataset</em></a>) – The Dataset to take features from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with the new features added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.construct">
+<span class="sig-name descname"><span class="pre">construct</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.construct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.construct" title="Permalink to this definition"></a></dt>
+<dd><p>Lazy init.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self</strong> – Constructed Dataset object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.create_valid">
+<span class="sig-name descname"><span class="pre">create_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.create_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.create_valid" title="Permalink to this definition"></a></dt>
+<dd><p>Create validation data align with current Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, </em><em>numpy array</em><em>, </em><em>pandas DataFrame</em><em>, </em><em>H2O DataTable's Frame</em><em>, </em><em>scipy.sparse</em><em>, </em><a class="reference internal" href="lightgbm.Sequence.html#lightgbm.Sequence" title="lightgbm.Sequence"><em>Sequence</em></a><em>, </em><em>list of Sequence</em><em> or </em><em>list of numpy array</em>) – Data source of Dataset.
+If str or pathlib.Path, it represents the path to a text file (CSV, TSV, or LibSVM) or a LightGBM Dataset binary file.</p></li>
+<li><p><strong>label</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series / one-column DataFrame</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Label of the data.</p></li>
+<li><p><strong>weight</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Weight for each instance.</p></li>
+<li><p><strong>group</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Group/query data.
+Only used in the learning-to-rank task.
+sum(group) = n_samples.
+For example, if you have a 100-document dataset with <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">=</span> <span class="pre">[10,</span> <span class="pre">20,</span> <span class="pre">40,</span> <span class="pre">10,</span> <span class="pre">10,</span> <span class="pre">10]</span></code>, that means that you have 6 groups,
+where the first 10 records are in the first group, records 11-30 are in the second group, records 31-70 are in the third group, etc.</p></li>
+<li><p><strong>init_score</strong> (<em>list</em><em>, </em><em>list of lists</em><em> (</em><em>for multi-class task</em><em>)</em><em>, </em><em>numpy array</em><em>, </em><em>pandas Series</em><em>, </em><em>pandas DataFrame</em><em> (</em><em>for multi-class task</em><em>)</em><em>, or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Init score for Dataset.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Whether to print messages during construction.</p></li>
+<li><p><strong>params</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Other parameters for validation Dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>valid</strong> – Validation Dataset with reference to self.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get the raw data of the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – Raw data used in the Dataset construction.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str, pathlib.Path, numpy array, pandas DataFrame, H2O DataTable’s Frame, scipy.sparse, <a class="reference internal" href="lightgbm.Sequence.html#lightgbm.Sequence" title="lightgbm.Sequence">Sequence</a>, list of Sequence or list of numpy array or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_feature_name">
+<span class="sig-name descname"><span class="pre">get_feature_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_feature_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_feature_name" title="Permalink to this definition"></a></dt>
+<dd><p>Get the names of columns (features) in the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feature_names</strong> – The names of columns (features) in the Dataset.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_field">
+<span class="sig-name descname"><span class="pre">get_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_field" title="Permalink to this definition"></a></dt>
+<dd><p>Get property from the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>field_name</strong> (<em>str</em>) – The field name of the information.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>info</strong> – A numpy array with information from the Dataset.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_group">
+<span class="sig-name descname"><span class="pre">get_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_group" title="Permalink to this definition"></a></dt>
+<dd><p>Get the group of the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>group</strong> – Group/query data.
+Only used in the learning-to-rank task.
+sum(group) = n_samples.
+For example, if you have a 100-document dataset with <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">=</span> <span class="pre">[10,</span> <span class="pre">20,</span> <span class="pre">40,</span> <span class="pre">10,</span> <span class="pre">10,</span> <span class="pre">10]</span></code>, that means that you have 6 groups,
+where the first 10 records are in the first group, records 11-30 are in the second group, records 31-70 are in the third group, etc.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_init_score">
+<span class="sig-name descname"><span class="pre">get_init_score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_init_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_init_score" title="Permalink to this definition"></a></dt>
+<dd><p>Get the initial score of the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>init_score</strong> – Init score of Booster.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_label">
+<span class="sig-name descname"><span class="pre">get_label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_label" title="Permalink to this definition"></a></dt>
+<dd><p>Get the label of the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>label</strong> – The label information from the Dataset.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_params" title="Permalink to this definition"></a></dt>
+<dd><p>Get the used parameters in the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> – The used parameters in this Dataset object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_ref_chain">
+<span class="sig-name descname"><span class="pre">get_ref_chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_ref_chain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_ref_chain" title="Permalink to this definition"></a></dt>
+<dd><p>Get a chain of Dataset objects.</p>
+<p>Starts with r, then goes to r.reference (if exists),
+then to r.reference.reference, etc.
+until we hit <code class="docutils literal notranslate"><span class="pre">ref_limit</span></code> or a reference loop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ref_limit</strong> (<em>int</em><em>, </em><em>optional</em><em> (</em><em>default=100</em><em>)</em>) – The limit number of references.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ref_chain</strong> – Chain of references of the Datasets.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>set of Dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.get_weight">
+<span class="sig-name descname"><span class="pre">get_weight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.get_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.get_weight" title="Permalink to this definition"></a></dt>
+<dd><p>Get the weight of the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>weight</strong> – Weight for each data point from the Dataset.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.num_data">
+<span class="sig-name descname"><span class="pre">num_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.num_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.num_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of rows in the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>number_of_rows</strong> – The number of rows in the Dataset.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.num_feature">
+<span class="sig-name descname"><span class="pre">num_feature</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.num_feature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.num_feature" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of columns (features) in the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>number_of_columns</strong> – The number of columns (features) in the Dataset.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.save_binary">
+<span class="sig-name descname"><span class="pre">save_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.save_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.save_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Save Dataset to a binary file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that <cite>init_score</cite> is not saved in binary file.
+If you need it, please set it again after loading Dataset.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Name of the output file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Returns self.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.set_categorical_feature">
+<span class="sig-name descname"><span class="pre">set_categorical_feature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">categorical_feature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.set_categorical_feature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.set_categorical_feature" title="Permalink to this definition"></a></dt>
+<dd><p>Set categorical features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>categorical_feature</strong> (<em>list of int</em><em> or </em><em>str</em>) – Names or indices of categorical features.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with set categorical features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.set_feature_name">
+<span class="sig-name descname"><span class="pre">set_feature_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.set_feature_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.set_feature_name" title="Permalink to this definition"></a></dt>
+<dd><p>Set feature name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feature_name</strong> (<em>list of str</em>) – Feature names.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with set feature name.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.set_field">
+<span class="sig-name descname"><span class="pre">set_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.set_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.set_field" title="Permalink to this definition"></a></dt>
+<dd><p>Set property into the Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>field_name</strong> (<em>str</em>) – The field name of the information.</p></li>
+<li><p><strong>data</strong> (<em>list</em><em>, </em><em>list of lists</em><em> (</em><em>for multi-class task</em><em>)</em><em>, </em><em>numpy array</em><em>, </em><em>pandas Series</em><em>, </em><em>pandas DataFrame</em><em> (</em><em>for multi-class task</em><em>)</em><em>, or </em><em>None</em>) – The data to be set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with set property.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.set_group">
+<span class="sig-name descname"><span class="pre">set_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.set_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.set_group" title="Permalink to this definition"></a></dt>
+<dd><p>Set group size of Dataset (used for ranking).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series</em><em> or </em><em>None</em>) – Group/query data.
+Only used in the learning-to-rank task.
+sum(group) = n_samples.
+For example, if you have a 100-document dataset with <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">=</span> <span class="pre">[10,</span> <span class="pre">20,</span> <span class="pre">40,</span> <span class="pre">10,</span> <span class="pre">10,</span> <span class="pre">10]</span></code>, that means that you have 6 groups,
+where the first 10 records are in the first group, records 11-30 are in the second group, records 31-70 are in the third group, etc.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with set group.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.set_init_score">
+<span class="sig-name descname"><span class="pre">set_init_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_score</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.set_init_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.set_init_score" title="Permalink to this definition"></a></dt>
+<dd><p>Set init score of Booster to start from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>init_score</strong> (<em>list</em><em>, </em><em>list of lists</em><em> (</em><em>for multi-class task</em><em>)</em><em>, </em><em>numpy array</em><em>, </em><em>pandas Series</em><em>, </em><em>pandas DataFrame</em><em> (</em><em>for multi-class task</em><em>)</em><em>, or </em><em>None</em>) – Init score for Booster.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with set init score.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.set_label">
+<span class="sig-name descname"><span class="pre">set_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.set_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.set_label" title="Permalink to this definition"></a></dt>
+<dd><p>Set label of Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>label</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series / one-column DataFrame</em><em> or </em><em>None</em>) – The label information to be set into Dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with set label.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.set_reference">
+<span class="sig-name descname"><span class="pre">set_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.set_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.set_reference" title="Permalink to this definition"></a></dt>
+<dd><p>Set reference Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference</strong> (<a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset"><em>Dataset</em></a>) – Reference that is used as a template to construct the current Dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with set reference.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.set_weight">
+<span class="sig-name descname"><span class="pre">set_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.set_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.set_weight" title="Permalink to this definition"></a></dt>
+<dd><p>Set weight of each instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>weight</strong> (<em>list</em><em>, </em><em>numpy 1-D array</em><em>, </em><em>pandas Series</em><em> or </em><em>None</em>) – Weight to be set for each data point.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Dataset with set weight.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lightgbm.Dataset.subset">
+<span class="sig-name descname"><span class="pre">subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">used_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/basic.html#Dataset.subset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.Dataset.subset" title="Permalink to this definition"></a></dt>
+<dd><p>Get subset of current Dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>used_indices</strong> (<em>list of int</em>) – Indices used to create the subset.</p></li>
+<li><p><strong>params</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – These parameters will be passed to Dataset constructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>subset</strong> – Subset of the current Dataset.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lightgbm.Dataset" title="lightgbm.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Python-API.html" class="btn btn-neutral float-left" title="Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lightgbm.Booster.html" class="btn btn-neutral float-right" title="lightgbm.Booster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

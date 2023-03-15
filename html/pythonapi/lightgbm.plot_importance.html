@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lightgbm.plot_importance &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="lightgbm.plot_split_value_histogram" href="lightgbm.plot_split_value_histogram.html" />
+    <link rel="prev" title="lightgbm.reset_parameter" href="lightgbm.reset_parameter.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../C-API.html">C API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Python-API.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#data-structure-api">Data Structure API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#training-api">Training API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#scikit-learn-api">Scikit-learn API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#dask-api">Dask API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#callbacks">Callbacks</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../Python-API.html#plotting">Plotting</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">lightgbm.plot_importance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.plot_split_value_histogram.html">lightgbm.plot_split_value_histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.plot_metric.html">lightgbm.plot_metric</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.plot_tree.html">lightgbm.plot_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lightgbm.create_tree_digraph.html">lightgbm.create_tree_digraph</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Python-API.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../Python-API.html">Python API</a></li>
+      <li class="breadcrumb-item active">lightgbm.plot_importance</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/pythonapi/lightgbm.plot_importance.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="lightgbm-plot-importance">
+<h1>lightgbm.plot_importance<a class="headerlink" href="#lightgbm-plot-importance" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="lightgbm.plot_importance">
+<span class="sig-prename descclassname"><span class="pre">lightgbm.</span></span><span class="sig-name descname"><span class="pre">plot_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">booster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Feature</span> <span class="pre">importance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Feature</span> <span class="pre">importance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Features'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_zero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightgbm/plotting.html#plot_importance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightgbm.plot_importance" title="Permalink to this definition"></a></dt>
+<dd><p>Plot model’s feature importances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>booster</strong> (<a class="reference internal" href="lightgbm.Booster.html#lightgbm.Booster" title="lightgbm.Booster"><em>Booster</em></a><em> or </em><a class="reference internal" href="lightgbm.LGBMModel.html#lightgbm.LGBMModel" title="lightgbm.LGBMModel"><em>LGBMModel</em></a>) – Booster or LGBMModel instance which feature importance should be plotted.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Target axes instance.
+If None, new figure and axes will be created.</p></li>
+<li><p><strong>height</strong> (<em>float</em><em>, </em><em>optional</em><em> (</em><em>default=0.2</em><em>)</em>) – Bar height, passed to <code class="docutils literal notranslate"><span class="pre">ax.barh()</span></code>.</p></li>
+<li><p><strong>xlim</strong> (<em>tuple of 2 elements</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Tuple passed to <code class="docutils literal notranslate"><span class="pre">ax.xlim()</span></code>.</p></li>
+<li><p><strong>ylim</strong> (<em>tuple of 2 elements</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Tuple passed to <code class="docutils literal notranslate"><span class="pre">ax.ylim()</span></code>.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;Feature importance&quot;</em><em>)</em>) – Axes title.
+If None, title is disabled.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;Feature importance&quot;</em><em>)</em>) – X-axis title label.
+If None, title is disabled.
+&#64;importance_type&#64; placeholder can be used, and it will be replaced with the value of <code class="docutils literal notranslate"><span class="pre">importance_type</span></code> parameter.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;Features&quot;</em><em>)</em>) – Y-axis title label.
+If None, title is disabled.</p></li>
+<li><p><strong>importance_type</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>default=&quot;auto&quot;</em><em>)</em>) – How the importance is calculated.
+If “auto”, if <code class="docutils literal notranslate"><span class="pre">booster</span></code> parameter is LGBMModel, <code class="docutils literal notranslate"><span class="pre">booster.importance_type</span></code> attribute is used; “split” otherwise.
+If “split”, result contains numbers of times the feature is used in a model.
+If “gain”, result contains total gains of splits which use the feature.</p></li>
+<li><p><strong>max_num_features</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Max number of top features displayed on plot.
+If None or &lt;1, all features will be displayed.</p></li>
+<li><p><strong>ignore_zero</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Whether to ignore features with zero importance.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple of 2 elements</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Figure size.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Resolution of the figure.</p></li>
+<li><p><strong>grid</strong> (<em>bool</em><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Whether to add a grid for axes.</p></li>
+<li><p><strong>precision</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=3</em><em>)</em>) – Used to restrict the display of floating point values to a certain precision.</p></li>
+<li><p><strong>**kwargs</strong> – Other parameters passed to <code class="docutils literal notranslate"><span class="pre">ax.barh()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ax</strong> – The plot with model’s feature importances.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.axes.Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lightgbm.reset_parameter.html" class="btn btn-neutral float-left" title="lightgbm.reset_parameter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lightgbm.plot_split_value_histogram.html" class="btn btn-neutral float-right" title="lightgbm.plot_split_value_histogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

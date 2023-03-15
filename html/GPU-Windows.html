@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GPU Windows Compilation &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Recommendations When Using gcc" href="gcc-Tips.html" />
+    <link rel="prev" title="GPU SDK Correspondence and Device Targeting Table" href="GPU-Targets.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">GPU Windows Compilation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/GPU-Windows.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gpu-windows-compilation">
+<h1>GPU Windows Compilation<a class="headerlink" href="#gpu-windows-compilation" title="Permalink to this heading"></a></h1>
+<p>This guide is for the MinGW build.</p>
+<p>For the MSVC (Visual Studio) build with GPU, please refer to <a class="reference external" href="./Installation-Guide.html#build-gpu-version">Installation Guide</a>.
+(We recommend you to use this since it is much easier).</p>
+<section id="install-lightgbm-gpu-version-in-windows-cli-r-python-using-mingw-gcc">
+<h2>Install LightGBM GPU version in Windows (CLI / R / Python), using MinGW/gcc<a class="headerlink" href="#install-lightgbm-gpu-version-in-windows-cli-r-python-using-mingw-gcc" title="Permalink to this heading"></a></h2>
+<p>This is for a vanilla installation of Boost, including full compilation steps from source without precompiled libraries.</p>
+<p>Installation steps (depends on what you are going to do):</p>
+<ul class="simple">
+<li><p>Install the appropriate OpenCL SDK</p></li>
+<li><p>Install MinGW</p></li>
+<li><p>Install Boost</p></li>
+<li><p>Install Git</p></li>
+<li><p>Install CMake</p></li>
+<li><p>Create LightGBM binaries</p></li>
+<li><p>Debugging LightGBM in CLI (if GPU is crashing or any other crash reason)</p></li>
+</ul>
+<p>If you wish to use another compiler like Visual Studio C++ compiler, you need to adapt the steps to your needs.</p>
+<p>For this compilation tutorial, we are using AMD SDK for our OpenCL steps.
+However, you are free to use any OpenCL SDK you want, you just need to adjust the PATH correctly.</p>
+<p>You will also need administrator rights. This will not work without them.</p>
+<p>At the end, you can restore your original PATH.</p>
+<hr class="docutils" />
+<section id="modifying-path-for-newbies">
+<h3>Modifying PATH (for newbies)<a class="headerlink" href="#modifying-path-for-newbies" title="Permalink to this heading"></a></h3>
+<p>To modify PATH, just follow the pictures after going to the <code class="docutils literal notranslate"><span class="pre">Control</span> <span class="pre">Panel</span></code>:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-system.png"><img alt="A screenshot of the System option under System and Security of the Control Panel." class="align-center" src="_images/screenshot-system.png" /></a>
+<p>Then, go to <code class="docutils literal notranslate"><span class="pre">Advanced</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">Environment</span> <span class="pre">Variables...</span></code>:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-advanced-system-settings.png"><img alt="A screenshot of the System Properties window." class="align-center" src="_images/screenshot-advanced-system-settings.png" /></a>
+<p>Under <code class="docutils literal notranslate"><span class="pre">System</span> <span class="pre">variables</span></code>, the variable <code class="docutils literal notranslate"><span class="pre">Path</span></code>:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-environment-variables.png"><img alt="A screenshot of the Environment variables window with variable path selected under the system variables." class="align-center" src="_images/screenshot-environment-variables.png" /></a>
+<hr class="docutils" />
+<section id="antivirus-performance-impact">
+<h4>Antivirus Performance Impact<a class="headerlink" href="#antivirus-performance-impact" title="Permalink to this heading"></a></h4>
+<p>Does not apply to you if you do not use a third-party antivirus nor the default preinstalled antivirus on Windows.</p>
+<p><strong>Windows Defender or any other antivirus will have a significant impact on the speed you will be able to perform the steps.</strong>
+It is recommended to <strong>turn them off temporarily</strong> until you finished with building and setting up everything, then turn them back on, if you are using them.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="opencl-sdk-installation">
+<h3>OpenCL SDK Installation<a class="headerlink" href="#opencl-sdk-installation" title="Permalink to this heading"></a></h3>
+<p>Installing the appropriate OpenCL SDK requires you to download the correct vendor source SDK.
+You need to know what you are going to use LightGBM!</p>
+<ul class="simple">
+<li><p>For running on Intel, get <a class="reference external" href="https://software.intel.com/en-us/articles/opencl-drivers">Intel SDK for OpenCL</a> (<strong>NOT RECOMMENDED</strong>).</p></li>
+<li><p>For running on AMD, get AMD APP SDK (downloads <a class="reference external" href="https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2">for Linux</a> and <a class="reference external" href="https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.135-GA-windows-F-x64.exe">for Windows</a>). You may want to replace the <code class="docutils literal notranslate"><span class="pre">OpenCL.dll</span></code> from the GPU driver package with the one from the SDK, if the one shipped with the driver lacks some functions.</p></li>
+<li><p>For running on NVIDIA, get <a class="reference external" href="https://developer.nvidia.com/cuda-downloads">CUDA Toolkit</a>.</p></li>
+<li><p>Or you can try to use <a class="reference external" href="https://github.com/KhronosGroup/OpenCL-Headers">Khronos official OpenCL headers</a>, the CMake module would automatically find the OpenCL library used in your system, though the result may be not portable.</p></li>
+</ul>
+<p>Further reading and correspondence table (especially if you intend to use cross-platform devices,
+like Intel CPU with AMD APP SDK): <a class="reference external" href="./GPU-Targets.html">GPU SDK Correspondence and Device Targeting Table</a>.</p>
+<p><strong>Warning</strong>: using Intel OpenCL is not recommended and may crash your machine due to being non compliant to OpenCL standards.
+If your objective is to use LightGBM + OpenCL on CPU, please use AMD APP SDK instead (it can run also on Intel CPUs without any issues).</p>
+</section>
+<hr class="docutils" />
+<section id="mingw-correct-compiler-selection">
+<h3>MinGW Correct Compiler Selection<a class="headerlink" href="#mingw-correct-compiler-selection" title="Permalink to this heading"></a></h3>
+<p>If you are expecting to use LightGBM without R, you need to install MinGW.
+Installing MinGW is straightforward, download <a class="reference external" href="http://iweb.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe">this</a>.</p>
+<p>Make sure you are using the x86_64 architecture, and do not modify anything else.
+You may choose a version other than the most recent one if you need a previous MinGW version.</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-mingw-installation.png"><img alt="A screenshot of the Min G W installation setup settings window." class="align-center" src="_images/screenshot-mingw-installation.png" /></a>
+<p>Then, add to your PATH the following (to adjust to your MinGW version):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">mingw</span><span class="o">-</span><span class="n">w64</span>\<span class="n">x86_64</span><span class="o">-</span><span class="mf">5.3.0</span><span class="o">-</span><span class="n">posix</span><span class="o">-</span><span class="n">seh</span><span class="o">-</span><span class="n">rt_v4</span><span class="o">-</span><span class="n">rev0</span>\<span class="n">mingw64</span>\<span class="nb">bin</span>
+</pre></div>
+</div>
+<p><strong>Warning</strong>: R users (even if you do not want LightGBM for R)</p>
+<p>If you have RTools and MinGW installed, and wish to use LightGBM in R,
+get rid of MinGW from PATH (to keep: <code class="docutils literal notranslate"><span class="pre">c:\Rtools\bin;c:\Rtools\mingw_32\bin</span></code> for 32-bit R installation,
+<code class="docutils literal notranslate"><span class="pre">c:\Rtools\bin;c:\Rtools\mingw_64\bin</span></code> for 64-bit R installation).</p>
+<p>You can check which MinGW version you are using by running the following in a command prompt: <code class="docutils literal notranslate"><span class="pre">gcc</span> <span class="pre">-v</span></code>:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-r-mingw-used.png"><img alt="A screenshot of the administrator command prompt where G C C version is being checked." class="align-center" src="_images/screenshot-r-mingw-used.png" /></a>
+<p>To check whether you need 32-bit or 64-bit MinGW for R, install LightGBM as usual and check for the following:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">installing</span> <span class="o">*</span><span class="n">source</span><span class="o">*</span> <span class="n">package</span> <span class="s">&#39;lightgbm&#39;</span> <span class="kc">...</span>
+<span class="o">**</span> <span class="n">libs</span>
+<span class="n">c</span><span class="o">:/</span><span class="n">Rtools</span><span class="o">/</span><span class="n">mingw_64</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">g</span><span class="o">++</span>
+</pre></div>
+</div>
+<p>If it says <code class="docutils literal notranslate"><span class="pre">mingw_64</span></code> then you need the 64-bit version (PATH with <code class="docutils literal notranslate"><span class="pre">c:\Rtools\bin;c:\Rtools\mingw_64\bin</span></code>),
+otherwise you need the 32-bit version (<code class="docutils literal notranslate"><span class="pre">c:\Rtools\bin;c:\Rtools\mingw_32\bin</span></code>), the latter being a very rare and untested case.</p>
+<p>NOTE: If you are using <cite>Rtools</cite> 4.0 or later, the path will have <cite>mingw64</cite> instead of <cite>mingw_64</cite> (PATH with <cite>C:rtools40mingw64bin</cite>), and <cite>mingw32</cite> instead of <cite>mingw_32</cite> (<cite>C:rtools40mingw32bin</cite>). The 32-bit version remains an unsupported solution under Rtools 4.0.</p>
+</section>
+<section id="download-the-prebuilt-boost">
+<h3>Download the prebuilt Boost<a class="headerlink" href="#download-the-prebuilt-boost" title="Permalink to this heading"></a></h3>
+<p>Download  <a class="reference external" href="https://mirror.linux-ia64.org/fedora/linux/releases/32/Everything/x86_64/os/Packages/m/mingw64-boost-static-1.66.0-6.fc32.noarch.rpm">Prebuilt Boost x86_64</a> or <a class="reference external" href="https://mirror.linux-ia64.org/fedora/linux/releases/32/Everything/x86_64/os/Packages/m/mingw32-boost-static-1.66.0-6.fc32.noarch.rpm">Prebuilt Boost i686</a> and unpack them with <a class="reference external" href="https://www.7-zip.org/download.html">7zip</a>, alternatively you can build Boost from source.</p>
+</section>
+<hr class="docutils" />
+<section id="boost-compilation">
+<h3>Boost Compilation<a class="headerlink" href="#boost-compilation" title="Permalink to this heading"></a></h3>
+<p>Installing Boost requires to download Boost and to install it.
+It takes about 10 minutes to several hours depending on your CPU speed and network speed.</p>
+<p>We will assume an installation in <code class="docutils literal notranslate"><span class="pre">C:\boost</span></code> and a general installation (like in Unix variants: without versioning and without type tags).</p>
+<p>There is one mandatory step to check the compiler:</p>
+<ul class="simple">
+<li><p><strong>Warning</strong>: if you want the R installation:
+If you have already MinGW in your PATH variable, get rid of it (you will link to the wrong compiler otherwise).</p></li>
+<li><p><strong>Warning</strong>: if you want the CLI installation:
+If you have already Rtools in your PATH variable, get rid of it (you will link to the wrong compiler otherwise).</p></li>
+<li><p>R installation must have Rtools in PATH</p></li>
+<li><p>CLI / Python installation must have MinGW (not Rtools) in PATH</p></li>
+</ul>
+<p>In addition, assuming you are going to use <code class="docutils literal notranslate"><span class="pre">C:\boost</span></code> for the folder path,
+you should add now already the following to PATH: <code class="docutils literal notranslate"><span class="pre">C:\boost\boost-build\bin</span></code>, <code class="docutils literal notranslate"><span class="pre">C:\boost\boost-build\include\boost</span></code>.
+Adjust <code class="docutils literal notranslate"><span class="pre">C:\boost</span></code> if you install it elsewhere.</p>
+<p>We can now start downloading and compiling the required Boost libraries:</p>
+<ul>
+<li><p>Download <a class="reference external" href="https://www.boost.org/users/history/">Boost</a> (for example, the filename for 1.63.0 version is <code class="docutils literal notranslate"><span class="pre">boost_1_63_0.zip</span></code>)</p></li>
+<li><p>Extract the archive to <code class="docutils literal notranslate"><span class="pre">C:\boost</span></code></p></li>
+<li><p>Open a command prompt, and run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">boost</span>\<span class="n">boost_1_63_0</span>\<span class="n">tools</span>\<span class="n">build</span>
+<span class="n">bootstrap</span><span class="o">.</span><span class="n">bat</span> <span class="n">gcc</span>
+<span class="n">b2</span> <span class="n">install</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;C:</span><span class="se">\b</span><span class="s2">oost</span><span class="se">\b</span><span class="s2">oost-build&quot;</span> <span class="n">toolset</span><span class="o">=</span><span class="n">gcc</span>
+<span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">boost</span>\<span class="n">boost_1_63_0</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>To build the Boost libraries, you have two choices for command prompt:</p>
+<ul>
+<li><p>If you have only one single core, you can use the default</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b2</span> <span class="n">install</span> <span class="o">--</span><span class="n">build_dir</span><span class="o">=</span><span class="s2">&quot;C:</span><span class="se">\b</span><span class="s2">oost</span><span class="se">\b</span><span class="s2">oost-build&quot;</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;C:</span><span class="se">\b</span><span class="s2">oost</span><span class="se">\b</span><span class="s2">oost-build&quot;</span> <span class="n">toolset</span><span class="o">=</span><span class="n">gcc</span> <span class="o">--</span><span class="k">with</span><span class="o">=</span><span class="n">filesystem</span><span class="p">,</span><span class="n">system</span> <span class="n">threading</span><span class="o">=</span><span class="n">multi</span> <span class="o">--</span><span class="n">layout</span><span class="o">=</span><span class="n">system</span> <span class="n">release</span>
+</pre></div>
+</div>
+</li>
+<li><p>If you want to do a multithreaded library building (faster), add <code class="docutils literal notranslate"><span class="pre">-j</span> <span class="pre">N</span></code> by replacing N by the number of cores/threads you have.
+For instance, for 2 cores, you would do</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">b2</span> <span class="n">install</span> <span class="o">--</span><span class="n">build_dir</span><span class="o">=</span><span class="s2">&quot;C:</span><span class="se">\b</span><span class="s2">oost</span><span class="se">\b</span><span class="s2">oost-build&quot;</span> <span class="o">--</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;C:</span><span class="se">\b</span><span class="s2">oost</span><span class="se">\b</span><span class="s2">oost-build&quot;</span> <span class="n">toolset</span><span class="o">=</span><span class="n">gcc</span> <span class="o">--</span><span class="k">with</span><span class="o">=</span><span class="n">filesystem</span><span class="p">,</span><span class="n">system</span> <span class="n">threading</span><span class="o">=</span><span class="n">multi</span> <span class="o">--</span><span class="n">layout</span><span class="o">=</span><span class="n">system</span> <span class="n">release</span> <span class="o">-</span><span class="n">j</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Ignore all the errors popping up, like Python, etc., they do not matter for us.</p>
+<p>Your folder should look like this at the end (not fully detailed):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">C</span>
+  <span class="o">|---</span> <span class="n">boost</span>
+  <span class="o">|------</span> <span class="n">boost_1_63_0</span>
+  <span class="o">|---------</span> <span class="n">some</span> <span class="n">folders</span> <span class="ow">and</span> <span class="n">files</span>
+  <span class="o">|------</span> <span class="n">boost</span><span class="o">-</span><span class="n">build</span>
+  <span class="o">|---------</span> <span class="nb">bin</span>
+  <span class="o">|---------</span> <span class="n">include</span>
+  <span class="o">|------------</span> <span class="n">boost</span>
+  <span class="o">|---------</span> <span class="n">lib</span>
+  <span class="o">|---------</span> <span class="n">share</span>
+</pre></div>
+</div>
+<p>This is what you should (approximately) get at the end of Boost compilation:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-boost-compiled.png"><img alt="A screenshot of the command prompt that ends with text that reads - updated 14621 targets." class="align-center" src="_images/screenshot-boost-compiled.png" /></a>
+<p>If you are getting an error:</p>
+<ul class="simple">
+<li><p>Wipe your Boost directory</p></li>
+<li><p>Close the command prompt</p></li>
+<li><p>Make sure you added
+<code class="docutils literal notranslate"><span class="pre">C:\boost\boost-build\bin</span></code>, <code class="docutils literal notranslate"><span class="pre">C:\boost\boost-build\include\boost</span></code> to
+your PATH (adjust accordingly if you use another folder)</p></li>
+<li><p>Do the Boost compilation steps again (extract =&gt; command prompt =&gt; <code class="docutils literal notranslate"><span class="pre">cd</span></code> =&gt; <code class="docutils literal notranslate"><span class="pre">bootstrap</span></code> =&gt; <code class="docutils literal notranslate"><span class="pre">b2</span></code> =&gt; <code class="docutils literal notranslate"><span class="pre">cd</span></code> =&gt; <code class="docutils literal notranslate"><span class="pre">b2</span></code></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="git-installation">
+<h3>Git Installation<a class="headerlink" href="#git-installation" title="Permalink to this heading"></a></h3>
+<p>Installing Git for Windows is straightforward, use the following <a class="reference external" href="https://git-scm.com/download/win">link</a>.</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-git-for-windows.png"><img alt="A screenshot of the website to download git that shows various versions of git compatible with 32 bit and 64 bit Windows separately." class="align-center" src="_images/screenshot-git-for-windows.png" /></a>
+<p>Now, we can fetch LightGBM repository for GitHub. Run Git Bash and the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span>
+<span class="n">mkdir</span> <span class="n">github_repos</span>
+<span class="n">cd</span> <span class="n">github_repos</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">recursive</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">microsoft</span><span class="o">/</span><span class="n">LightGBM</span>
+</pre></div>
+</div>
+<p>Your LightGBM repository copy should now be under <code class="docutils literal notranslate"><span class="pre">C:\github_repos\LightGBM</span></code>.
+You are free to use any folder you want, but you have to adapt.</p>
+<p>Keep Git Bash open.</p>
+</section>
+<hr class="docutils" />
+<section id="cmake-installation-configuration-generation">
+<h3>CMake Installation, Configuration, Generation<a class="headerlink" href="#cmake-installation-configuration-generation" title="Permalink to this heading"></a></h3>
+<p><strong>CLI / Python users only</strong></p>
+<p>Installing CMake requires one download first and then a lot of configuration for LightGBM:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-downloading-cmake.png"><img alt="A screenshot of the binary distributions of C Make for downloading on 64 bit Windows." class="align-center" src="_images/screenshot-downloading-cmake.png" /></a>
+<ul>
+<li><p>Download <a class="reference external" href="https://cmake.org/download/">CMake</a> (3.8 or higher)</p></li>
+<li><p>Install CMake</p></li>
+<li><p>Run cmake-gui</p></li>
+<li><p>Select the folder where you put LightGBM for <code class="docutils literal notranslate"><span class="pre">Where</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">code</span></code>,
+default using our steps would be <code class="docutils literal notranslate"><span class="pre">C:/github_repos/LightGBM</span></code></p></li>
+<li><p>Copy the folder name, and add <code class="docutils literal notranslate"><span class="pre">/build</span></code> for “Where to build the binaries”,
+default using our steps would be <code class="docutils literal notranslate"><span class="pre">C:/github_repos/LightGBM/build</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Configure</span></code></p>
+<a class="reference external image-reference" href="./_static/images/screenshot-create-directory.png"><img alt="A screenshot with a pop-up window that reads - Build directory does not exist, should I create it?" class="align-center" src="_images/screenshot-create-directory.png" /></a>
+<a class="reference external image-reference" href="./_static/images/screenshot-mingw-makefiles-to-use.png"><img alt="A screenshot that asks to specify the generator for the project which should be selected as Min G W makefiles and selected as the use default native compilers option." class="align-center" src="_images/screenshot-mingw-makefiles-to-use.png" /></a>
+</li>
+<li><p>Lookup for <code class="docutils literal notranslate"><span class="pre">USE_GPU</span></code> and check the checkbox</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-use-gpu.png"><img alt="A screenshot of the C Make window where the checkbox with the test Use G P U is checked." class="align-center" src="_images/screenshot-use-gpu.png" /></a>
+</li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Configure</span></code></p>
+<p>You should get (approximately) the following after clicking Configure:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-configured-lightgbm.png"><img alt="A screenshot of the C Make window after clicking on the configure button." class="align-center" src="_images/screenshot-configured-lightgbm.png" /></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Looking</span> <span class="k">for</span> <span class="n">CL_VERSION_2_0</span>
+<span class="n">Looking</span> <span class="k">for</span> <span class="n">CL_VERSION_2_0</span> <span class="o">-</span> <span class="n">found</span>
+<span class="n">Found</span> <span class="n">OpenCL</span><span class="p">:</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Windows</span><span class="o">/</span><span class="n">System32</span><span class="o">/</span><span class="n">OpenCL</span><span class="o">.</span><span class="n">dll</span> <span class="p">(</span><span class="n">found</span> <span class="n">version</span> <span class="s2">&quot;2.0&quot;</span><span class="p">)</span>
+<span class="n">OpenCL</span> <span class="n">include</span> <span class="n">directory</span><span class="p">:</span><span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">Program</span> <span class="n">Files</span> <span class="p">(</span><span class="n">x86</span><span class="p">)</span><span class="o">/</span><span class="n">AMD</span> <span class="n">APP</span> <span class="n">SDK</span><span class="o">/</span><span class="mf">3.0</span><span class="o">/</span><span class="n">include</span>
+<span class="n">Boost</span> <span class="n">version</span><span class="p">:</span> <span class="mf">1.63.0</span>
+<span class="n">Found</span> <span class="n">the</span> <span class="n">following</span> <span class="n">Boost</span> <span class="n">libraries</span><span class="p">:</span>
+  <span class="n">filesystem</span>
+  <span class="n">system</span>
+<span class="n">Configuring</span> <span class="n">done</span>
+</pre></div>
+</div>
+</li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Generate</span></code> to get the following message:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Generating</span> <span class="n">done</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>This is straightforward, as CMake is providing a large help into locating the correct elements.</p>
+</section>
+<hr class="docutils" />
+<section id="lightgbm-compilation-cli-final-step">
+<h3>LightGBM Compilation (CLI: final step)<a class="headerlink" href="#lightgbm-compilation-cli-final-step" title="Permalink to this heading"></a></h3>
+<section id="installation-in-cli">
+<h4>Installation in CLI<a class="headerlink" href="#installation-in-cli" title="Permalink to this heading"></a></h4>
+<p><strong>CLI / Python users</strong></p>
+<p>Creating LightGBM libraries is very simple as all the important and hard steps were done before.</p>
+<p>You can do everything in the Git Bash console you left open:</p>
+<ul>
+<li><p>If you closed Git Bash console previously, run this to get back to the build folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">github_repos</span><span class="o">/</span><span class="n">LightGBM</span><span class="o">/</span><span class="n">build</span>
+</pre></div>
+</div>
+</li>
+<li><p>If you did not close the Git Bash console previously, run this to get to the build folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">LightGBM</span><span class="o">/</span><span class="n">build</span>
+</pre></div>
+</div>
+</li>
+<li><p>Setup MinGW as <code class="docutils literal notranslate"><span class="pre">make</span></code> using</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">alias</span> <span class="n">make</span><span class="o">=</span><span class="s1">&#39;mingw32-make&#39;</span>
+</pre></div>
+</div>
+<p>otherwise, beware error and name clash!</p>
+</li>
+<li><p>In Git Bash, run <code class="docutils literal notranslate"><span class="pre">make</span></code> and see LightGBM being installing!</p></li>
+</ul>
+<a class="reference external image-reference" href="./_static/images/screenshot-lightgbm-with-gpu-support-compiled.png"><img alt="A screenshot of the git bash window with Light G B M successfully installed." class="align-center" src="_images/screenshot-lightgbm-with-gpu-support-compiled.png" /></a>
+<p>If everything was done correctly, you now compiled CLI LightGBM with GPU support!</p>
+</section>
+<section id="testing-in-cli">
+<h4>Testing in CLI<a class="headerlink" href="#testing-in-cli" title="Permalink to this heading"></a></h4>
+<p>You can now test LightGBM directly in CLI in a <strong>command prompt</strong> (not Git Bash):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">github_repos</span><span class="o">/</span><span class="n">LightGBM</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">binary_classification</span>
+<span class="s2">&quot;../../lightgbm.exe&quot;</span> <span class="n">config</span><span class="o">=</span><span class="n">train</span><span class="o">.</span><span class="n">conf</span> <span class="n">data</span><span class="o">=</span><span class="n">binary</span><span class="o">.</span><span class="n">train</span> <span class="n">valid</span><span class="o">=</span><span class="n">binary</span><span class="o">.</span><span class="n">test</span> <span class="n">objective</span><span class="o">=</span><span class="n">binary</span> <span class="n">device</span><span class="o">=</span><span class="n">gpu</span>
+</pre></div>
+</div>
+<a class="reference external image-reference" href="./_static/images/screenshot-lightgbm-in-cli-with-gpu.png"><img alt="A screenshot of the command prompt where a binary classification model is being trained using Light G B M." class="align-center" src="_images/screenshot-lightgbm-in-cli-with-gpu.png" /></a>
+<p>Congratulations for reaching this stage!</p>
+<p>To learn how to target a correct CPU or GPU for training, please see: <a class="reference external" href="./GPU-Targets.html">GPU SDK Correspondence and Device Targeting Table</a>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="debugging-lightgbm-crashes-in-cli">
+<h3>Debugging LightGBM Crashes in CLI<a class="headerlink" href="#debugging-lightgbm-crashes-in-cli" title="Permalink to this heading"></a></h3>
+<p>Now that you compiled LightGBM, you try it… and you always see a segmentation fault or an undocumented crash with GPU support:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-segmentation-fault.png"><img alt="A screenshot of the command prompt where a segmentation fault has occurred while using Light G B M." class="align-center" src="_images/screenshot-segmentation-fault.png" /></a>
+<p>Please check if you are using the right device (<code class="docutils literal notranslate"><span class="pre">Using</span> <span class="pre">GPU</span> <span class="pre">device:</span> <span class="pre">...</span></code>). You can find a list of your OpenCL devices using <a class="reference external" href="http://www.ozone3d.net/gpu_caps_viewer/">GPUCapsViewer</a>, and make sure you are using a discrete (AMD/NVIDIA) GPU if you have both integrated (Intel) and discrete GPUs installed.
+Also, try to set <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span> <span class="pre">=</span> <span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span> <span class="pre">=</span> <span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">gpu_device_id</span> <span class="pre">=</span> <span class="pre">-1</span></code> and <code class="docutils literal notranslate"><span class="pre">gpu_platform_id</span> <span class="pre">=</span> <span class="pre">-1</span></code> to use the first platform and device or the default platform and device.
+If it still does not work, then you should follow all the steps below.</p>
+<p>You will have to redo the compilation steps for LightGBM to add debugging mode. This involves:</p>
+<ul class="simple">
+<li><p>Deleting <code class="docutils literal notranslate"><span class="pre">C:/github_repos/LightGBM/build</span></code> folder</p></li>
+<li><p>Deleting <code class="docutils literal notranslate"><span class="pre">lightgbm.exe</span></code>, <code class="docutils literal notranslate"><span class="pre">lib_lightgbm.dll</span></code>, and <code class="docutils literal notranslate"><span class="pre">lib_lightgbm.dll.a</span></code> files</p></li>
+</ul>
+<a class="reference external image-reference" href="./_static/images/screenshot-files-to-remove.png"><img alt="A screenshot of the Light G B M folder with 1 folder and 3 files selected to be removed." class="align-center" src="_images/screenshot-files-to-remove.png" /></a>
+<p>Once you removed the file, go into CMake, and follow the usual steps.
+Before clicking “Generate”, click on “Add Entry”:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-added-manual-entry-in-cmake.png"><img alt="A screenshot of the Cache Entry popup where the name is set to CMAKE_BUILD_TYPE in all caps, the type is set to STRING in all caps and the value is set to Debug." class="align-center" src="_images/screenshot-added-manual-entry-in-cmake.png" /></a>
+<p>In addition, click on Configure and Generate:</p>
+<a class="reference external image-reference" href="./_static/images/screenshot-configured-and-generated-cmake.png"><img alt="A screenshot of the C Make window after clicking on configure and generate." class="align-center" src="_images/screenshot-configured-and-generated-cmake.png" /></a>
+<p>And then, follow the regular LightGBM CLI installation from there.</p>
+<p>Once you have installed LightGBM CLI, assuming your LightGBM is in <code class="docutils literal notranslate"><span class="pre">C:\github_repos\LightGBM</span></code>,
+open a command prompt and run the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gdb</span> <span class="o">--</span><span class="n">args</span> <span class="s2">&quot;../../lightgbm.exe&quot;</span> <span class="n">config</span><span class="o">=</span><span class="n">train</span><span class="o">.</span><span class="n">conf</span> <span class="n">data</span><span class="o">=</span><span class="n">binary</span><span class="o">.</span><span class="n">train</span> <span class="n">valid</span><span class="o">=</span><span class="n">binary</span><span class="o">.</span><span class="n">test</span> <span class="n">objective</span><span class="o">=</span><span class="n">binary</span> <span class="n">device</span><span class="o">=</span><span class="n">gpu</span>
+</pre></div>
+</div>
+<a class="reference external image-reference" href="./_static/images/screenshot-debug-run.png"><img alt="A screenshot of the command prompt after the command above is run." class="align-center" src="_images/screenshot-debug-run.png" /></a>
+<p>Type <code class="docutils literal notranslate"><span class="pre">run</span></code> and press the Enter key.</p>
+<p>You will probably get something similar to this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[LightGBM] [Info] This is the GPU trainer!!
+[LightGBM] [Info] Total Bins 6143
+[LightGBM] [Info] Number of data: 7000, number of used features: 28
+[New Thread 105220.0x1a62c]
+[LightGBM] [Info] Using GPU Device: Oland, Vendor: Advanced Micro Devices, Inc.
+[LightGBM] [Info] Compiling OpenCL Kernel with 256 bins...
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00007ffbb37c11f1 in strlen () from C:\Windows\system32\msvcrt.dll
+(gdb)
+</pre></div>
+</div>
+<p>There, write <code class="docutils literal notranslate"><span class="pre">backtrace</span></code> and press the Enter key as many times as gdb requests two choices:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Program</span> <span class="n">received</span> <span class="n">signal</span> <span class="n">SIGSEGV</span><span class="p">,</span> <span class="n">Segmentation</span> <span class="n">fault</span><span class="o">.</span>
+<span class="mh">0x00007ffbb37c11f1</span> <span class="ow">in</span> <span class="n">strlen</span> <span class="p">()</span> <span class="kn">from</span> <span class="nn">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">system32</span>\<span class="n">msvcrt</span><span class="o">.</span><span class="n">dll</span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span> <span class="n">backtrace</span>
+<span class="c1">#0  0x00007ffbb37c11f1 in strlen () from C:\Windows\system32\msvcrt.dll</span>
+<span class="c1">#1  0x000000000048bbe5 in std::char_traits&lt;char&gt;::length (__s=0x0)</span>
+    <span class="n">at</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">PROGRA</span><span class="o">~</span><span class="mi">1</span><span class="o">/</span><span class="n">MINGW</span><span class="o">-~</span><span class="mi">1</span><span class="o">/</span><span class="n">X86_64</span><span class="o">~</span><span class="mf">1.0</span><span class="o">-</span><span class="n">P</span><span class="o">/</span><span class="n">mingw64</span><span class="o">/</span><span class="n">x86_64</span><span class="o">-</span><span class="n">w64</span><span class="o">-</span><span class="n">mingw32</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">c</span><span class="o">++/</span><span class="n">bits</span><span class="o">/</span><span class="n">char_traits</span><span class="o">.</span><span class="n">h</span><span class="p">:</span><span class="mi">267</span>
+<span class="c1">#2  std::operator+&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; (__rhs=&quot;\\&quot;, __lhs=0x0)</span>
+    <span class="n">at</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">PROGRA</span><span class="o">~</span><span class="mi">1</span><span class="o">/</span><span class="n">MINGW</span><span class="o">-~</span><span class="mi">1</span><span class="o">/</span><span class="n">X86_64</span><span class="o">~</span><span class="mf">1.0</span><span class="o">-</span><span class="n">P</span><span class="o">/</span><span class="n">mingw64</span><span class="o">/</span><span class="n">x86_64</span><span class="o">-</span><span class="n">w64</span><span class="o">-</span><span class="n">mingw32</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">c</span><span class="o">++/</span><span class="n">bits</span><span class="o">/</span><span class="n">basic_string</span><span class="o">.</span><span class="n">tcc</span><span class="p">:</span><span class="mi">1157</span>
+<span class="c1">#3  boost::compute::detail::appdata_path[abi:cxx11]() () at C:/boost/boost-build/include/boost/compute/detail/path.hpp:38</span>
+<span class="c1">#4  0x000000000048eec3 in boost::compute::detail::program_binary_path (hash=&quot;d27987d5bd61e2d28cd32b8d7a7916126354dc81&quot;, create=create@entry=false)</span>
+    <span class="n">at</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">boost</span><span class="o">/</span><span class="n">boost</span><span class="o">-</span><span class="n">build</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">boost</span><span class="o">/</span><span class="n">compute</span><span class="o">/</span><span class="n">detail</span><span class="o">/</span><span class="n">path</span><span class="o">.</span><span class="n">hpp</span><span class="p">:</span><span class="mi">46</span>
+<span class="c1">#5  0x00000000004913de in boost::compute::program::load_program_binary (hash=&quot;d27987d5bd61e2d28cd32b8d7a7916126354dc81&quot;, ctx=...)</span>
+    <span class="n">at</span> <span class="n">C</span><span class="p">:</span><span class="o">/</span><span class="n">boost</span><span class="o">/</span><span class="n">boost</span><span class="o">-</span><span class="n">build</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">boost</span><span class="o">/</span><span class="n">compute</span><span class="o">/</span><span class="n">program</span><span class="o">.</span><span class="n">hpp</span><span class="p">:</span><span class="mi">605</span>
+<span class="c1">#6  0x0000000000490ece in boost::compute::program::build_with_source (</span>
+    <span class="n">source</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">#ifndef _HISTOGRAM_256_KERNEL_</span><span class="se">\n</span><span class="s2">#define _HISTOGRAM_256_KERNEL_</span><span class="se">\n\n</span><span class="s2">#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable</span><span class="se">\n</span><span class="s2">#pragma OPENC</span>
+<span class="n">L</span> <span class="n">EXTENSION</span> <span class="n">cl_khr_global_int32_base_atomics</span> <span class="p">:</span> <span class="n">enable</span>\<span class="n">n</span>\<span class="n">n</span><span class="o">//</span><span class="s2">&quot;..., context=...,</span>
+    <span class="n">options</span><span class="o">=</span><span class="s2">&quot; -D POWER_FEATURE_WORKGROUPS=5 -D USE_CONSTANT_BUF=0 -D USE_DP_FLOAT=0 -D CONST_HESSIAN=0 -cl-strict-aliasing -cl-mad-enable -cl-no-signed-zeros -c</span>
+<span class="n">l</span><span class="o">-</span><span class="n">fast</span><span class="o">-</span><span class="n">relaxed</span><span class="o">-</span><span class="n">math</span><span class="s2">&quot;) at C:/boost/boost-build/include/boost/compute/program.hpp:549</span>
+<span class="c1">#7  0x0000000000454339 in LightGBM::GPUTreeLearner::BuildGPUKernels () at C:\LightGBM\src\treelearner\gpu_tree_learner.cpp:583</span>
+<span class="c1">#8  0x00000000636044f2 in libgomp-1!GOMP_parallel () from C:\Program Files\mingw-w64\x86_64-5.3.0-posix-seh-rt_v4-rev0\mingw64\bin\libgomp-1.dll</span>
+<span class="c1">#9  0x0000000000455e7e in LightGBM::GPUTreeLearner::BuildGPUKernels (this=this@entry=0x3b9cac0)</span>
+    <span class="n">at</span> <span class="n">C</span><span class="p">:</span>\<span class="n">LightGBM</span>\<span class="n">src</span>\<span class="n">treelearner</span>\<span class="n">gpu_tree_learner</span><span class="o">.</span><span class="n">cpp</span><span class="p">:</span><span class="mi">569</span>
+<span class="c1">#10 0x0000000000457b49 in LightGBM::GPUTreeLearner::InitGPU (this=0x3b9cac0, platform_id=&lt;optimized out&gt;, device_id=&lt;optimized out&gt;)</span>
+    <span class="n">at</span> <span class="n">C</span><span class="p">:</span>\<span class="n">LightGBM</span>\<span class="n">src</span>\<span class="n">treelearner</span>\<span class="n">gpu_tree_learner</span><span class="o">.</span><span class="n">cpp</span><span class="p">:</span><span class="mi">720</span>
+<span class="c1">#11 0x0000000000410395 in LightGBM::GBDT::ResetTrainingData (this=0x1f26c90, config=&lt;optimized out&gt;, train_data=0x1f28180, objective_function=0x1f280e0,</span>
+    <span class="n">training_metrics</span><span class="o">=</span><span class="n">std</span><span class="p">::</span><span class="n">vector</span> <span class="n">of</span> <span class="n">length</span> <span class="mi">2</span><span class="p">,</span> <span class="n">capacity</span> <span class="mi">2</span> <span class="o">=</span> <span class="p">{</span><span class="o">...</span><span class="p">})</span> <span class="n">at</span> <span class="n">C</span><span class="p">:</span>\<span class="n">LightGBM</span>\<span class="n">src</span>\<span class="n">boosting</span>\<span class="n">gbdt</span><span class="o">.</span><span class="n">cpp</span><span class="p">:</span><span class="mi">98</span>
+<span class="c1">#12 0x0000000000402e93 in LightGBM::Application::InitTrain (this=this@entry=0x23f9d0) at C:\LightGBM\src\application\application.cpp:213</span>
+<span class="o">---</span><span class="n">Type</span> <span class="o">&lt;</span><span class="k">return</span><span class="o">&gt;</span> <span class="n">to</span> <span class="k">continue</span><span class="p">,</span> <span class="ow">or</span> <span class="n">q</span> <span class="o">&lt;</span><span class="k">return</span><span class="o">&gt;</span> <span class="n">to</span> <span class="n">quit</span><span class="o">---</span>
+<span class="c1">#13 0x00000000004f0b55 in LightGBM::Application::Run (this=0x23f9d0) at C:/LightGBM/include/LightGBM/application.h:84</span>
+<span class="c1">#14 main (argc=6, argv=0x1f21e90) at C:\LightGBM\src\main.cpp:7</span>
+</pre></div>
+</div>
+<p>Right-click the command prompt, click “Mark”, and select all the text from the first line (with the command prompt containing gdb) to the last line printed, containing all the log, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C:\LightGBM\examples\binary_classification&gt;gdb --args &quot;../../lightgbm.exe&quot; config=train.conf data=binary.train valid=binary.test objective=binary device=gpu
+GNU gdb (GDB) 7.10.1
+Copyright (C) 2015 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;
+and &quot;show warranty&quot; for details.
+This GDB was configured as &quot;x86_64-w64-mingw32&quot;.
+Type &quot;show configuration&quot; for configuration details.
+For bug reporting instructions, please see:
+&lt;http://www.gnu.org/software/gdb/bugs/&gt;.
+Find the GDB manual and other documentation resources online at:
+&lt;http://www.gnu.org/software/gdb/documentation/&gt;.
+For help, type &quot;help&quot;.
+Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...
+Reading symbols from ../../lightgbm.exe...done.
+(gdb) run
+Starting program: C:\LightGBM\lightgbm.exe &quot;config=train.conf&quot; &quot;data=binary.train&quot; &quot;valid=binary.test&quot; &quot;objective=binary&quot; &quot;device=gpu&quot;
+[New Thread 105220.0x199b8]
+[New Thread 105220.0x783c]
+[Thread 105220.0x783c exited with code 0]
+[LightGBM] [Info] Finished loading parameters
+[New Thread 105220.0x19490]
+[New Thread 105220.0x1a71c]
+[New Thread 105220.0x19a24]
+[New Thread 105220.0x4fb0]
+[Thread 105220.0x4fb0 exited with code 0]
+[LightGBM] [Info] Loading weights...
+[New Thread 105220.0x19988]
+[Thread 105220.0x19988 exited with code 0]
+[New Thread 105220.0x1a8fc]
+[Thread 105220.0x1a8fc exited with code 0]
+[LightGBM] [Info] Loading weights...
+[New Thread 105220.0x1a90c]
+[Thread 105220.0x1a90c exited with code 0]
+[LightGBM] [Info] Finished loading data in 1.011408 seconds
+[LightGBM] [Info] Number of positive: 3716, number of negative: 3284
+[LightGBM] [Info] This is the GPU trainer!!
+[LightGBM] [Info] Total Bins 6143
+[LightGBM] [Info] Number of data: 7000, number of used features: 28
+[New Thread 105220.0x1a62c]
+[LightGBM] [Info] Using GPU Device: Oland, Vendor: Advanced Micro Devices, Inc.
+[LightGBM] [Info] Compiling OpenCL Kernel with 256 bins...
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00007ffbb37c11f1 in strlen () from C:\Windows\system32\msvcrt.dll
+(gdb) backtrace
+#0  0x00007ffbb37c11f1 in strlen () from C:\Windows\system32\msvcrt.dll
+#1  0x000000000048bbe5 in std::char_traits&lt;char&gt;::length (__s=0x0)
+    at C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/x86_64-w64-mingw32/include/c++/bits/char_traits.h:267
+#2  std::operator+&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; (__rhs=&quot;\\&quot;, __lhs=0x0)
+    at C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/x86_64-w64-mingw32/include/c++/bits/basic_string.tcc:1157
+#3  boost::compute::detail::appdata_path[abi:cxx11]() () at C:/boost/boost-build/include/boost/compute/detail/path.hpp:38
+#4  0x000000000048eec3 in boost::compute::detail::program_binary_path (hash=&quot;d27987d5bd61e2d28cd32b8d7a7916126354dc81&quot;, create=create@entry=false)
+    at C:/boost/boost-build/include/boost/compute/detail/path.hpp:46
+#5  0x00000000004913de in boost::compute::program::load_program_binary (hash=&quot;d27987d5bd61e2d28cd32b8d7a7916126354dc81&quot;, ctx=...)
+    at C:/boost/boost-build/include/boost/compute/program.hpp:605
+#6  0x0000000000490ece in boost::compute::program::build_with_source (
+    source=&quot;\n#ifndef _HISTOGRAM_256_KERNEL_\n#define _HISTOGRAM_256_KERNEL_\n\n#pragma OPENCL EXTENSION cl_khr_local_int32_base_atomics : enable\n#pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : enable\n\n//&quot;..., context=...,
+    options=&quot; -D POWER_FEATURE_WORKGROUPS=5 -D USE_CONSTANT_BUF=0 -D USE_DP_FLOAT=0 -D CONST_HESSIAN=0 -cl-strict-aliasing -cl-mad-enable -cl-no-signed-zeros -cl-fast-relaxed-math&quot;) at C:/boost/boost-build/include/boost/compute/program.hpp:549
+#7  0x0000000000454339 in LightGBM::GPUTreeLearner::BuildGPUKernels () at C:\LightGBM\src\treelearner\gpu_tree_learner.cpp:583
+#8  0x00000000636044f2 in libgomp-1!GOMP_parallel () from C:\Program Files\mingw-w64\x86_64-5.3.0-posix-seh-rt_v4-rev0\mingw64\bin\libgomp-1.dll
+#9  0x0000000000455e7e in LightGBM::GPUTreeLearner::BuildGPUKernels (this=this@entry=0x3b9cac0)
+    at C:\LightGBM\src\treelearner\gpu_tree_learner.cpp:569
+#10 0x0000000000457b49 in LightGBM::GPUTreeLearner::InitGPU (this=0x3b9cac0, platform_id=&lt;optimized out&gt;, device_id=&lt;optimized out&gt;)
+    at C:\LightGBM\src\treelearner\gpu_tree_learner.cpp:720
+#11 0x0000000000410395 in LightGBM::GBDT::ResetTrainingData (this=0x1f26c90, config=&lt;optimized out&gt;, train_data=0x1f28180, objective_function=0x1f280e0,
+    training_metrics=std::vector of length 2, capacity 2 = {...}) at C:\LightGBM\src\boosting\gbdt.cpp:98
+#12 0x0000000000402e93 in LightGBM::Application::InitTrain (this=this@entry=0x23f9d0) at C:\LightGBM\src\application\application.cpp:213
+---Type &lt;return&gt; to continue, or q &lt;return&gt; to quit---
+#13 0x00000000004f0b55 in LightGBM::Application::Run (this=0x23f9d0) at C:/LightGBM/include/LightGBM/application.h:84
+#14 main (argc=6, argv=0x1f21e90) at C:\LightGBM\src\main.cpp:7
+</pre></div>
+</div>
+<p>And open an issue in GitHub <a class="reference external" href="https://github.com/microsoft/LightGBM/issues">here</a> with that log.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="GPU-Targets.html" class="btn btn-neutral float-left" title="GPU SDK Correspondence and Device Targeting Table" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gcc-Tips.html" class="btn btn-neutral float-right" title="Recommendations When Using gcc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

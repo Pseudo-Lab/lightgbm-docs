@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lightgbm.callback &mdash; LightGBM 3.3.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/js/script.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/LightGBM_logo_grey_text.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.3.5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation-Guide.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick-Start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Python-Intro.html">Python Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Parameters-Tuning.html">Parameters Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../C-API.html">C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Python-API.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/R/reference/">R API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Parallel-Learning-Guide.html">Distributed Learning Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../GPU-Tutorial.html">GPU Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Advanced-Topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Development-Guide.html">Development Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">LightGBM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lightgbm.callback</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lightgbm.callback</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;Callbacks library.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">gt</span><span class="p">,</span> <span class="n">lt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">.basic</span> <span class="kn">import</span> <span class="n">_ConfigAliases</span><span class="p">,</span> <span class="n">_log_info</span><span class="p">,</span> <span class="n">_log_warning</span>
+
+
+<span class="k">class</span> <span class="nc">EarlyStopException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception of early stopping.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">best_iteration</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">best_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create early stopping exception.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        best_iteration : int</span>
+<span class="sd">            The best iteration stopped.</span>
+<span class="sd">        best_score : float</span>
+<span class="sd">            The score of the best iteration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_iteration</span> <span class="o">=</span> <span class="n">best_iteration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span> <span class="o">=</span> <span class="n">best_score</span>
+
+
+<span class="c1"># Callback environment used by callbacks</span>
+<span class="n">CallbackEnv</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;CallbackEnv&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;params&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;iteration&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;begin_iteration&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;end_iteration&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;evaluation_result_list&quot;</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_format_eval_result</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">show_stdv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Format metric string.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;s </span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">show_stdv</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;s </span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2"> + </span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;s </span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong metric value&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">print_evaluation</span><span class="p">(</span><span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">show_stdv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create a callback that logs the evaluation results.</span>
+
+<span class="sd">    Deprecated, use ``log_evaluation()`` instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_log_warning</span><span class="p">(</span><span class="s2">&quot;&#39;print_evaluation()&#39; callback is deprecated and will be removed in a future release of LightGBM. &quot;</span>
+                 <span class="s2">&quot;Use &#39;log_evaluation()&#39; callback instead.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">log_evaluation</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="n">period</span><span class="p">,</span> <span class="n">show_stdv</span><span class="o">=</span><span class="n">show_stdv</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="log_evaluation"><a class="viewcode-back" href="../../pythonapi/lightgbm.log_evaluation.html#lightgbm.log_evaluation">[docs]</a><span class="k">def</span> <span class="nf">log_evaluation</span><span class="p">(</span><span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">show_stdv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create a callback that logs the evaluation results.</span>
+
+<span class="sd">    By default, standard output resource is used.</span>
+<span class="sd">    Use ``register_logger()`` function to register a custom logger.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Requires at least one validation data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    period : int, optional (default=1)</span>
+<span class="sd">        The period to log the evaluation results.</span>
+<span class="sd">        The last boosting stage or the boosting stage found by using ``early_stopping`` callback is also logged.</span>
+<span class="sd">    show_stdv : bool, optional (default=True)</span>
+<span class="sd">        Whether to log stdv (if provided).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    callback : callable</span>
+<span class="sd">        The callback that logs the evaluation results every ``period`` boosting iteration(s).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_callback</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">CallbackEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">period</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span> <span class="ow">and</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">iteration</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">period</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_format_eval_result</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">show_stdv</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">])</span>
+            <span class="n">_log_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">iteration</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">]</span><span class="se">\t</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">_callback</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># type: ignore</span>
+    <span class="k">return</span> <span class="n">_callback</span></div>
+
+
+<div class="viewcode-block" id="record_evaluation"><a class="viewcode-back" href="../../pythonapi/lightgbm.record_evaluation.html#lightgbm.record_evaluation">[docs]</a><span class="k">def</span> <span class="nf">record_evaluation</span><span class="p">(</span><span class="n">eval_result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create a callback that records the evaluation history into ``eval_result``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eval_result : dict</span>
+<span class="sd">        Dictionary used to store all evaluation results of all validation sets.</span>
+<span class="sd">        This should be initialized outside of your call to ``record_evaluation()`` and should be empty.</span>
+<span class="sd">        Any initial contents of the dictionary will be deleted.</span>
+
+<span class="sd">        .. rubric:: Example</span>
+
+<span class="sd">        With two validation sets named &#39;eval&#39; and &#39;train&#39;, and one evaluation metric named &#39;logloss&#39;</span>
+<span class="sd">        this dictionary after finishing a model training process will have the following structure:</span>
+
+<span class="sd">        .. code-block::</span>
+
+<span class="sd">            {</span>
+<span class="sd">             &#39;train&#39;:</span>
+<span class="sd">                 {</span>
+<span class="sd">                  &#39;logloss&#39;: [0.48253, 0.35953, ...]</span>
+<span class="sd">                 },</span>
+<span class="sd">             &#39;eval&#39;:</span>
+<span class="sd">                 {</span>
+<span class="sd">                  &#39;logloss&#39;: [0.480385, 0.357756, ...]</span>
+<span class="sd">                 }</span>
+<span class="sd">            }</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    callback : callable</span>
+<span class="sd">        The callback that records the evaluation history into the passed dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">eval_result</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;eval_result should be a dictionary&#39;</span><span class="p">)</span>
+    <span class="n">eval_result</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">CallbackEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">data_name</span><span class="p">,</span> <span class="n">eval_name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">:</span>
+            <span class="n">eval_result</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">data_name</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">())</span>
+            <span class="n">eval_result</span><span class="p">[</span><span class="n">data_name</span><span class="p">]</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">eval_name</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="k">def</span> <span class="nf">_callback</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">CallbackEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">eval_result</span><span class="p">:</span>
+            <span class="n">_init</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">data_name</span><span class="p">,</span> <span class="n">eval_name</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">:</span>
+            <span class="n">eval_result</span><span class="p">[</span><span class="n">data_name</span><span class="p">][</span><span class="n">eval_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">_callback</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># type: ignore</span>
+    <span class="k">return</span> <span class="n">_callback</span></div>
+
+
+<div class="viewcode-block" id="reset_parameter"><a class="viewcode-back" href="../../pythonapi/lightgbm.reset_parameter.html#lightgbm.reset_parameter">[docs]</a><span class="k">def</span> <span class="nf">reset_parameter</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">Callable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create a callback that resets the parameter after the first iteration.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The initial parameter will still take in-effect on first iteration.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    **kwargs : value should be list or callable</span>
+<span class="sd">        List of parameters for each boosting round</span>
+<span class="sd">        or a callable that calculates the parameter in terms of</span>
+<span class="sd">        current number of round (e.g. yields learning rate decay).</span>
+<span class="sd">        If list lst, parameter = lst[current_round].</span>
+<span class="sd">        If callable func, parameter = func(current_round).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    callback : callable</span>
+<span class="sd">        The callback that resets the parameter after the first iteration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_callback</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">CallbackEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">new_parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="n">env</span><span class="o">.</span><span class="n">end_iteration</span> <span class="o">-</span> <span class="n">env</span><span class="o">.</span><span class="n">begin_iteration</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Length of list </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2"> has to equal to &#39;num_boost_round&#39;.&quot;</span><span class="p">)</span>
+                <span class="n">new_param</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">iteration</span> <span class="o">-</span> <span class="n">env</span><span class="o">.</span><span class="n">begin_iteration</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_param</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">iteration</span> <span class="o">-</span> <span class="n">env</span><span class="o">.</span><span class="n">begin_iteration</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">new_param</span> <span class="o">!=</span> <span class="n">env</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">new_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_param</span>
+        <span class="k">if</span> <span class="n">new_parameters</span><span class="p">:</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">reset_parameter</span><span class="p">(</span><span class="n">new_parameters</span><span class="p">)</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_parameters</span><span class="p">)</span>
+    <span class="n">_callback</span><span class="o">.</span><span class="n">before_iteration</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># type: ignore</span>
+    <span class="n">_callback</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># type: ignore</span>
+    <span class="k">return</span> <span class="n">_callback</span></div>
+
+
+<div class="viewcode-block" id="early_stopping"><a class="viewcode-back" href="../../pythonapi/lightgbm.early_stopping.html#lightgbm.early_stopping">[docs]</a><span class="k">def</span> <span class="nf">early_stopping</span><span class="p">(</span><span class="n">stopping_rounds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">first_metric_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create a callback that activates early stopping.</span>
+
+<span class="sd">    Activates early stopping.</span>
+<span class="sd">    The model will train until the validation score stops improving.</span>
+<span class="sd">    Validation score needs to improve at least every ``stopping_rounds`` round(s)</span>
+<span class="sd">    to continue training.</span>
+<span class="sd">    Requires at least one validation data and one metric.</span>
+<span class="sd">    If there&#39;s more than one, will check all of them. But the training data is ignored anyway.</span>
+<span class="sd">    To check only the first metric set ``first_metric_only`` to True.</span>
+<span class="sd">    The index of iteration that has the best performance will be saved in the ``best_iteration`` attribute of a model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stopping_rounds : int</span>
+<span class="sd">        The possible number of rounds without the trend occurrence.</span>
+<span class="sd">    first_metric_only : bool, optional (default=False)</span>
+<span class="sd">        Whether to use only the first metric for early stopping.</span>
+<span class="sd">    verbose : bool, optional (default=True)</span>
+<span class="sd">        Whether to log message with early stopping information.</span>
+<span class="sd">        By default, standard output resource is used.</span>
+<span class="sd">        Use ``register_logger()`` function to register a custom logger.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    callback : callable</span>
+<span class="sd">        The callback that activates early stopping.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">best_score</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">best_iter</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">best_score_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cmp_op</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">enabled</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span>
+    <span class="n">first_metric</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_init</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">CallbackEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">enabled</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">boost_alias</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;dart&#39;</span> <span class="k">for</span> <span class="n">boost_alias</span>
+                             <span class="ow">in</span> <span class="n">_ConfigAliases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;boosting&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">enabled</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">_log_warning</span><span class="p">(</span><span class="s1">&#39;Early stopping is not available in dart mode&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;For early stopping, &#39;</span>
+                             <span class="s1">&#39;at least one dataset and eval metric is required for evaluation&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">_log_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training until validation scores don&#39;t improve for </span><span class="si">{</span><span class="n">stopping_rounds</span><span class="si">}</span><span class="s2"> rounds&quot;</span><span class="p">)</span>
+
+        <span class="c1"># split is needed for &quot;&lt;dataset type&gt; &lt;metric&gt;&quot; case (e.g. &quot;train l1&quot;)</span>
+        <span class="n">first_metric</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">eval_ret</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">:</span>
+            <span class="n">best_iter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">best_score_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">eval_ret</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>
+                <span class="n">best_score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">))</span>
+                <span class="n">cmp_op</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">best_score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>
+                <span class="n">cmp_op</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_final_iteration_check</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">CallbackEnv</span><span class="p">,</span> <span class="n">eval_name_splitted</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">iteration</span> <span class="o">==</span> <span class="n">env</span><span class="o">.</span><span class="n">end_iteration</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">best_score_str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_format_eval_result</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">best_score_list</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+                <span class="n">_log_info</span><span class="p">(</span><span class="s1">&#39;Did not meet early stopping. &#39;</span>
+                          <span class="sa">f</span><span class="s1">&#39;Best iteration is:</span><span class="se">\n</span><span class="s1">[</span><span class="si">{</span><span class="n">best_iter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">]</span><span class="se">\t</span><span class="si">{</span><span class="n">best_score_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">first_metric_only</span><span class="p">:</span>
+                    <span class="n">_log_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Evaluated only: </span><span class="si">{</span><span class="n">eval_name_splitted</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">EarlyStopException</span><span class="p">(</span><span class="n">best_iter</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">best_score_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_callback</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">CallbackEnv</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmp_op</span><span class="p">:</span>
+            <span class="n">_init</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">enabled</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">)):</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">best_score_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">cmp_op</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">score</span><span class="p">,</span> <span class="n">best_score</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                <span class="n">best_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">score</span>
+                <span class="n">best_iter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">iteration</span>
+                <span class="n">best_score_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span>
+            <span class="c1"># split is needed for &quot;&lt;dataset type&gt; &lt;metric&gt;&quot; case (e.g. &quot;train l1&quot;)</span>
+            <span class="n">eval_name_splitted</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">first_metric_only</span> <span class="ow">and</span> <span class="n">first_metric</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">eval_name_splitted</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">continue</span>  <span class="c1"># use only the first metric for early stopping</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cv_agg&quot;</span> <span class="ow">and</span> <span class="n">eval_name_splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span>
+                 <span class="ow">or</span> <span class="n">env</span><span class="o">.</span><span class="n">evaluation_result_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">env</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_train_data_name</span><span class="p">)):</span>
+                <span class="n">_final_iteration_check</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">eval_name_splitted</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="k">continue</span>  <span class="c1"># train data for lgb.cv or sklearn wrapper (underlying lgb.train)</span>
+            <span class="k">elif</span> <span class="n">env</span><span class="o">.</span><span class="n">iteration</span> <span class="o">-</span> <span class="n">best_iter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">stopping_rounds</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="n">eval_result_str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_format_eval_result</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">best_score_list</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+                    <span class="n">_log_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Early stopping, best iteration is:</span><span class="se">\n</span><span class="s2">[</span><span class="si">{</span><span class="n">best_iter</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">]</span><span class="se">\t</span><span class="si">{</span><span class="n">eval_result_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">first_metric_only</span><span class="p">:</span>
+                        <span class="n">_log_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Evaluated only: </span><span class="si">{</span><span class="n">eval_name_splitted</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">EarlyStopException</span><span class="p">(</span><span class="n">best_iter</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">best_score_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">_final_iteration_check</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">eval_name_splitted</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">_callback</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># type: ignore</span>
+    <span class="k">return</span> <span class="n">_callback</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Microsoft Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
