@@ -1,2 +1,25 @@
-# lightgbm-docs
-LightGBM 문서 번역 저장소
+# LightGBM 문서 번역
+
+[LightGBM](https://github.com/microsoft/LightGBM)의 온라인 문서 저장소로 가짜연구소 6기 프로젝트입니다. 자세한 내용은 [LightGBM 온라인 문서 번역](https://chanrankim.notion.site/LightGBM-e981a2c31eaa460ab0b642aa840778a3) 팀 페이지를 참고하세요.
+
+## 번역 저장소 운영 방법
+
+1. lightgbm-docs 저장소를 클론합니다. 작업할 LightGBM 버전에 해당하는 폴더를 rst 폴더 아래 생성합니다.
+```sh
+mkdir rst/v3.3.5
+```
+2. LightGBM 저장소를 클론 후 작업할 버전의 태그로 체크아웃합니다.
+```sh
+git checkout v3.3.5
+```
+3. `LightGBM/docs` 디렉토리를 `lightgbm-docs/rst/v3.3.5`로 복사합니다.
+4. 작업자는 lightgbm-docs 저장소를 포크하여 `lightgbm-docs/rst/v3.3.5` 안의 파일을 번역하고 PR을 보냅니다.
+5. `lightgbm-docs/rst/v3.3.5` 폴더에 있는 모든 문서의 번역이 완료되면 `lightgbm-docs/rst/v3.3.5` 안의 파일을 `LightGBM/docs`로 복사합니다. 그다음 `LightGBM/docs` 디렉토리에서 다음 명령으로 html 문서를 빌드합니다.
+```sh
+pip install sphinx 'sphinx_rtd_theme>=0.5'
+export C_API=NO || set C_API=NO
+make html
+```
+6. 빌드가 끝나면 `LightGBM/docs/_build/html` 폴더 안의 모든 파일과 폴더를 `lightgbm-docs/docs/v3.3.1`로 복사합니다.
+7. `lightgbm-docs/docs/v3.3.1` 폴더를 깃허브에 푸시합니다.
+8. `lightgbm-docs/docs/index.html` 페이지의 리다이렉션을 `lightgbm-docs/docs/v3.3.1` 폴더로 바꿉니다.
