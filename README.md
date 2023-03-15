@@ -20,6 +20,6 @@ pip install sphinx 'sphinx_rtd_theme>=0.5'
 export C_API=NO || set C_API=NO
 make html
 ```
-6. 빌드가 끝나면 `LightGBM/docs/_build/html` 폴더 안의 모든 파일과 폴더를 `lightgbm-docs/docs/v3.3.1`로 복사합니다.
-7. `lightgbm-docs/docs/v3.3.1` 폴더를 깃허브에 푸시합니다.
-8. `lightgbm-docs/docs/index.html` 페이지의 리다이렉션을 `lightgbm-docs/docs/v3.3.1` 폴더로 바꿉니다.
+6. 빌드가 끝나면 `LightGBM/docs/_build/html` 폴더 안의 모든 파일과 폴더를 `lightgbm-docs/docs/v3.3.5`로 복사합니다.
+7. `lightgbm-docs/docs/v3.3.5` 폴더를 깃허브에 푸시합니다.
+8. `lightgbm-docs/docs/index.html` 페이지의 리다이렉션을 `lightgbm-docs/docs/v3.3.5` 폴더로 바꿉니다.
