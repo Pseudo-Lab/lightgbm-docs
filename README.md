@@ -23,3 +23,4 @@ make html
 6. 빌드가 끝나면 `LightGBM/docs/_build/html` 폴더 안의 모든 파일과 폴더를 `lightgbm-docs/docs/v3.3.5`로 복사합니다.
 7. `lightgbm-docs/docs/v3.3.5` 폴더를 깃허브에 푸시합니다.
 8. `lightgbm-docs/docs/index.html` 페이지의 리다이렉션을 `lightgbm-docs/docs/v3.3.5` 폴더로 바꿉니다.
+9. 새 버전(예를 들어 v3.3.6)이 나오면 `LightGBM/docs` 디렉토리의 버전간 diff를 `lightgbm-docs/rst/v3.3.5` 폴더에 반영하여 `lightgbm-docs/rst/v3.3.6` 폴더를 만듭니다. 그다음은 5번부터 반복합니다.
