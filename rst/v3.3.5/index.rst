@@ -10,18 +10,18 @@
 
 |
 
-Welcome to LightGBM's documentation!
-====================================
+LightGBM 문서에 오신 것을 환영합니다!
+======================================
 
-**LightGBM** is a gradient boosting framework that uses tree based learning algorithms. It is designed to be distributed and efficient with the following advantages:
+**LightGBM** 은 트리 기반 학습 알고리즘을 사용하는 그레이디언트 부스팅 프레임워크입니다. 분산과 효율성을 고려하여 설계되었으며 다음과 같은 장점을 가지고 있습니다:
 
-- Faster training speed and higher efficiency.
-- Lower memory usage.
-- Better accuracy.
-- Support of parallel, distributed, and GPU learning.
-- Capable of handling large-scale data.
+- 빠른 훈련 속도와 높은 효율성
+- 적은 메모리 사용량
+- 높은 정확도
+- 병렬, 분산 및 GPU 학습 지원
+- 대규모 데이터 처리 가능
 
-For more details, please refer to `Features <./Features.rst>`__.
+더 자세한 내용은 `Features <./Features.rst>`__ 을 참고하세요.
 
 .. toctree::
    :maxdepth: 1
@@ -52,7 +52,7 @@ For more details, please refer to `Features <./Features.rst>`__.
    gcc-Tips
    README
 
-Indices and Tables
+인덱스와 테이블
 ==================
 
 * :ref:`genindex`
