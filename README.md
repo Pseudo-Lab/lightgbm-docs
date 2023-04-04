@@ -2,6 +2,16 @@
 
 [LightGBM](https://github.com/microsoft/LightGBM)의 온라인 문서 저장소로 가짜연구소 6기 프로젝트입니다. 자세한 내용은 [LightGBM 온라인 문서 번역](https://chanrankim.notion.site/LightGBM-e981a2c31eaa460ab0b642aa840778a3) 팀 페이지를 참고하세요.
 
+## 용어 번역 관리 시트
+
+용어집은 편리성 때문에 구글 시트로 관리합니다. 자유롭게 추가하고 의견 주세요.
+
+https://docs.google.com/spreadsheets/d/1Fz3Z_T4rTqxtZCRhh2ykgg2D4POpATXSnG22sZWzP0U/edit?usp=sharing
+
+## 번역시 유의 사항
+
+토론 https://github.com/Pseudo-Lab/lightgbm-docs/discussions/20 참조
+
 ## 번역 저장소 운영 방법
 
 1. lightgbm-docs 저장소를 클론합니다. 작업할 LightGBM 버전에 해당하는 폴더를 rst 폴더 아래 생성합니다.
