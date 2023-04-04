@@ -163,7 +163,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  수축률(Shrinkage Rate)
 
-   -  ``dart`` 옵션에서  ``learning_rate`` 는 제거된 트리(dropped trees)의 정규화 가중치(normalization weights)에도 영향을 미칩니다.
+   -  ``dart`` 옵션을 설정할 경우,  ``learning_rate`` 는 제거된 트리(dropped trees)의 정규화 가중치(normalization weights)에도 영향을 미칩니다.
 
 -  ``num_leaves`` :raw-html:`<a id="num_leaves" title="Permalink to this parameter" href="#num_leaves">&#x1F517;&#xFE0E;</a>`, 기본값 = ``31``, 타입 = 정수형, 별칭: ``num_leaf``, ``max_leaves``, ``max_leaf``, ``max_leaf_nodes``, constraints: ``1 < num_leaves <= 131072``
 
