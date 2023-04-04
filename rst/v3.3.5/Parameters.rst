@@ -61,15 +61,15 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``task`` :raw-html:`<a id="task" title="Permalink to this parameter" href="#task">&#x1F517;&#xFE0E;</a>`, 기본값 = ``train``, 타입 = 열거형, 옵션: ``train``, ``predict``, ``convert_model``, ``refit``, 별칭: ``task_type``
 
-   -  ``train``은 학습에 사용됩니다. 별칭: ``training``.
+   -  ``train`` 은 학습에 사용됩니다. 별칭: ``training``.
 
-   -  ``predict``은 예측에 사용됩니다. 별칭: ``prediction``, ``test``.
+   -  ``predict`` 은 예측에 사용됩니다. 별칭: ``prediction``, ``test``.
 
-   -  ``convert_model``은 모델을 if-else 형태로 변환합니다. 자세한 정보는 `변환 파라미터 <#convert-parameters>`__에서 확인하세요.
+   -  ``convert_model`` 은 모델을 if-else 형태로 변환합니다. 자세한 정보는 `변환 파라미터 <#convert-parameters>`__ 에서 확인하세요.
 
-   -  ``refit``은 기존의 모델을 새로운 데이터에 재학습할 때 사용합니다. 별칭: ``refit_tree``.
+   -  ``refit`` 은 기존의 모델을 새로운 데이터에 재학습할 때 사용합니다. 별칭: ``refit_tree``.
 
-   -  ``save_binary``은 학습 (및 검증) 데이터를 불러와 binary 형태로 저장합니다. 일반적인 사용법: ``save_binary``를 먼저 사용한 후, 저장된 binary 파일을 활용해 여러 개의 ``train`` 작업을 병렬로 실행합니다.
+   -  ``save_binary`` 은 학습 (및 검증) 데이터를 불러와 binary 형태로 저장합니다. 일반적인 사용법: ``save_binary`` 를 먼저 사용한 후, 저장된 binary 파일을 활용해 여러 개의 ``train`` 작업을 병렬로 실행합니다.
 
    -  **참고**: CLI 버전에서만 사용가능합니다. 각 언어별 패키지가 제공하는 동일한 함수를 사용할 수도 있습니다.
 
@@ -91,9 +91,9 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  ``mape``, `평균 절대 비율 오차 손실(MAPE loss) <https://en.wikipedia.org/wiki/Mean_absolute_percentage_error>`__, 별칭: ``mean_absolute_percentage_error``
 
-      -  ``gamma``는 로그 링크(Log-link)를 활용한 감마 회귀(Gamma Regression)에 사용됩니다. 보험 청구의 심도(Severity) 혹은 `감마 분포 <https://en.wikipedia.org/wiki/Gamma_distribution#Occurrence_and_applications>`__를 따르는 대상을 모델링할 때 유용합니다.
+      -  ``gamma`` 는 로그 링크(Log-link)를 활용한 감마 회귀(Gamma Regression)에 사용됩니다. 보험 청구의 심도(Severity) 혹은 `감마 분포 <https://en.wikipedia.org/wiki/Gamma_distribution#Occurrence_and_applications>`__ 를 따르는 대상을 모델링할 때 유용합니다.
 
-      -  ``tweedie``는 로그 링크(Log-link)를 활용한 트위디 회귀(Tweedie Regression)에 사용됩니다. 보험에서의 전손(Total Loss) 혹은 `트위디 분포 <https://en.wikipedia.org/wiki/Tweedie_distribution#Occurrence_and_applications>`__를 따르는 대상을 모델링할 때 유용합니다.
+      -  ``tweedie``는 로그 링크(Log-link)를 활용한 트위디 회귀(Tweedie Regression)에 사용됩니다. 보험에서의 전손(Total Loss) 혹은 `트위디 분포 <https://en.wikipedia.org/wiki/Tweedie_distribution#Occurrence_and_applications>`__ 를 따르는 대상을 모델링할 때 유용합니다.
 
    -  이진 분류에서의 응용
 
