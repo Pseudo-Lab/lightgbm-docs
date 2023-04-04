@@ -93,11 +93,11 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  ``gamma`` 는 로그 링크(Log-link)를 활용한 감마 회귀(Gamma Regression)에 사용됩니다. 보험 청구의 심도(Severity) 혹은 `감마 분포 <https://en.wikipedia.org/wiki/Gamma_distribution#Occurrence_and_applications>`__ 를 따르는 대상을 모델링할 때 유용합니다.
 
-      -  ``tweedie``는 로그 링크(Log-link)를 활용한 트위디 회귀(Tweedie Regression)에 사용됩니다. 보험에서의 전손(Total Loss) 혹은 `트위디 분포 <https://en.wikipedia.org/wiki/Tweedie_distribution#Occurrence_and_applications>`__ 를 따르는 대상을 모델링할 때 유용합니다.
+      -  ``tweedie`` 는 로그 링크(Log-link)를 활용한 트위디 회귀(Tweedie Regression)에 사용됩니다. 보험에서의 전손(Total Loss) 혹은 `트위디 분포 <https://en.wikipedia.org/wiki/Tweedie_distribution#Occurrence_and_applications>`__ 를 따르는 대상을 모델링할 때 유용합니다.
 
    -  이진 분류에서의 응용
 
-      -  ``binary``는 이진 `로그 손실(Log Loss) <https://en.wikipedia.org/wiki/Cross_entropy>`__ 분류 (또는 로지스틱 회귀(Logistic Regression))에 사용됩니다.
+      -  ``binary`` 는 이진 `로그 손실(Log Loss) <https://en.wikipedia.org/wiki/Cross_entropy>`__ 분류 (또는 로지스틱 회귀(Logistic Regression))에 사용됩니다.
 
       -  requires labels in {0, 1}; see ``cross-entropy`` application for general probability labels in [0, 1]
 
