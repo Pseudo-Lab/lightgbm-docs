@@ -21,7 +21,7 @@
 파라미터 형식
 -----------------
 
-파라미터 형식은 ``key1=value1 key2=value2 ...``와 같습니다.
+파라미터를 지정하기 위해 ``key1=value1 key2=value2 ...`` 형식을 사용합니다.
 설정 파일 또는 커맨드 라인으로 파라미터를 설정할 수 있습니다.
 커맨드 라인을 사용하는 경우, ``=``의 앞뒤로 공백을 허용하지 않습니다.
 설정 파일을 사용하는 경우, 하나의 라인에 하나의 파라미터만 허용합니다. ``#``을 활용해 주석을 달 수 있습니다.
@@ -57,7 +57,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  설정 파일의 경로
 
-   -  **참고**: CLI 버전에서만 사용가능합니다
+   -  **참고**: CLI 버전에서만 사용가능합니다.
 
 -  ``task`` :raw-html:`<a id="task" title="Permalink to this parameter" href="#task">&#x1F517;&#xFE0E;</a>`, 기본값 = ``train``, 타입 = 열거형, 옵션: ``train``, ``predict``, ``convert_model``, ``refit``, 별칭: ``task_type``
 
@@ -81,7 +81,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  ``regression_l1``, L1 loss, 별칭: ``l1``, ``mean_absolute_error``, ``mae``
 
-      -  ``huber``, `후버 손실(Huber loss) <https://en.wikipedia.org/wiki/Huber_loss>`__
+      -  ``huber``, `후버 손실(Huber Loss) <https://en.wikipedia.org/wiki/Huber_loss>`__
 
       -  ``fair``, `공정 손실(Fair Loss) <https://www.kaggle.com/c/allstate-claims-severity/discussion/24520>`__
 
@@ -97,7 +97,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  이진 분류에서의 응용
 
-      -  ``binary``는 이진 `로그 손실(log loss) <https://en.wikipedia.org/wiki/Cross_entropy>`__ 분류 (또는 로지스틱 회귀(Logistic Regression))에 사용됩니다.
+      -  ``binary``는 이진 `로그 손실(Log Loss) <https://en.wikipedia.org/wiki/Cross_entropy>`__ 분류 (또는 로지스틱 회귀(Logistic Regression))에 사용됩니다.
 
       -  requires labels in {0, 1}; see ``cross-entropy`` application for general probability labels in [0, 1]
 
