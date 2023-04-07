@@ -398,105 +398,105 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  트리의 리프(leaf)의 최대 결과값을 제한하기 위해 사용됩니다.
 
-   -  ``<= 0`` means no constraint
+   -  ``<= 0`` 는 제약이 없음을 의미합니다.
 
-   -  the final max output of leaves is ``learning_rate * max_delta_step``
+   -  리프의 가장 마지막 최댓값은 ``learning_rate * max_delta_step`` 입니다.
 
 -  ``lambda_l1`` :raw-html:`<a id="lambda_l1" title="Permalink to this parameter" href="#lambda_l1">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 별칭: ``reg_alpha``, ``l1_regularization``, 제약 조건: ``lambda_l1 >= 0.0``
 
-   -  L1 regularization
+   -  L1 정규화(regularization)
 
 -  ``lambda_l2`` :raw-html:`<a id="lambda_l2" title="Permalink to this parameter" href="#lambda_l2">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 별칭: ``reg_lambda``, ``lambda``, ``l2_regularization``, 제약 조건: ``lambda_l2 >= 0.0``
 
-   -  L2 regularization
+   -  L2 정규화(regularization)
 
 -  ``linear_lambda`` :raw-html:`<a id="linear_lambda" title="Permalink to this parameter" href="#linear_lambda">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 제약 조건: ``linear_lambda >= 0.0``
 
-   -  linear tree regularization, corresponds to the parameter ``lambda`` in Eq. 3 of `Gradient Boosting with Piece-Wise Linear Regression Trees <https://arxiv.org/pdf/1802.05640.pdf>`__
+   -  선형 트리 정규화(linear tree regularization)는 `Gradient Boosting with Piece-Wise Linear Regression Trees <https://arxiv.org/pdf/1802.05640.pdf>`__ 의 3번 수식의 ``lambda`` 파라미터에 해당합니다.
 
 -  ``min_gain_to_split`` :raw-html:`<a id="min_gain_to_split" title="Permalink to this parameter" href="#min_gain_to_split">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 별칭: ``min_split_gain``, 제약 조건: ``min_gain_to_split >= 0.0``
 
-   -  the minimal gain to perform split
+   -  분할을 수행하기 위한 최소 이득(gain)
 
    -  학습 속도를 높이기 위해 사용됩니다.
 
 -  ``drop_rate`` :raw-html:`<a id="drop_rate" title="Permalink to this parameter" href="#drop_rate">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.1``, 타입 = 부동 소숫점(double), 별칭: ``rate_drop``, 제약 조건: ``0.0 <= drop_rate <= 1.0``
 
-   -  used only in ``dart``
+   -  ``dart`` 옵션에서만 사용됩니다.
 
-   -  dropout rate: a fraction of previous trees to drop during the dropout
+   -  드롭아웃(dropout) 비율: 드롭아웃 시 탈락되는 기존 트리 비율
 
 -  ``max_drop`` :raw-html:`<a id="max_drop" title="Permalink to this parameter" href="#max_drop">&#x1F517;&#xFE0E;</a>`, 기본값 = ``50``, 타입 = 정수형
 
-   -  used only in ``dart``
+   -  ``dart`` 옵션에서만 사용됩니다.
 
-   -  max number of dropped trees during one boosting iteration
+   -  한 번의 부스팅 반복 동안 탈락되는 나무의 최대 개수
 
-   -  ``<=0`` means no limit
+   -  ``<=0`` 은 제한이 없음을 의미합니다.
 
 -  ``skip_drop`` :raw-html:`<a id="skip_drop" title="Permalink to this parameter" href="#skip_drop">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.5``, 타입 = 부동 소숫점(double), 제약 조건: ``0.0 <= skip_drop <= 1.0``
 
-   -  used only in ``dart``
+   -  ``dart`` 옵션에서만 사용됩니다.
 
-   -  probability of skipping the dropout procedure during a boosting iteration
+   -  부스팅 반복 중 드롭아웃 절차를 건너뛸 확률
 
 -  ``xgboost_dart_mode`` :raw-html:`<a id="xgboost_dart_mode" title="Permalink to this parameter" href="#xgboost_dart_mode">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  used only in ``dart``
+   -  ``dart`` 옵션에서만 사용됩니다.
 
-   -  set this to ``true``, if you want to use xgboost dart mode
+   -  XGBoost의 dart 모드를 사용하려면 이 값을 ``true``로 설정하세요.
 
 -  ``uniform_drop`` :raw-html:`<a id="uniform_drop" title="Permalink to this parameter" href="#uniform_drop">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  used only in ``dart``
+   -  ``dart`` 옵션에서만 사용됩니다.
 
-   -  set this to ``true``, if you want to use uniform drop
+   -  균등 드롭(uniform drop)을 사용하려면 이 값을 ``true``로 설정하세요.
 
 -  ``drop_seed`` :raw-html:`<a id="drop_seed" title="Permalink to this parameter" href="#drop_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``4``, 타입 = 정수형
 
-   -  used only in ``dart``
+   -  ``dart`` 옵션에서만 사용됩니다.
 
-   -  random seed to choose dropping models
+   -  무작위 시드(seed)로 드롭(dropping) 모델을 선택합니다.
 
 -  ``top_rate`` :raw-html:`<a id="top_rate" title="Permalink to this parameter" href="#top_rate">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.2``, 타입 = 부동 소숫점(double), 제약 조건: ``0.0 <= top_rate <= 1.0``
 
-   -  used only in ``goss``
+   -  ``goss`` 옵션에서만 사용됩니다.
 
-   -  the retain ratio of large gradient data
+   -  큰 경사를 갖는 데이터(large gradient data)의 보존 비율
 
 -  ``other_rate`` :raw-html:`<a id="other_rate" title="Permalink to this parameter" href="#other_rate">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.1``, 타입 = 부동 소숫점(double), 제약 조건: ``0.0 <= other_rate <= 1.0``
 
-   -  used only in ``goss``
+   -  ``goss`` 옵션에서만 사용됩니다.
 
-   -  the retain ratio of small gradient data
+   -  작은 경사를 갖는 데이터(small gradient data)의 보존 비율
 
 -  ``min_data_per_group`` :raw-html:`<a id="min_data_per_group" title="Permalink to this parameter" href="#min_data_per_group">&#x1F517;&#xFE0E;</a>`, 기본값 = ``100``, 타입 = 정수형, 제약 조건: ``min_data_per_group > 0``
 
-   -  minimal number of data per categorical group
+   -  범주별 그룹(categorical group)당 최소 데이터 수
 
 -  ``max_cat_threshold`` :raw-html:`<a id="max_cat_threshold" title="Permalink to this parameter" href="#max_cat_threshold">&#x1F517;&#xFE0E;</a>`, 기본값 = ``32``, 타입 = 정수형, 제약 조건: ``max_cat_threshold > 0``
 
-   -  used for the categorical features
+   -  범주형 변수에 사용됩니다.
 
-   -  limit number of split points considered for categorical features. See `the documentation on how LightGBM finds optimal splits for categorical features <./Features.rst#optimal-split-for-categorical-features>`_ for more details
+   -  범주형 변수에 대한 분할 지점 수를 제한합니다. limit number of split points considered for categorical features. 자세한 내용은 `LightGBM이 범주형 변수에 대한 최적의 분할을 찾는 방법에 대한 문서 <./Features.rst#optimal-split-for-categorical-features>`_ 를 참조하세요.
 
    -  학습 속도를 높이기 위해 사용됩니다.
 
 -  ``cat_l2`` :raw-html:`<a id="cat_l2" title="Permalink to this parameter" href="#cat_l2">&#x1F517;&#xFE0E;</a>`, 기본값 = ``10.0``, 타입 = 부동 소숫점(double), 제약 조건: ``cat_l2 >= 0.0``
 
-   -  used for the categorical features
+   -  범주형 변수에 사용됩니다.
 
-   -  L2 regularization in categorical split
+   -  범주형 데이터의 분할에 대한 L2 정규화(regularization)
 
 -  ``cat_smooth`` :raw-html:`<a id="cat_smooth" title="Permalink to this parameter" href="#cat_smooth">&#x1F517;&#xFE0E;</a>`, 기본값 = ``10.0``, 타입 = 부동 소숫점(double), 제약 조건: ``cat_smooth >= 0.0``
 
-   -  used for the categorical features
+   -  범주형 변수에 사용됩니다.
 
-   -  this can reduce the effect of noises in categorical features, especially for categories with few data
+   -  이를 사용하여 특히 데이터가 적은 카테고리의 경우, 범주형 변수의 노이즈 영향을 줄일 수 있습니다.
 
 -  ``max_cat_to_onehot`` :raw-html:`<a id="max_cat_to_onehot" title="Permalink to this parameter" href="#max_cat_to_onehot">&#x1F517;&#xFE0E;</a>`, 기본값 = ``4``, 타입 = 정수형, 제약 조건: ``max_cat_to_onehot > 0``
 
-   -  when number of categories of one feature smaller than or equal to ``max_cat_to_onehot``, one-vs-other split algorithm will be used
+   -  한 변수의 카테고리 개수가 ``max_cat_to_onehot`` 보다 작거나 같을 경우, ``max_cat_to_onehot`` 대신 1-대-다 분할 알고리즘이 사용됩니다.
 
 -  ``top_k`` :raw-html:`<a id="top_k" title="Permalink to this parameter" href="#top_k">&#x1F517;&#xFE0E;</a>`, 기본값 = ``20``, 타입 = 정수형, 별칭: ``topk``, 제약 조건: ``top_k > 0``
 
