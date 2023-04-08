@@ -28,7 +28,7 @@
 
 만약 특정 파라미터가 커맨드 라인과 설정 파일에 모두 등장할 경우, LightGBM은 커맨드 라인의 파라미터를 우선합니다.
 
-Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 ``multi-int`` 또는 ``multi-double`` 와 같은 ``multi-xxx`` 형태)을 파라미터로 받습니다.
+Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 ``다중 정수형(multi-int)`` 또는 ``multi-double`` 와 같은 ``multi-xxx`` 형태)을 파라미터로 받습니다.
 예를 들어, ``monotone_constraints`` 파라미터를 다음과 같이 설정할 수 있습니다.
 
 **Python**
@@ -500,109 +500,109 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``top_k`` :raw-html:`<a id="top_k" title="Permalink to this parameter" href="#top_k">&#x1F517;&#xFE0E;</a>`, 기본값 = ``20``, 타입 = 정수형, 별칭: ``topk``, 제약 조건: ``top_k > 0``
 
-   -  used only in ``voting`` tree learner, refer to `Voting parallel <./Parallel-Learning-Guide.rst#choose-appropriate-parallel-algorithm>`__
+   -  ``voting`` 학습기 에서만 사용됩니다. `Voting parallel <./Parallel-Learning-Guide.rst#choose-appropriate-parallel-algorithm>`__ 을 참조하세요.
 
-   -  set this to larger value for more accurate result, but it will slow down the training speed
+   -  이 값을 크게 설정하여 더 정확한 결과를 얻을 수 있으나, 학습 속도가 느려질 것입니다.
 
--  ``monotone_constraints`` :raw-html:`<a id="monotone_constraints" title="Permalink to this parameter" href="#monotone_constraints">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = multi-int, 별칭: ``mc``, ``monotone_constraint``, ``monotonic_cst``
+-  ``monotone_constraints`` :raw-html:`<a id="monotone_constraints" title="Permalink to this parameter" href="#monotone_constraints">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = 다중 정수형(multi-int), 별칭: ``mc``, ``monotone_constraint``, ``monotonic_cst``
 
-   -  used for constraints of monotonic features
+   -  변수에 단조성(monotonic)을 부여하기 위해 사용됩니다.
 
-   -  ``1`` means increasing, ``-1`` means decreasing, ``0`` means non-constraint
+   -  ``1`` 은 증가, ``-1`` 은 감소, ``0`` 은 제약이 없음을 의미합니다.
 
-   -  you need to specify all features in order. For example, ``mc=-1,0,1`` means decreasing for 1st feature, non-constraint for 2nd feature and increasing for the 3rd feature
+   -  이 값을 사용하기 위해 모든 변수를 순서대로 지정해야합니다. 예를 들어, ``mc=-1,0,1`` 은 1번째 변수: 감소, 2번째 변수: 제약 없음, 3번째 변수: 증가를 의미합니다.
 
 -  ``monotone_constraints_method`` :raw-html:`<a id="monotone_constraints_method" title="Permalink to this parameter" href="#monotone_constraints_method">&#x1F517;&#xFE0E;</a>`, 기본값 = ``basic``, 타입 = 열거형, 옵션: ``basic``, ``intermediate``, ``advanced``, 별칭: ``monotone_constraining_method``, ``mc_method``
 
-   -  used only if ``monotone_constraints`` is set
+   -  ``monotone_constraints`` 이 설정된 경우에만 사용됩니다.
 
-   -  monotone constraints method
+   -  제약 조건 방식
 
-      -  ``basic``, the most basic monotone constraints method. It does not slow the library at all, but over-constrains the predictions
+      -  ``basic`` 은 가장 기본적인 단조(monotonic) 제약 방법입니다. 이 설정이 라이브러리의 속도를 늦추지는 않으나, 예측을 과도하게 제약합니다.
 
-      -  ``intermediate``, a `more advanced method <https://hal.archives-ouvertes.fr/hal-02862802/document>`__, which may slow the library very slightly. However, this method is much less constraining than the basic method and should significantly improve the results
+      -  ``intermediate``은 `보다 고급 방법 <https://hal.archives-ouvertes.fr/hal-02862802/document>`__ 으로서 속도를 약간 느리게 합니다. 그러나 이 설정은 ``basic`` 방법보다 제약이 훨씬 적고 결과를 크게 개선합니다.
 
-      -  ``advanced``, an `even more advanced method <https://hal.archives-ouvertes.fr/hal-02862802/document>`__, which may slow the library. However, this method is even less constraining than the intermediate method and should again significantly improve the results
+      -  ``advanced``은 `보다 더 고급 방법 <https://hal.archives-ouvertes.fr/hal-02862802/document>`__ 으로서, 라이브러리를 느리게 합니다. 그러나 이 설정은 ``intermediate`` 방법보다 제약이 훨씬 적으면서도 결과를 크게 개선합니다.
 
 -  ``monotone_penalty`` :raw-html:`<a id="monotone_penalty" title="Permalink to this parameter" href="#monotone_penalty">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 별칭: ``monotone_splits_penalty``, ``ms_penalty``, ``mc_penalty``, 제약 조건: ``monotone_penalty >= 0.0``
 
-   -  used only if ``monotone_constraints`` is set
+   -  ``monotone_constraints`` 이 설정된 경우에만 사용됩니다.
 
-   -  `monotone penalty <https://hal.archives-ouvertes.fr/hal-02862802/document>`__: a penalization parameter X forbids any monotone splits on the first X (rounded down) level(s) of the tree. The penalty applied to monotone splits on a given depth is a continuous, increasing function the penalization parameter
+   -  `단조성 패널티(monotone penalty) <https://hal.archives-ouvertes.fr/hal-02862802/document>`__: 패널티 파라미터 X는 첫 X (실수일 때 정수로 반내림) 레벨에서 단조적 분할을 금지합니다. 이 패널티는 주어진 깊이(depth)의 단조 분할에 사용되고, 연속이며 증가하는 함수입니다.
 
-   -  if ``0.0`` (the default), no penalization is applied
+   -  ``0.0``(기본값)인 경우, 어떠한 제약도 적용되지 않습니다. 
 
 -  ``feature_contri`` :raw-html:`<a id="feature_contri" title="Permalink to this parameter" href="#feature_contri">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = multi-double, 별칭: ``feature_contrib``, ``fc``, ``fp``, ``feature_penalty``
 
-   -  used to control feature's split gain, will use ``gain[i] = max(0, feature_contri[i]) * gain[i]`` to replace the split gain of i-th feature
+   -  변수의 분할 이득(gain)을 제어하는데 사용되며, i번째 변수의 분할 이득을 ``gain[i] = max(0, feature_contri[i]) * gain[i]``로 대체합니다.
 
-   -  you need to specify all features in order
+   -  모든 변수를 순서대로 지정해야 합니다.
 
 -  ``forcedsplits_filename`` :raw-html:`<a id="forcedsplits_filename" title="Permalink to this parameter" href="#forcedsplits_filename">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``fs``, ``forced_splits_filename``, ``forced_splits_file``, ``forced_splits``
 
-   -  path to a ``.json`` file that specifies splits to force at the top of every decision tree before best-first learning commences
+   -  최적의 우선(best-first) 학습이 시작되기 전에 모든 의사 결정 트리의 맨 위에 강제로 분할을 지정하는 ``.json`` 파일의 경로
 
-   -  ``.json`` file can be arbitrarily nested, and each split contains ``feature``, ``threshold`` fields, as well as ``left`` and ``right`` fields representing subsplits
+   -  ``.json`` 은 임의로 중첩할 수 있으며, 각 분할에 ``feature``, ``threshold`` 필드와 하위 필드를 표현하는 ``left``, ``right`` 필드가 포함됩니다.
 
-   -  categorical splits are forced in a one-hot fashion, with ``left`` representing the split containing the feature value and ``right`` representing other values
+   -  범주형 분할(categorical splits)은 원핫(one-hot) 방식이 강제 적용되며, ``left`` 는 변수 값이 포함된 분할을 나타내고 ``right`` 는 그 외의 값을 나타냅니다.
 
-   -  **참고**: the forced split logic will be ignored, if the split makes gain worse
+   -  **참고**: 강제 분할 로직은 분할로 인한 이득이 저하될 경우 무시됩니다.
 
-   -  see `this file <https://github.com/microsoft/LightGBM/tree/master/examples/binary_classification/forced_splits.json>`__ as an example
+   - `이 예제 파일 <https://github.com/microsoft/LightGBM/tree/master/examples/binary_classification/forced_splits.json>`__ 을 참조하세요.
 
 -  ``refit_decay_rate`` :raw-html:`<a id="refit_decay_rate" title="Permalink to this parameter" href="#refit_decay_rate">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.9``, 타입 = 부동 소숫점(double), 제약 조건: ``0.0 <= refit_decay_rate <= 1.0``
 
-   -  decay rate of ``refit`` task, will use ``leaf_output = refit_decay_rate * old_leaf_output + (1.0 - refit_decay_rate) * new_leaf_output`` to refit trees
+   -  ``refit`` 작업의 감쇠율(decay rate)은 ``leaf_output = refit_decay_rate * old_leaf_output + (1.0 - refit_decay_rate) * new_leaf_output`` 를 사용하여 트리를 재학습(refit)합니다.
 
-   -  used only in ``refit`` task in CLI version or as argument in ``refit`` function in language-specific package
+   -  CLI 버전의 ``refit``나 각 언어별 패키지가 제공하는 ``refit`` 함수의 인자로 사용됩니다.
 
 -  ``cegb_tradeoff`` :raw-html:`<a id="cegb_tradeoff" title="Permalink to this parameter" href="#cegb_tradeoff">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``cegb_tradeoff >= 0.0``
 
-   -  cost-effective gradient boosting multiplier for all penalties
+   -  모든 패널티에 대한 비용 효율적인 경사 부스팅 승수(gradient boosting multiplier)
 
 -  ``cegb_penalty_split`` :raw-html:`<a id="cegb_penalty_split" title="Permalink to this parameter" href="#cegb_penalty_split">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 제약 조건: ``cegb_penalty_split >= 0.0``
 
-   -  cost-effective gradient-boosting penalty for splitting a node
+   -  노드 분할에 대한 비용 효율적인 경사 부스팅 패널티(gradient boosting penalty)
 
 -  ``cegb_penalty_feature_lazy`` :raw-html:`<a id="cegb_penalty_feature_lazy" title="Permalink to this parameter" href="#cegb_penalty_feature_lazy">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0,0,...,0``, 타입 = multi-double
 
-   -  cost-effective gradient boosting penalty for using a feature
+   -  변수 사용에 대한 비용 효율적인 경사 부스팅 패널티(gradient boosting penalty)
 
-   -  applied per data point
+   -  각 데이터 포인트마다 적용됩니다.
 
--  ``cegb_penalty_feature_coupled`` :raw-html:`<a id="cegb_penalty_feature_coupled" title="Permalink to this parameter" href="#cegb_penalty_feature_coupled">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0,0,...,0``, 타입 = multi-double
+-  ``cegb_penalty_feature_coupled`` :raw-html:`<a id="cegb_penalty_feature_coupled" title="Permalink to this parameter" href="#cegb_penalty_feature_coupled">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0,0,...,0``, 타입 = 다중 부동 소숫점(multi-double)
 
-   -  cost-effective gradient boosting penalty for using a feature
+   -  변수 사용에 대한 비용 효율적인 경사 부스팅 패널티(gradient boosting penalty)
 
-   -  applied once per forest
+   -  포레스트(forest)당 한 번 적용
 
 -  ``path_smooth`` :raw-html:`<a id="path_smooth" title="Permalink to this parameter" href="#path_smooth">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 부동 소숫점(double), 제약 조건: ``path_smooth >=  0.0``
 
-   -  controls smoothing applied to tree nodes
+   -  트리 노드에 적용되는 평활화(smoothing)을 제어합니다.
 
-   -  helps prevent overfitting on leaves with few samples
+   -  샘플이 적은 리프(leaf)의 과적합(over-fitting)을 방지합니다.
 
-   -  if set to zero, no smoothing is applied
+   -  0으로 설정하면 평활화가 적용되지 않습니다.
 
-   -  if ``path_smooth > 0`` then ``min_data_in_leaf`` must be at least ``2``
+   -  ``path_smooth > 0`` 이면 ``min_data_in_leaf`` 는 ``2`` 이상이어야 합니다.
 
-   -  larger values give stronger regularization
+   -  값이 클수록 강한 정규화(regularization)를 제공합니다.
 
-      -  the weight of each node is ``(n / path_smooth) * w + w_p / (n / path_smooth + 1)``, where ``n`` is the number of samples in the node, ``w`` is the optimal node weight to minimise the loss (approximately ``-sum_gradients / sum_hessians``), and ``w_p`` is the weight of the parent node
+      -  각 노드의 가중치(weights)는 ``(n / path_smooth) * w + w_p / (n / path_smooth + 1)`` 이며, 여기서 ``n`` 은 노드의 샘플 수, ``w`` 는 로스(loss)를 최소화하기 위한 최적의 노드 가중치(대략 ``-sum_gradients / sum_hessians``), ``w_p`` 는 부모 노드의 가중치입니다.
 
-      -  note that the parent output ``w_p`` itself has smoothing applied, unless it is the root node, so that the smoothing effect accumulates with the tree depth
+      -  루트 노드가 아닌 경우 부모 노드의 값(output) ``w_p`` 자체에 평활화(smoothing)가 적용되어 트리의 깊이에 따라 평활화 효과가 누적된다는 점에 유의하십시오.
 
 -  ``interaction_constraints`` :raw-html:`<a id="interaction_constraints" title="Permalink to this parameter" href="#interaction_constraints">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열
 
-   -  controls which features can appear in the same branch
+   -  같은 분기(branch)에 표현되는 변수를 제어합니다.
 
-   -  by default interaction constraints are disabled, to enable them you can specify
+   -  기본적으로 상호 작용 제약(interaction constraints)은 비활성화되어 있으며, 이를 활성화하려면 다음의 것들을 지정할 수 있습니다.
 
-      -  for CLI, lists separated by commas, e.g. ``[0,1,2],[2,3]``
+      -  CLI의 경우 쉼표로 구분된 리스트(예: ``[0,1,2],[2,3]``) 
 
-      -  for Python-package, list of lists, e.g. ``[[0, 1, 2], [2, 3]]``
+      -  파이썬 패키지의 경우 리스트의 리스트(예: ``[[0, 1, 2], [2, 3]]``)
 
-      -  for R-package, list of character or numeric vectors, e.g. ``list(c("var1", "var2", "var3"), c("var3", "var4"))`` or ``list(c(1L, 2L, 3L), c(3L, 4L))``. Numeric vectors should use 1-based indexing, where ``1L`` is the first feature, ``2L`` is the second feature, etc
+      -  R 패키지의 경우 문자(character) 또는 숫자(numeric) 벡터의 리스트(예: ``list(c("var1", "var2", "var3"), c("var3", "var4"))``, ``list(c(1L, 2L, 3L), c(3L, 4L))``).  숫자 벡터는 1부터 시작하는 인덱싱을 사용해야하며 여기서 ``1L`` 은 첫번째 변수, ``2L`` 는 두번째 변수를 의미합니다.
 
    -  any two features can only appear in the same branch only if there exists a constraint containing both features
 
@@ -680,7 +680,7 @@ Dataset Parameters
 
    -  LightGBM will auto compress memory according to ``max_bin``. For example, LightGBM will use ``uint8_t`` for feature value if ``max_bin=255``
 
--  ``max_bin_by_feature`` :raw-html:`<a id="max_bin_by_feature" title="Permalink to this parameter" href="#max_bin_by_feature">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = multi-int
+-  ``max_bin_by_feature`` :raw-html:`<a id="max_bin_by_feature" title="Permalink to this parameter" href="#max_bin_by_feature">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = 다중 정수형(multi-int)
 
    -  max number of bins for each feature
 
@@ -792,7 +792,7 @@ Dataset Parameters
 
    -  **참고**: index starts from ``0`` and it doesn't count the label column when passing type is ``int``, e.g. when label is column\_0 and query\_id is column\_1, the correct parameter is ``query=0``
 
--  ``ignore_column`` :raw-html:`<a id="ignore_column" title="Permalink to this parameter" href="#ignore_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = multi-int or string, 별칭: ``ignore_feature``, ``blacklist``
+-  ``ignore_column`` :raw-html:`<a id="ignore_column" title="Permalink to this parameter" href="#ignore_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 정수형(multi-int) or string, 별칭: ``ignore_feature``, ``blacklist``
 
    -  used to specify some ignoring columns in training
 
@@ -806,7 +806,7 @@ Dataset Parameters
 
    -  **참고**: despite the fact that specified columns will be completely ignored during the training, they still should have a valid format allowing LightGBM to load file successfully
 
--  ``categorical_feature`` :raw-html:`<a id="categorical_feature" title="Permalink to this parameter" href="#categorical_feature">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = multi-int or string, 별칭: ``cat_feature``, ``categorical_column``, ``cat_column``, ``categorical_features``
+-  ``categorical_feature`` :raw-html:`<a id="categorical_feature" title="Permalink to this parameter" href="#categorical_feature">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 정수형(multi-int) or string, 별칭: ``cat_feature``, ``categorical_column``, ``cat_column``, ``categorical_features``
 
    -  used to specify categorical features
 
@@ -1134,7 +1134,7 @@ Metric Parameters
 
    -  **참고**: CLI 버전에서만 사용 가능합니다.
 
--  ``eval_at`` :raw-html:`<a id="eval_at" title="Permalink to this parameter" href="#eval_at">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1,2,3,4,5``, 타입 = multi-int, 별칭: ``ndcg_eval_at``, ``ndcg_at``, ``map_eval_at``, ``map_at``
+-  ``eval_at`` :raw-html:`<a id="eval_at" title="Permalink to this parameter" href="#eval_at">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1,2,3,4,5``, 타입 = 다중 정수형(multi-int), 별칭: ``ndcg_eval_at``, ``ndcg_at``, ``map_eval_at``, ``map_at``
 
    -  used only with ``ndcg`` and ``map`` metrics
 
