@@ -171,13 +171,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``tree_learner`` :raw-html:`<a id="tree_learner" title="Permalink to this parameter" href="#tree_learner">&#x1F517;&#xFE0E;</a>`, 기본값 = ``serial``, 타입 = 열거형, 옵션: ``serial``, ``feature``, ``data``, ``voting``, 별칭: ``tree``, ``tree_type``, ``tree_learner_type``
 
-   -  ``serial``, 단일 머신 트리 학습기(Single Machine Tree Learner)
+   -  ``serial``, 단일 머신 트리 학습자(Single Machine Tree Learner)
 
-   -  ``feature``, 변수 기반의 병렬 트리 학습기(Feature Parallel Tree Learner), 별칭: ``feature_parallel``
+   -  ``feature``, 변수 기반의 병렬 트리 학습자(Feature Parallel Tree Learner), 별칭: ``feature_parallel``
 
-   -  ``data``, 데이터 기반의 병렬 트리 학습기(Data Parallel Tree Learner), 별칭: ``data_parallel``
+   -  ``data``, 데이터 기반의 병렬 트리 학습자(Data Parallel Tree Learner), 별칭: ``data_parallel``
 
-   -  ``voting``, 투표 기반의 병렬 트리 학습기(Voting Parallel Tree Learner), 별칭: ``voting_parallel``
+   -  ``voting``, 투표 기반의 병렬 트리 학습자(Voting Parallel Tree Learner), 별칭: ``voting_parallel``
 
    -  자세한 내용은 `Distributed Learning Guide <./Parallel-Learning-Guide.rst>`__ 을 참고하세요.
 
@@ -500,7 +500,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``top_k`` :raw-html:`<a id="top_k" title="Permalink to this parameter" href="#top_k">&#x1F517;&#xFE0E;</a>`, 기본값 = ``20``, 타입 = 정수형, 별칭: ``topk``, 제약 조건: ``top_k > 0``
 
-   -  ``voting`` 학습기 에서만 사용됩니다. `Voting parallel <./Parallel-Learning-Guide.rst#choose-appropriate-parallel-algorithm>`__ 을 참조하세요.
+   -  ``voting`` 학습자에서만 사용됩니다. `Voting parallel <./Parallel-Learning-Guide.rst#choose-appropriate-parallel-algorithm>`__ 을 참조하세요.
 
    -  이 값을 크게 설정하여 더 정확한 결과를 얻을 수 있으나, 학습 속도가 느려질 것입니다.
 
@@ -596,107 +596,107 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  같은 분기(branch)에 표현되는 변수를 제어합니다.
 
-   -  기본적으로 상호 작용 제약(interaction constraints)은 비활성화되어 있으며, 이를 활성화하려면 다음의 것들을 지정할 수 있습니다.
+   -  기본적으로 상호 작용 제약(interaction constraints)은 비활성화되어 있으며, 이를 활성화하려면 다음과 같이 지정하세요.
 
       -  CLI의 경우 쉼표로 구분된 리스트(예: ``[0,1,2],[2,3]``) 
 
       -  파이썬 패키지의 경우 리스트의 리스트(예: ``[[0, 1, 2], [2, 3]]``)
 
-      -  R 패키지의 경우 문자(character) 또는 숫자(numeric) 벡터의 리스트(예: ``list(c("var1", "var2", "var3"), c("var3", "var4"))``, ``list(c(1L, 2L, 3L), c(3L, 4L))``).  숫자 벡터는 1부터 시작하는 인덱싱을 사용해야하며 여기서 ``1L`` 은 첫번째 변수, ``2L`` 는 두번째 변수를 의미합니다.
+      -  R 패키지의 경우 문자(character) 또는 숫자(numeric) 벡터의 리스트(예: ``list(c("var1", "var2", "var3"), c("var3", "var4"))``, ``list(c(1L, 2L, 3L), c(3L, 4L))``). 숫자 벡터는 1부터 시작하는 인덱싱을 사용해야하며 여기서 ``1L`` 은 첫번째 변수, ``2L`` 는 두번째 변수를 의미합니다.
 
-   -  any two features can only appear in the same branch only if there exists a constraint containing both features
+   -  두 변수가 모두 포함된 제약 조건이 있는 경우에만 같은 분기에 나타날 수 있습니다.
 
 -  ``verbosity`` :raw-html:`<a id="verbosity" title="Permalink to this parameter" href="#verbosity">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 별칭: ``verbose``
 
-   -  controls the level of LightGBM's verbosity
+   -  LightGBM의 로그 레벨(verbosity)을 제어합니다.
 
-   -  ``< 0``: Fatal, ``= 0``: Error (Warning), ``= 1``: Info, ``> 1``: Debug
+   -  ``< 0``: 심각한 경우(Fatal), ``= 0``: 문제가 발생하거나 발생할 수 있는 소지가 있을 경우(Error(Warning)), ``= 1``: 정보성 메시지, ``> 1``: 디버깅(Debugging)할 경우
 
 -  ``input_model`` :raw-html:`<a id="input_model" title="Permalink to this parameter" href="#input_model">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``model_input``, ``model_in``
 
-   -  filename of input model
+   -  입력 모델의 파일 이름
 
-   -  for ``prediction`` task, this model will be applied to prediction data
+   -  예측의 경우 이 모델은 예측 데이터에 적용됩니다.
 
-   -  for ``train`` task, training will be continued from this model
+   -  학습의 경우 이 모델로부터 학습이 진행됩니다.
 
    -  **참고**: CLI 버전에서만 사용 가능합니다.
 
 -  ``output_model`` :raw-html:`<a id="output_model" title="Permalink to this parameter" href="#output_model">&#x1F517;&#xFE0E;</a>`, 기본값 = ``LightGBM_model.txt``, 타입 = 문자열, 별칭: ``model_output``, ``model_out``
 
-   -  filename of output model in training
+   -  학습에서 출력 모델의 파일 이름
 
    -  **참고**: CLI 버전에서만 사용 가능합니다.
 
 -  ``saved_feature_importance_type`` :raw-html:`<a id="saved_feature_importance_type" title="Permalink to this parameter" href="#saved_feature_importance_type">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형
 
-   -  the feature importance type in the saved model file
+   -  저장된 모델 파일에서 변수 중요도의 타입
 
-   -  ``0``: count-based feature importance (numbers of splits are counted); ``1``: gain-based feature importance (values of gain are counted)
+   -  ``0``: 횟수 기반 변수 중요도(분할 횟수 계산); ``1``: 이득(gain) 기반 변수 중요도(이득 값 계산)
 
    -  **참고**: CLI 버전에서만 사용 가능합니다.
 
 -  ``snapshot_freq`` :raw-html:`<a id="snapshot_freq" title="Permalink to this parameter" href="#snapshot_freq">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형, 별칭: ``save_period``
 
-   -  frequency of saving model file snapshot
+   -  모델 파일의 스냅샷(Snapshot) 저장 빈도
 
-   -  set this to positive value to enable this function. For example, the model file will be snapshotted at each iteration if ``snapshot_freq=1``
+   -  이 기능을 활성화하려면 이 파라미터를 양수로 설정하십시오. 예를 들어 ``snapshot_freq=1`` 인 경우, 모델 파일은 매 반복마다 스냅샷을 캡처할 것입니다.
 
    -  **참고**: CLI 버전에서만 사용 가능합니다.
 
-IO Parameters
+입출력 파라미터
 -------------
 
-Dataset Parameters
+데이터셋 파라미터
 ~~~~~~~~~~~~~~~~~~
 
 -  ``linear_tree`` :raw-html:`<a id="linear_tree" title="Permalink to this parameter" href="#linear_tree">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``linear_trees``
 
-   -  fit piecewise linear gradient boosting tree
+   -  각 부분별 선형 경사 부스팅 적용(fit piecewise linear gradient boosting tree)
 
-      -  tree splits are chosen in the usual way, but the model at each leaf is linear instead of constant
+      -  트리 분할은 일반적인 방식으로 선택되지만 각 리프에서의 모델은 상수가 아닌 선형입니다.
 
-      -  the linear model at each leaf includes all the numerical features in that leaf's branch
+      -  각 리프의 선형 모델에는 해당 리프 분기에 있는 모든 수치적 변수(numerical features)가 포함됩니다.
 
-      -  categorical features are used for splits as normal but are not used in the linear models
+      -  범주형 변수는 분할에는 사용되지만 선형 모델에는 사용되지 않습니다.
 
-      -  missing values should not be encoded as ``0``. Use ``np.nan`` for Python, ``NA`` for the CLI, and ``NA``, ``NA_real_``, or ``NA_integer_`` for R
+      -  결측값을 ``0`` 으로 인코딩하지 마십시오. 파이썬의 경우 ``np.nan``, CLI의 경우 ``NA``, R의 경우 ``NA``, ``NA_real_`` 또는 ``NA_integer_`` 를 사용하세요.
 
-      -  it is recommended to rescale data before training so that features have similar mean and standard deviation
+      -  학습 전에 변수 간 평균과 표준편차가 비슷해지도록 데이터를 정규화하는 것이 좋습니다.
 
-      -  **참고**: only works with CPU and ``serial`` tree learner
+      -  **참고**: CPU 및 ``serial`` 트리 학습자에서만 작동합니다.
 
-      -  **참고**: ``regression_l1`` objective is not supported with linear tree boosting
+      -  **참고**: ``regression_l1`` objective는 선형 트리 부스팅에서 지원하지 않습니다.
 
-      -  **참고**: setting ``linear_tree=true`` significantly increases the memory use of LightGBM
+      -  **참고**: ``linear_tree=true`` 를 설정하면 LightGBM의 메모리 사용량이 크게 증가합니다.
 
-      -  **참고**: if you specify ``monotone_constraints``, constraints will be enforced when choosing the split points, but not when fitting the linear models on leaves
+      -  **참고**: ``monotone_constraints`` 를 지정하면 분할 지점을 선택할 때 제약 조건이 적용되나 리프의 선형 모델에는 적용되지 않습니다.
 
 -  ``max_bin`` :raw-html:`<a id="max_bin" title="Permalink to this parameter" href="#max_bin">&#x1F517;&#xFE0E;</a>`, 기본값 = ``255``, 타입 = 정수형, 별칭: ``max_bins``, 제약 조건: ``max_bin > 1``
 
-   -  max number of bins that feature values will be bucketed in
+   -  변수 값이 포함되는 구간(bin)의 최대 개수
 
-   -  small number of bins may reduce training accuracy but may increase general power (deal with over-fitting)
+   -  구간 개수가 적으면 학습 정확도는 떨어질 수 있으나 일반화 성능(과적합 방지)은 증가할 수 있습니다.
 
-   -  LightGBM will auto compress memory according to ``max_bin``. For example, LightGBM will use ``uint8_t`` for feature value if ``max_bin=255``
+   -  LightGBM은 ``max_bin`` 에 따라 메모리를 자동적으로 압축합니다. 예를 들어, ``max_bin=255`` 인 경우 LightGBM은 ``uint8_t`` 을 변수 값으로 사용합니다.
 
 -  ``max_bin_by_feature`` :raw-html:`<a id="max_bin_by_feature" title="Permalink to this parameter" href="#max_bin_by_feature">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = 다중 정수형(multi-int)
 
-   -  max number of bins for each feature
+   -  각 변수별 최대 구간(bin) 개수
 
-   -  if not specified, will use ``max_bin`` for all features
+   -  지정하지 않으면 모든 변수에 ``max_bin`` 을 사용합니다.
 
 -  ``min_data_in_bin`` :raw-html:`<a id="min_data_in_bin" title="Permalink to this parameter" href="#min_data_in_bin">&#x1F517;&#xFE0E;</a>`, 기본값 = ``3``, 타입 = 정수형, 제약 조건: ``min_data_in_bin > 0``
 
-   -  minimal number of data inside one bin
+   -  한 구간(bin)의 최소 데이터 수
 
-   -  use this to avoid one-data-one-bin (potential over-fitting)
+   -  이를 사용하여 1개의 데이터가 1개의 구간에 있는 상황(잠재적 과적합)을 피할 수 있습니다.
 
 -  ``bin_construct_sample_cnt`` :raw-html:`<a id="bin_construct_sample_cnt" title="Permalink to this parameter" href="#bin_construct_sample_cnt">&#x1F517;&#xFE0E;</a>`, 기본값 = ``200000``, 타입 = 정수형, 별칭: ``subsample_for_bin``, 제약 조건: ``bin_construct_sample_cnt > 0``
 
-   -  number of data that sampled to construct feature discrete bins
+   -  변수의 이산적 구간(dicrete bins)을 구성하기 위해 샘플링한 데이터의 개수
 
-   -  setting this to larger value will give better training result, but may increase data loading time
+   -  이 값을 크게 설정하여 더 나은 학습 결과를 얻을 수 있지만 데이터 로딩 시간이 늘어날 것입니다.
 
    -  set this to larger value if data is very sparse
 
