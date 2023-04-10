@@ -99,7 +99,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  ``binary`` 는 이진 `로그 손실(Log Loss) <https://en.wikipedia.org/wiki/Cross_entropy>`__ 분류 (또는 로지스틱 회귀(Logistic Regression))에 사용됩니다.
 
-      -  0 또는 1의 라벨이 필요합니다. 0과 1 사이의 확률 라벨을 활용하는 ``cross-entropy`` 에서의 응용을 참고하세요.
+      -  0 또는 1의 레이블이 필요합니다. 0과 1 사이의 확률 레이블을 활용하는 ``cross-entropy`` 에서의 응용을 참고하세요.
 
    -  다중(Multi-class) 분류에서의 활용
 
@@ -115,17 +115,17 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  ``cross_entropy_lambda``, 교차 엔트로피를 대체하는 재매개변수화(reparametrization), 별칭: ``xentlambda``
 
-      -  라벨은 0과 1사이의 값을 가집니다.
+      -  레이블은 0과 1사이의 값을 가집니다.
 
    -  순위 예측에서의 응용
 
-      -  ``lambdarank``, `lambdarank <https://papers.nips.cc/paper/2971-learning-to-rank-with-nonsmooth-cost-functions.pdf>`__ 목적 함수. `label_gain <#label_gain>`__ 을 사용하여 ``int`` 라벨의 gain(가중치)를 설정할 수 있으며, ``label`` 의 모든 값은 ``label_gain`` 의 개수 보다 적어야합니다.
+      -  ``lambdarank``, `lambdarank <https://papers.nips.cc/paper/2971-learning-to-rank-with-nonsmooth-cost-functions.pdf>`__ 목적 함수. `label_gain <#label_gain>`__ 을 사용하여 ``int`` 레이블의 gain(가중치)를 설정할 수 있으며, ``label`` 의 모든 값은 ``label_gain`` 의 개수 보다 적어야합니다.
 
       -  ``rank_xendcg``, `XE_NDCG_MART <https://arxiv.org/abs/1911.09798>`__ 랭킹 목적 함수, 별칭: ``xendcg``, ``xe_ndcg``, ``xe_ndcg_mart``, ``xendcg_mart``
 
       -  ``rank_xendcg`` 는 ``lambdarank`` 보다 빠르면서도 비슷한 수준의 성능을 보입니다.
 
-      -  라벨은 ``int`` 타입만 허용합니다. 큰 숫자는 높은 순위를 의미합니다. (예: 0:나쁨, 1:보통, 2:좋음, 3:완벽)
+      -  레이블은 ``int`` 타입만 허용합니다. 큰 숫자는 높은 순위를 뜻합니다(예: 0:나쁨, 1:보통, 2:좋음, 3:완벽).
 
 -  ``boosting`` :raw-html:`<a id="boosting" title="Permalink to this parameter" href="#boosting">&#x1F517;&#xFE0E;</a>`, 기본값 = ``gbdt``, 타입 = 열거형, 옵션: ``gbdt``, ``rf``, ``dart``, ``goss``, 별칭: ``boosting_type``, ``boost``
 
@@ -185,7 +185,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  LightGBM에 사용되는 스레드 수
 
-   -  ``0`` 은 OpenMP의 기본 스레드 수를 의미합니다.
+   -  ``0`` 은 OpenMP의 기본 스레드 수를 뜻합니다.
 
    -  최상의 속도를 위해, 스레드 수가 아닌 **실제 CPU 코어 수** 로 설정하십시오. (대부분의 CPU는 `하이퍼 스레딩 <https://en.wikipedia.org/wiki/Hyper-threading>`__ 을 활용해 CPU 코어당 2개의 스레드를 만듭니다.)
 
@@ -209,7 +209,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``seed`` :raw-html:`<a id="seed" title="Permalink to this parameter" href="#seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = 정수형, 별칭: ``random_seed``, ``random_state``
 
-   -  이 시드(seed)는 다른 시드를 만드는데에 사용됩니다. (예: ``data_random_seed``, ``feature_fraction_seed`` 등)
+   -  이 시드(seed)는 다른 시드를 만드는데에 사용됩니다(예: ``data_random_seed``, ``feature_fraction_seed`` 등).
 
    -  기본적으로 이 시드는 다른 시드의 기본값보다 우선하여 사용되지 않습니다.
 
@@ -225,7 +225,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  불안정한 결과를 발견할 경우 LightGBM 깃허브 레포지토리에서 `문제 제기 <https://github.com/microsoft/LightGBM/issues>`__ 를 할 수 있습니다.
 
-   -  **참고**: ``true`` 로 설정하면 훈련 속도가 느려질 수 있습니다.
+   -  **참고**: ``true`` 로 설정하면 학습 속도가 느려질 수 있습니다.
 
    -  **참고**: ``deterministic=true`` 로 설정한 경우, 수치적(numerical) 문제로 인한 잠재적 불안정성을 피하려면 ``force_col_wise=true`` 나 ``force_row_wise=true`` 를 설정하십시오.
 
@@ -242,7 +242,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  컬럼 개수가 많거나, 총 구간(bins)의 개수가 많은 경우
 
-      -  ``num_threads`` 가 큰 경우 (예: 20보다 큰 경우)
+      -  ``num_threads`` 가 큰 경우(예: 20보다 큰 경우)
 
       -  메모리 비용을 줄이고 싶은 경우
 
@@ -260,7 +260,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  데이터 개수가 많고 총 구간(bins)의 개수가 상대적으로 적은 경우
 
-      -  ``num_threads`` 가 상대적으로 작은 경우 (예: 16보다 작거나 같은 경우)
+      -  ``num_threads`` 가 상대적으로 작은 경우(예: 16보다 작거나 같은 경우)
 
       -  속도를 위해 작은 ``bagging_fraction`` 이나 ``goss`` 부스팅을 사용하고자 하는 경우
 
@@ -274,13 +274,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  기록 히스토그램(historical histogram)의 최대 캐시 크기 (단위: MB)
 
-   -  ``< 0`` 은 제한이 없음을 의미합니다.
+   -  ``< 0`` 은 제한이 없음을 뜻합니다.
 
 -  ``max_depth`` :raw-html:`<a id="max_depth" title="Permalink to this parameter" href="#max_depth">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형
 
    -  트리 모델의 최대 깊이를 제한합니다. 이는 ``#data`` 가 작을 때, 과적합(over-fitting)을 처리하기 위해 사용됩니다. 그럼에도 트리는 리프 방식(leaf-wise)으로 확장합니다.
 
-   -  ``<= 0`` 은 제한이 없음을 의미합니다.
+   -  ``<= 0`` 은 제한이 없음을 뜻합니다.
 
 -  ``min_data_in_leaf`` :raw-html:`<a id="min_data_in_leaf" title="Permalink to this parameter" href="#min_data_in_leaf">&#x1F517;&#xFE0E;</a>`, 기본값 = ``20``, 타입 = 정수형, 별칭: ``min_data_per_leaf``, ``min_data``, ``min_child_samples``, ``min_samples_leaf``, 제약 조건: ``min_data_in_leaf >= 0``
 
@@ -338,7 +338,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  배깅(Bagging) 빈도
 
-   -  ``0`` 은 배깅을 사용하지 않음을 의미합니다. ``k`` 는 매 ``k`` 회의 반복마다 배깅을 수행함을 의미합니다. 매 ``k`` 번째 반복마다, LightGBM은 다음 ``k`` 회의 반복에 사용될 데이터의 ``bagging_fraction * 100 %`` 만큼을 무작위로 선택할 것입니다.
+   -  ``0`` 은 배깅을 사용하지 않음을 뜻합니다. ``k`` 는 매 ``k`` 회의 반복마다 배깅을 수행함을 뜻합니다. 매 ``k`` 번째 반복마다, LightGBM은 다음 ``k`` 회의 반복에 사용될 데이터의 ``bagging_fraction * 100 %`` 만큼을 무작위로 선택할 것입니다.
 
    -  **참고**: 배깅을 사용하기 위해, ``bagging_fraction`` 또한 ``1.0`` 보다 작은 값으로 세팅해야 합니다.
 
@@ -360,7 +360,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  과적합(over-fitting)을 방지하기 위해 사용됩니다.
 
-   -  **참고**: ``feature_fraction`` 와 달리 훈련 속도를 높이지 않습니다.
+   -  **참고**: ``feature_fraction`` 와 달리 학습 속도를 높이지 않습니다.
 
    -  **참고**: ``feature_fraction`` 와 ``feature_fraction_bynode`` 가 모두 ``1.0`` 보다 작으면 각 노드의 최종 비율은 ``feature_fraction * feature_fraction_bynode`` 가 됩니다.
 
@@ -386,7 +386,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  만약 검증 데이터의 평가지표(Metric)가 이전 ``early_stopping_round`` 라운드보다 개선되지 않으면 학습을 멈춥니다.
 
-   -  ``<= 0`` 은 비활성화를 의미합니다.
+   -  ``<= 0`` 은 비활성화를 뜻합니다.
 
    -  학습 속도를 높이기 위해 사용됩니다.
 
@@ -398,7 +398,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  트리의 리프(leaf)의 최대 결과값을 제한하기 위해 사용됩니다.
 
-   -  ``<= 0`` 는 제약이 없음을 의미합니다.
+   -  ``<= 0`` 는 제약이 없음을 뜻합니다.
 
    -  리프의 가장 마지막 최댓값은 ``learning_rate * max_delta_step`` 입니다.
 
@@ -432,7 +432,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  한 번의 부스팅 반복 동안 탈락되는 나무의 최대 개수
 
-   -  ``<=0`` 은 제한이 없음을 의미합니다.
+   -  ``<=0`` 은 제한이 없음을 뜻합니다.
 
 -  ``skip_drop`` :raw-html:`<a id="skip_drop" title="Permalink to this parameter" href="#skip_drop">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.5``, 타입 = 부동 소숫점(double), 제약 조건: ``0.0 <= skip_drop <= 1.0``
 
@@ -508,7 +508,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  변수에 단조성(monotonic)을 부여하기 위해 사용됩니다.
 
-   -  ``1`` 은 증가, ``-1`` 은 감소, ``0`` 은 제약이 없음을 의미합니다.
+   -  ``1`` 은 증가, ``-1`` 은 감소, ``0`` 은 제약이 없음을 뜻합니다.
 
    -  이 값을 사용하기 위해 모든 변수를 순서대로 지정해야합니다. 예를 들어, ``mc=-1,0,1`` 은 1번째 변수: 감소, 2번째 변수: 제약 없음, 3번째 변수: 증가를 의미합니다.
 
@@ -698,109 +698,109 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  이 값을 크게 설정하여 더 나은 학습 결과를 얻을 수 있지만 데이터 로딩 시간이 늘어날 것입니다.
 
-   -  set this to larger value if data is very sparse
+   -  데이터가 희소(sparse)할 경우 이 값을 더 크게 설정하십시오.
 
-   -  **참고**: don't set this to small values, otherwise, you may encounter unexpected errors and poor accuracy
+   -  **참고**: 작은 값으로 설정하지 마십시오. 예상치 못한 오류과 정확도 저하가 발생할 수 있습니다.
 
 -  ``data_random_seed`` :raw-html:`<a id="data_random_seed" title="Permalink to this parameter" href="#data_random_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 별칭: ``data_seed``
 
-   -  random seed for sampling data to construct histogram bins
+   -  히스토그램 구간(bins)을 구성하기 위한 데이터 샘플링에 대한 무작위 시드
 
 -  ``is_enable_sparse`` :raw-html:`<a id="is_enable_sparse" title="Permalink to this parameter" href="#is_enable_sparse">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울, 별칭: ``is_sparse``, ``enable_sparse``, ``sparse``
 
-   -  used to enable/disable sparse optimization
+   -  희소(sparse) 최적화를 (비)활성화하는데 사용됩니다.
 
 -  ``enable_bundle`` :raw-html:`<a id="enable_bundle" title="Permalink to this parameter" href="#enable_bundle">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울, 별칭: ``is_enable_bundle``, ``bundle``
 
-   -  set this to ``false`` to disable Exclusive Feature Bundling (EFB), which is described in `LightGBM: A Highly Efficient Gradient Boosting Decision Tree <https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree>`__
+   -  이를 ``false`` 로 설정하면 `LightGBM: A Highly Efficient Gradient Boosting Decision Tree <https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree>`__ 에 설명되어있는 배타적 변수 묶기(EFB: Exclusive Feature Bundling)가 비활성화됩니다.
 
-   -  **참고**: disabling this may cause the slow training speed for sparse datasets
+   -  **참고**: 이 기능을 비활성화하면 희소한(sparse) 데이터의 학습 속도가 느려질 수 있습니다.
 
 -  ``use_missing`` :raw-html:`<a id="use_missing" title="Permalink to this parameter" href="#use_missing">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울
 
-   -  set this to ``false`` to disable the special handle of missing value
+   -  결측값에 대한 특수한 처리(handle)를 비활성화하려면 이 값을 ``false``로 설정하세요.
 
 -  ``zero_as_missing`` :raw-html:`<a id="zero_as_missing" title="Permalink to this parameter" href="#zero_as_missing">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  set this to ``true`` to treat all zero as missing values (including the unshown values in LibSVM / sparse matrices)
+   -  0을 결측값으로 처리하려면 이 값을 ``true`` 로 설정합니다(LibSVM/희소(sparse) 행렬에 나타나지 않은 값 포함).
 
-   -  set this to ``false`` to use ``na`` for representing missing values
+   -  결측값을 표현하기 위해 ``na`` 를 사용하려면 이 값을 ``false`` 로 설정합니다.
 
 -  ``feature_pre_filter`` :raw-html:`<a id="feature_pre_filter" title="Permalink to this parameter" href="#feature_pre_filter">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울
 
-   -  set this to ``true`` (the default) to tell LightGBM to ignore the features that are unsplittable based on ``min_data_in_leaf``
+   -  이 값을 ``true`` (기본값)로 설정해 LightGBM이 ``min_data_in_leaf`` 에 따라 분할할 수 없는 변수를 무시하도록 설정합니다.
 
-   -  as dataset object is initialized only once and cannot be changed after that, you may need to set this to ``false`` when searching parameters with ``min_data_in_leaf``, otherwise features are filtered by ``min_data_in_leaf`` firstly if you don't reconstruct dataset object
+   -  데이터셋 객체는 한 번만 초기화되고 그 이후에는 변경할 수 없으므로 ``min_data_in_leaf`` 로 파라미터를 탐색할 때, 이 값음 ``false`` 로 설정해야 하며, 데이터셋을 재구성하지 않을 경우 ``min_data_in_leaf`` 에 의해 변수들이 우선적으로 필터링됩니다.
 
-   -  **참고**: setting this to ``false`` may slow down the training
+   -  **참고**: ``false`` 로 설정하면 학습 속도가 느려질 수 있습니다.
 
 -  ``pre_partition`` :raw-html:`<a id="pre_partition" title="Permalink to this parameter" href="#pre_partition">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``is_pre_partition``
 
-   -  used for distributed learning (excluding the ``feature_parallel`` mode)
+   -  분산 학습에 사용됩니다(``feature_parallel`` 모드 제외).
 
-   -  ``true`` if training data are pre-partitioned, and different machines use different partitions
+   -  학습 데이터가 사전에 나뉘어져 있거나(pre-partitioned) 머신(machines)마다 다른 파티션을 사용하는 경우 ``true`` 로 설정하십시오.
 
 -  ``two_round`` :raw-html:`<a id="two_round" title="Permalink to this parameter" href="#two_round">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``two_round_loading``, ``use_two_round_loading``
 
-   -  set this to ``true`` if data file is too big to fit in memory
+   -  데이터가 커서 메모리에 담기 어려운 경우 이 값을 ``true`` 로 설정하십시오.
 
-   -  by default, LightGBM will map data file to memory and load features from memory. This will provide faster data loading speed, but may cause run out of memory error when the data file is very big
+   -  기본적으로 LightGBM은 데이터 파일은 메모리에 매핑(mapping)하고 메모리에서 변수를 불러옵니다. 이렇게 하면 데이터 로딩 속도가 빨라지지만 데이터 파일이 매우 큰 경우 메모리 부족 오류가 발생할 수 있습니다.
 
-   -  **참고**: works only in case of loading data directly from text file
+   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
 -  ``header`` :raw-html:`<a id="header" title="Permalink to this parameter" href="#header">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``has_header``
 
-   -  set this to ``true`` if input data has header
+   -  입력 데이터에 헤더가 있는 경우 이 값을 ``true`` 로 설정하십시오.
 
-   -  **참고**: works only in case of loading data directly from text file
+   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
--  ``label_column`` :raw-html:`<a id="label_column" title="Permalink to this parameter" href="#label_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 or string, 별칭: ``label``
+-  ``label_column`` :raw-html:`<a id="label_column" title="Permalink to this parameter" href="#label_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 또는 문자열, 별칭: ``label``
 
-   -  used to specify the label column
+   -  레이블 열을 지정하는데 사용합니다.
 
-   -  use number for index, e.g. ``label=0`` means column\_0 is the label
+   -  인덱스 숫자를 사용하세요(예: ``label=0`` 은 열\_0이 레이블 열임을 뜻합니다).
 
-   -  add a prefix ``name:`` for column name, e.g. ``label=name:is_click``
+   -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``label=name:is_click``).
 
-   -  if omitted, the first column in the training data is used as the label
+   -  생략할 경우 학습 데이터의 1번째 열이 레이블로 사용됩니다.
 
-   -  **참고**: works only in case of loading data directly from text file
+   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
--  ``weight_column`` :raw-html:`<a id="weight_column" title="Permalink to this parameter" href="#weight_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 or string, 별칭: ``weight``
+-  ``weight_column`` :raw-html:`<a id="weight_column" title="Permalink to this parameter" href="#weight_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 또는 문자열, 별칭: ``weight``
 
-   -  used to specify the weight column
+   -  가중치 열을 지정하는데 사용합니다.
 
-   -  use number for index, e.g. ``weight=0`` means column\_0 is the weight
+   -  인덱스 숫자를 사용하세요(예: ``weight=0`` 은 열\_0이 가중치 열임을 뜻합니다).
 
-   -  add a prefix ``name:`` for column name, e.g. ``weight=name:weight``
+   -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``weight=name:weight``).
 
-   -  **참고**: works only in case of loading data directly from text file
+   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
-   -  **참고**: index starts from ``0`` and it doesn't count the label column when passing type is ``int``, e.g. when label is column\_0, and weight is column\_1, the correct parameter is ``weight=0``
+   -  **참고**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다(예: 레이블이 열\_0이고 가중치가 열\_1인 경우, ``weight=0`` 이 올바른 파라미터입니다).
 
--  ``group_column`` :raw-html:`<a id="group_column" title="Permalink to this parameter" href="#group_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 or string, 별칭: ``group``, ``group_id``, ``query_column``, ``query``, ``query_id``
+-  ``group_column`` :raw-html:`<a id="group_column" title="Permalink to this parameter" href="#group_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 또는 문자열, 별칭: ``group``, ``group_id``, ``query_column``, ``query``, ``query_id``
 
-   -  used to specify the query/group id column
+   -  쿼리/그룹 아이디 열을 지정하는데 사용합니다.
 
-   -  use number for index, e.g. ``query=0`` means column\_0 is the query id
+   -  인덱스 숫자를 사용하세요(예: ``query=0`` 은 열\_0이 쿼리 아이디임을 뜻합니다).
 
-   -  add a prefix ``name:`` for column name, e.g. ``query=name:query_id``
+   -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``query=name:query_id``).
 
-   -  **참고**: works only in case of loading data directly from text file
+   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
-   -  **참고**: data should be grouped by query\_id, for more information, see `Query Data <#query-data>`__
+   -  **참고**: 데이터는 쿼리\_아이디별로 그룹화해야 하며 자세한 내용은 `쿼리 데이터 <#query-data>`__ 를 참조하십시오.
 
-   -  **참고**: index starts from ``0`` and it doesn't count the label column when passing type is ``int``, e.g. when label is column\_0 and query\_id is column\_1, the correct parameter is ``query=0``
+   -  **참고**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다(예: 레이블이 열\_0이고 쿼리\_아이디가 열\_1인 경우, ``query=0`` 이 올바른 파라미터입니다).
 
 -  ``ignore_column`` :raw-html:`<a id="ignore_column" title="Permalink to this parameter" href="#ignore_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 정수형(multi-int) or string, 별칭: ``ignore_feature``, ``blacklist``
 
-   -  used to specify some ignoring columns in training
+   -  학습할 때 제외할 열을 지정하는데 사용합니다.
 
-   -  use number for index, e.g. ``ignore_column=0,1,2`` means column\_0, column\_1 and column\_2 will be ignored
+   -  인덱스 숫자를 사용하세요(예: ``ignore_column=0,1,2`` 는 열\_0, 열\_1, 열\_2 가 제외되는 것을뜻합니다.
 
    -  add a prefix ``name:`` for column name, e.g. ``ignore_column=name:c1,c2,c3`` means c1, c2 and c3 will be ignored
 
-   -  **참고**: works only in case of loading data directly from text file
+   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
    -  **참고**: index starts from ``0`` and it doesn't count the label column when passing type is ``int``
 
