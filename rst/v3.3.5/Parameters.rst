@@ -57,7 +57,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  설정 파일의 경로
 
-   -  **참고**: CLI 버전에서만 사용가능합니다.
+   -  **주의**: CLI 버전에서만 사용가능합니다.
 
 -  ``task`` :raw-html:`<a id="task" title="Permalink to this parameter" href="#task">&#x1F517;&#xFE0E;</a>`, 기본값 = ``train``, 타입 = 열거형, 옵션: ``train``, ``predict``, ``convert_model``, ``refit``, 별칭: ``task_type``
 
@@ -71,7 +71,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``save_binary`` 은 학습 (및 검증) 데이터를 불러와 바이너리(binary) 형태로 저장합니다. 일반적인 사용법: ``save_binary`` 를 먼저 사용한 후, 저장된 바이너리 파일을 활용해 여러 개의 ``train`` 작업을 병렬로 실행합니다.
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다. 각 언어별 패키지가 제공하는 동일한 기능의 함수를 사용할 수도 있습니다.
+   -  **주의**: CLI 버전에만 사용되며, 각 언어별 패키지가 제공하는 동일한 기능의 함수를 사용할 수도 있습니다.
 
 -  ``objective`` :raw-html:`<a id="objective" title="Permalink to this parameter" href="#objective">&#x1F517;&#xFE0E;</a>`, 기본값 = ``regression``, 타입 = 열거형, 옵션: ``regression``, ``regression_l1``, ``huber``, ``fair``, ``poisson``, ``quantile``, ``mape``, ``gamma``, ``tweedie``, ``binary``, ``multiclass``, ``multiclassova``, ``cross_entropy``, ``cross_entropy_lambda``, ``lambdarank``, ``rank_xendcg``, 별칭: ``objective_type``, ``app``, ``application``, ``loss``
 
@@ -137,13 +137,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``goss``, 경사 기반 단측 샘플링(Gradient-based One-Side Sampling)
 
-      -  **참고**: LightGBM은 첫 ``1 / learning_rate`` 회의 반복동안 ``gbdt`` 모드를 사용합니다.
+      -  **주의**: LightGBM은 첫 ``1 / learning_rate`` 회의 반복동안 ``gbdt`` 모드를 사용합니다.
 
 -  ``data`` :raw-html:`<a id="data" title="Permalink to this parameter" href="#data">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``train``, ``train_data``, ``train_data_file``, ``data_filename``
 
    -  학습 데이터의 경로를 지정하면, LightGBM은 해당 경로의 데이터로 학습합니다.
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``valid`` :raw-html:`<a id="valid" title="Permalink to this parameter" href="#valid">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``test``, ``valid_data``, ``valid_data_file``, ``test_data``, ``test_data_file``, ``valid_filenames``
 
@@ -151,13 +151,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``,`` 를 활용하여 여러 개의 검증 데이터를 사용할 수 있습니다.
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``num_iterations`` :raw-html:`<a id="num_iterations" title="Permalink to this parameter" href="#num_iterations">&#x1F517;&#xFE0E;</a>`, 기본값 = ``100``, 타입 = 정수형, 별칭: ``num_iteration``, ``n_iter``, ``num_tree``, ``num_trees``, ``num_round``, ``num_rounds``, ``num_boost_round``, ``n_estimators``, ``max_iter``, 제약 조건: ``num_iterations >= 0``
 
    -  부스팅 반복 횟수
 
-   -  **참고**: LightGBM은 다중 분류 문제에서 ``num_class * num_iterations`` 개의 트리를 만듭니다.
+   -  **주의**: LightGBM은 다중 분류 문제에서 ``num_class * num_iterations`` 개의 트리를 만듭니다.
 
 -  ``learning_rate`` :raw-html:`<a id="learning_rate" title="Permalink to this parameter" href="#learning_rate">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.1``, 타입 = 부동 소숫점(double), 별칭: ``shrinkage_rate``, ``eta``, 제약 조건: ``learning_rate > 0.0``
 
@@ -195,17 +195,17 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  분산 학습 시, 네트워크 통신 성능을 저하시키므로 CPU 코어를 모두 사용하지 마십시오.
 
-   -  **참고**: 학습 중에 이 값을 변경하지 **마십시오**. 특히 외부 패키지로 여러 작업을 동시에 실행하는 경우 원치 않는 오류가 발생할 수 있습니다.
+   -  **주의**: 학습 중에 이 값을 변경하지 **마십시오**. 특히 외부 패키지로 여러 작업을 동시에 실행하는 경우 원치 않는 오류가 발생할 수 있습니다.
 
 -  ``device_type`` :raw-html:`<a id="device_type" title="Permalink to this parameter" href="#device_type">&#x1F517;&#xFE0E;</a>`, 기본값 = ``cpu``, 타입 = 열거형, 옵션: ``cpu``, ``gpu``, ``cuda``, 별칭: ``device``
 
    -  트리 학습을 위한 장치 설정, GPU를 사용하여 더 빠르게 학습할 수 있습니다.
 
-   -  **참고**: 속도를 높이려면 작은 ``max_bin`` (예: 63)을 사용하는 것이 좋습니다.
+   -  **주의**: 속도를 높이려면 작은 ``max_bin`` (예: 63)을 사용하는 것이 좋습니다.
 
-   -  **참고**: 빠른 속도를 위해 GPU는 기본적으로 32비트 부동 소숫점을 사용하여 합산하므로 일부 작업의 정확도에 영향을 줄 수 있습니다. 64비트 부동 소숫점을 사용하도록 ``gpu_use_dp=true`` 를 설정할 수 있지만, 학습 속도가 느려질 것입니다.
+   -  **주의**: 빠른 속도를 위해 GPU는 기본적으로 32비트 부동 소숫점을 사용하여 합산하므로 일부 작업의 정확도에 영향을 줄 수 있습니다. 64비트 부동 소숫점을 사용하도록 ``gpu_use_dp=true`` 를 설정할 수 있지만, 학습 속도가 느려질 것입니다.
 
-   -  **참고**: GPU를 지원하는 LightGBM을 빌드하려면 `설치 가이드 <./Installation-Guide.rst#build-gpu-version>`__ 를 참고하세요.
+   -  **주의**: GPU를 지원하는 LightGBM을 빌드하려면 `설치 가이드 <./Installation-Guide.rst#build-gpu-version>`__ 를 참고하세요.
 
 -  ``seed`` :raw-html:`<a id="seed" title="Permalink to this parameter" href="#seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = 정수형, 별칭: ``random_seed``, ``random_state``
 
@@ -225,9 +225,9 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  불안정한 결과를 발견할 경우 LightGBM 깃허브 레포지토리에서 `문제 제기 <https://github.com/microsoft/LightGBM/issues>`__ 를 할 수 있습니다.
 
-   -  **참고**: ``true`` 로 설정하면 학습 속도가 느려질 수 있습니다.
+   -  **주의**: ``true`` 로 설정하면 학습 속도가 느려질 수 있습니다.
 
-   -  **참고**: ``deterministic=true`` 로 설정한 경우, 수치적(numerical) 문제로 인한 잠재적 불안정성을 피하려면 ``force_col_wise=true`` 나 ``force_row_wise=true`` 를 설정하십시오.
+   -  **주의**: ``deterministic=true`` 로 설정한 경우, 수치적(numerical) 문제로 인한 잠재적 불안정성을 피하려면 ``force_col_wise=true`` 나 ``force_row_wise=true`` 를 설정하십시오.
 
 학습 제어 파라미터
 ---------------------------
@@ -246,9 +246,9 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  메모리 비용을 줄이고 싶은 경우
 
-   -  **참고**: ``force_col_wise`` 와 ``force_row_wise`` 가 ``false`` 일 경우, LightGBM은 처음에 둘 다 실행하고, 그 후에 더 빠른것을 사용합니다. 테스트 셋의 오버헤드를 제거하려면 더 빠른 것을 직접 ``true`` 로 설정하십시오.
+   -  **주의**: ``force_col_wise`` 와 ``force_row_wise`` 가 ``false`` 일 경우, LightGBM은 처음에 둘 다 실행하고, 그 후에 더 빠른것을 사용합니다. 테스트 셋의 오버헤드를 제거하려면 더 빠른 것을 직접 ``true`` 로 설정하십시오.
 
-   -  **참고**: 이 파라미터는 ``force_row_wise`` 와 동시에 사용할 수 없으므로 둘 중 하나만 사용하십시오.
+   -  **주의**: 이 파라미터는 ``force_row_wise`` 와 동시에 사용할 수 없으므로 둘 중 하나만 사용하십시오.
 
 -  ``force_row_wise`` :raw-html:`<a id="force_row_wise" title="Permalink to this parameter" href="#force_row_wise">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
@@ -264,11 +264,11 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  속도를 위해 작은 ``bagging_fraction`` 이나 ``goss`` 부스팅을 사용하고자 하는 경우
 
-   -  **참고**: 이를 ``true`` 로 설정하면 Dataset 오브젝트의 메모리 비용이 두 배로 증가합니다. 메모리가 충분하지 않은 경우 ``force_col_wise=true`` 를 설정할 수 있습니다.
+   -  **주의**: 이를 ``true`` 로 설정하면 Dataset 오브젝트의 메모리 비용이 두 배로 증가합니다. 메모리가 충분하지 않은 경우 ``force_col_wise=true`` 를 설정할 수 있습니다.
 
-   -  **참고**: ``force_col_wise`` 과 ``force_row_wise`` 가 ``false`` 일 경우, LightGBM은 처음에 둘 다 실행하고, 그 후에 더 빠른것을 사용합니다. 테스트 셋의 오버헤드를 제거하려면 더 빠른 것을 직접 ``true`` 로 설정하십시오.
+   -  **주의**: ``force_col_wise`` 과 ``force_row_wise`` 가 ``false`` 일 경우, LightGBM은 처음에 둘 다 실행하고, 그 후에 더 빠른것을 사용합니다. 테스트 셋의 오버헤드를 제거하려면 더 빠른 것을 직접 ``true`` 로 설정하십시오.
 
-   -  **참고**: 이 파라미터는 ``force_col_wise`` 와 동시에 사용할 수 없으므로 둘 중 하나만 사용하십시오.
+   -  **주의**: 이 파라미터는 ``force_col_wise`` 와 동시에 사용할 수 없으므로 둘 중 하나만 사용하십시오.
 
 -  ``histogram_pool_size`` :raw-html:`<a id="histogram_pool_size" title="Permalink to this parameter" href="#histogram_pool_size">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1.0``, 타입 = 부동 소숫점(double), 별칭: ``hist_pool_size``
 
@@ -278,19 +278,19 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``max_depth`` :raw-html:`<a id="max_depth" title="Permalink to this parameter" href="#max_depth">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형
 
-   -  트리 모델의 최대 깊이를 제한합니다. 이는 ``#data`` 가 작을 때, 과적합(over-fitting)을 처리하기 위해 사용됩니다. 그럼에도 트리는 리프 방식(leaf-wise)으로 확장합니다.
+   -  트리 모델의 최대 깊이를 제한합니다. 이는 ``#data`` 가 작을 때, 과적합(over-fitting)을 다루기 위해 사용됩니다. 그럼에도 트리는 리프 방식(leaf-wise)으로 확장합니다.
 
    -  ``<= 0`` 은 제한이 없음을 뜻합니다.
 
 -  ``min_data_in_leaf`` :raw-html:`<a id="min_data_in_leaf" title="Permalink to this parameter" href="#min_data_in_leaf">&#x1F517;&#xFE0E;</a>`, 기본값 = ``20``, 타입 = 정수형, 별칭: ``min_data_per_leaf``, ``min_data``, ``min_child_samples``, ``min_samples_leaf``, 제약 조건: ``min_data_in_leaf >= 0``
 
-   -  한 리프(leaf)의 최소 데이터 수. 과적합(over-fitting)을 처리하기 위해 사용됩니다.
+   -  한 리프(leaf)의 최소 데이터 수. 과적합(over-fitting)을 다루기 위해 사용됩니다.
 
-   -  **참고**: 이는 헤시안(the Hessian) 기반의 근사치이므로, 때때로 이 값보다 적은 수의 데이터를 갖는 리프 노드를 생성하는 일이 발생할 수 있습니다.
+   -  **주의**: 이는 헤시안(the Hessian) 기반의 근사치이므로, 때때로 이 값보다 적은 수의 데이터를 갖는 리프 노드를 생성하는 일이 발생할 수 있습니다.
 
 -  ``min_sum_hessian_in_leaf`` :raw-html:`<a id="min_sum_hessian_in_leaf" title="Permalink to this parameter" href="#min_sum_hessian_in_leaf">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1e-3``, 타입 = 부동 소숫점(double), 별칭: ``min_sum_hessian_per_leaf``, ``min_sum_hessian``, ``min_hessian``, ``min_child_weight``, 제약 조건: ``min_sum_hessian_in_leaf >= 0.0``
 
-   -  한 리프(leaf)의 최소 헤시안 합. ``min_data_in_leaf`` 와 동일하게, 과적합(over-fitting)을 처리하기 위해 사용됩니다.
+   -  한 리프(leaf)의 최소 헤시안 합. ``min_data_in_leaf`` 와 동일하게, 과적합(over-fitting)을 다루기 위해 사용됩니다.
 
 -  ``bagging_fraction`` :raw-html:`<a id="bagging_fraction" title="Permalink to this parameter" href="#bagging_fraction">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 별칭: ``sub_row``, ``subsample``, ``bagging``, 제약 조건: ``0.0 < bagging_fraction <= 1.0``
 
@@ -300,7 +300,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  과적합(over-fitting)을 방지하기 위해 사용됩니다.
 
-   -  **참고**: 배깅(bagging)을 활성화하려면, ``bagging_freq`` 도 0이 아닌 값으로 설정해야합니다.
+   -  **주의**: 배깅(bagging)을 활성화하려면, ``bagging_freq`` 도 0이 아닌 값으로 설정해야합니다.
 
 -  ``pos_bagging_fraction`` :raw-html:`<a id="pos_bagging_fraction" title="Permalink to this parameter" href="#pos_bagging_fraction">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 별칭: ``pos_sub_row``, ``pos_subsample``, ``pos_bagging``, 제약 조건: ``0.0 < pos_bagging_fraction <= 1.0``
 
@@ -312,11 +312,11 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  비활성화하려면 ``1.0`` 으로 설정하십시오.
 
-   -  **참고**: 이를 사용하기 위해 ``bagging_freq`` 와 ``neg_bagging_fraction`` 도 설정해야 합니다.
+   -  **주의**: 이를 사용하기 위해 ``bagging_freq`` 와 ``neg_bagging_fraction`` 도 설정해야 합니다.
 
-   -  **참고**: 만약 ``pos_bagging_fraction`` 와 ``neg_bagging_fraction`` 가 모두 ``1.0`` 으로 설정되면, 균형잡힌 배깅(balanced bagging)은 비활성화됩니다.
+   -  **주의**: 만약 ``pos_bagging_fraction`` 와 ``neg_bagging_fraction`` 가 모두 ``1.0`` 으로 설정되면, 균형잡힌 배깅(balanced bagging)은 비활성화됩니다.
 
-   -  **참고**: 만약 균형잡힌 배깅이 사용될 경우, ``bagging_fraction`` 은 무시됩니다.
+   -  **주의**: 만약 균형잡힌 배깅이 사용될 경우, ``bagging_fraction`` 은 무시됩니다.
 
 -  ``neg_bagging_fraction`` :raw-html:`<a id="neg_bagging_fraction" title="Permalink to this parameter" href="#neg_bagging_fraction">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 별칭: ``neg_sub_row``, ``neg_subsample``, ``neg_bagging``, 제약 조건: ``0.0 < neg_bagging_fraction <= 1.0``
 
@@ -328,11 +328,11 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  비활성화하려면 ``1.0`` 으로 설정하십시오.
 
-   -  **참고**: 이를 사용하기 위해 ``bagging_freq`` 와 ``pos_bagging_fraction`` 도 설정해야 합니다.
+   -  **주의**: 이를 사용하기 위해 ``bagging_freq`` 와 ``pos_bagging_fraction`` 도 설정해야 합니다.
 
-   -  **참고**: 만약 ``pos_bagging_fraction`` 와 ``neg_bagging_fraction`` 가 모두 ``1.0`` 으로 설정되면, 균형잡힌 배깅(balanced bagging)은 비활성화됩니다.
+   -  **주의**: 만약 ``pos_bagging_fraction`` 와 ``neg_bagging_fraction`` 가 모두 ``1.0`` 으로 설정되면, 균형잡힌 배깅(balanced bagging)은 비활성화됩니다.
 
-   -  **참고**: 만약 균형잡힌 배깅이 사용될 경우, ``bagging_fraction`` 은 무시됩니다.
+   -  **주의**: 만약 균형잡힌 배깅이 사용될 경우, ``bagging_fraction`` 은 무시됩니다.
 
 -  ``bagging_freq`` :raw-html:`<a id="bagging_freq" title="Permalink to this parameter" href="#bagging_freq">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형, 별칭: ``subsample_freq``
 
@@ -340,7 +340,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``0`` 은 배깅을 사용하지 않음을 뜻합니다. ``k`` 는 매 ``k`` 회의 반복마다 배깅을 수행함을 뜻합니다. 매 ``k`` 번째 반복마다, LightGBM은 다음 ``k`` 회의 반복에 사용될 데이터의 ``bagging_fraction * 100 %`` 만큼을 무작위로 선택할 것입니다.
 
-   -  **참고**: 배깅을 사용하기 위해, ``bagging_fraction`` 또한 ``1.0`` 보다 작은 값으로 세팅해야 합니다.
+   -  **주의**: 배깅을 사용하기 위해, ``bagging_fraction`` 또한 ``1.0`` 보다 작은 값으로 세팅해야 합니다.
 
 -  ``bagging_seed`` :raw-html:`<a id="bagging_seed" title="Permalink to this parameter" href="#bagging_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``3``, 타입 = 정수형, 별칭: ``bagging_fraction_seed``
 
@@ -360,9 +360,9 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  과적합(over-fitting)을 방지하기 위해 사용됩니다.
 
-   -  **참고**: ``feature_fraction`` 와 달리 학습 속도를 높이지 않습니다.
+   -  **주의**: ``feature_fraction`` 와 달리 학습 속도를 높이지 않습니다.
 
-   -  **참고**: ``feature_fraction`` 와 ``feature_fraction_bynode`` 가 모두 ``1.0`` 보다 작으면 각 노드의 최종 비율은 ``feature_fraction * feature_fraction_bynode`` 가 됩니다.
+   -  **주의**: ``feature_fraction`` 와 ``feature_fraction_bynode`` 가 모두 ``1.0`` 보다 작으면 각 노드의 최종 비율은 ``feature_fraction * feature_fraction_bynode`` 가 됩니다.
 
 -  ``feature_fraction_seed`` :raw-html:`<a id="feature_fraction_seed" title="Permalink to this parameter" href="#feature_fraction_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``2``, 타입 = 정수형
 
@@ -534,7 +534,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``feature_contri`` :raw-html:`<a id="feature_contri" title="Permalink to this parameter" href="#feature_contri">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = multi-double, 별칭: ``feature_contrib``, ``fc``, ``fp``, ``feature_penalty``
 
-   -  변수의 분할 이득(gain)을 제어하는데 사용되며, i번째 변수의 분할 이득을 ``gain[i] = max(0, feature_contri[i]) * gain[i]``로 대체합니다.
+   -  변수의 분할 이득(gain)을 제어하는 데 사용되며, i번째 변수의 분할 이득을 ``gain[i] = max(0, feature_contri[i]) * gain[i]``로 대체합니다.
 
    -  모든 변수를 순서대로 지정해야 합니다.
 
@@ -546,7 +546,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  범주형 분할(categorical splits)은 원핫(one-hot) 방식이 강제 적용되며, ``left`` 는 변수 값이 포함된 분할을 나타내고 ``right`` 는 그 외의 값을 나타냅니다.
 
-   -  **참고**: 강제 분할 로직은 분할로 인한 이득이 저하될 경우 무시됩니다.
+   -  **주의**: 강제 분할 로직은 분할로 인한 이득이 저하될 경우에는 적용되지 않습니다.
 
    - `이 예제 파일 <https://github.com/microsoft/LightGBM/tree/master/examples/binary_classification/forced_splits.json>`__ 을 참조하세요.
 
@@ -620,13 +620,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  학습의 경우 이 모델로부터 학습이 진행됩니다.
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``output_model`` :raw-html:`<a id="output_model" title="Permalink to this parameter" href="#output_model">&#x1F517;&#xFE0E;</a>`, 기본값 = ``LightGBM_model.txt``, 타입 = 문자열, 별칭: ``model_output``, ``model_out``
 
    -  학습에서 출력 모델의 파일 이름
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``saved_feature_importance_type`` :raw-html:`<a id="saved_feature_importance_type" title="Permalink to this parameter" href="#saved_feature_importance_type">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형
 
@@ -634,7 +634,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``0``: 횟수 기반 변수 중요도(분할 횟수 계산); ``1``: 이득(gain) 기반 변수 중요도(이득 값 계산)
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``snapshot_freq`` :raw-html:`<a id="snapshot_freq" title="Permalink to this parameter" href="#snapshot_freq">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형, 별칭: ``save_period``
 
@@ -642,7 +642,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  이 기능을 활성화하려면 이 파라미터를 양수로 설정하십시오. 예를 들어 ``snapshot_freq=1`` 인 경우, 모델 파일은 매 반복마다 스냅샷을 캡처할 것입니다.
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 입출력 파라미터
 -------------
@@ -664,13 +664,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  학습 전에 변수 간 평균과 표준편차가 비슷해지도록 데이터를 정규화하는 것이 좋습니다.
 
-      -  **참고**: CPU 및 ``serial`` 트리 학습자에서만 작동합니다.
+      -  **주의**: CPU 및 ``serial`` 트리 학습자에서만 작동합니다.
 
-      -  **참고**: ``regression_l1`` objective는 선형 트리 부스팅에서 지원하지 않습니다.
+      -  **주의**: ``regression_l1`` objective는 선형 트리 부스팅에서 지원하지 않습니다.
 
-      -  **참고**: ``linear_tree=true`` 를 설정하면 LightGBM의 메모리 사용량이 크게 증가합니다.
+      -  **주의**: ``linear_tree=true`` 를 설정하면 LightGBM의 메모리 사용량이 크게 증가합니다.
 
-      -  **참고**: ``monotone_constraints`` 를 지정하면 분할 지점을 선택할 때 제약 조건이 적용되나 리프의 선형 모델에는 적용되지 않습니다.
+      -  **주의**: ``monotone_constraints`` 를 지정하면 분할 지점을 선택할 때 제약 조건이 적용되나 리프의 선형 모델에는 적용되지 않습니다.
 
 -  ``max_bin`` :raw-html:`<a id="max_bin" title="Permalink to this parameter" href="#max_bin">&#x1F517;&#xFE0E;</a>`, 기본값 = ``255``, 타입 = 정수형, 별칭: ``max_bins``, 제약 조건: ``max_bin > 1``
 
@@ -700,7 +700,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  데이터가 희소(sparse)할 경우 이 값을 더 크게 설정하십시오.
 
-   -  **참고**: 작은 값으로 설정하지 마십시오. 예상치 못한 오류과 정확도 저하가 발생할 수 있습니다.
+   -  **주의**: 작은 값으로 설정하지 마십시오. 예상치 못한 오류과 정확도 저하가 발생할 수 있습니다.
 
 -  ``data_random_seed`` :raw-html:`<a id="data_random_seed" title="Permalink to this parameter" href="#data_random_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 별칭: ``data_seed``
 
@@ -708,13 +708,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``is_enable_sparse`` :raw-html:`<a id="is_enable_sparse" title="Permalink to this parameter" href="#is_enable_sparse">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울, 별칭: ``is_sparse``, ``enable_sparse``, ``sparse``
 
-   -  희소(sparse) 최적화를 (비)활성화하는데 사용됩니다.
+   -  희소(sparse) 최적화를 (비)활성화하는 데 사용됩니다.
 
 -  ``enable_bundle`` :raw-html:`<a id="enable_bundle" title="Permalink to this parameter" href="#enable_bundle">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울, 별칭: ``is_enable_bundle``, ``bundle``
 
    -  이를 ``false`` 로 설정하면 `LightGBM: A Highly Efficient Gradient Boosting Decision Tree <https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree>`__ 에 설명되어있는 배타적 변수 묶기(EFB: Exclusive Feature Bundling)가 비활성화됩니다.
 
-   -  **참고**: 이 기능을 비활성화하면 희소한(sparse) 데이터의 학습 속도가 느려질 수 있습니다.
+   -  **주의**: 이 기능을 비활성화하면 희소한(sparse) 데이터의 학습 속도가 느려질 수 있습니다.
 
 -  ``use_missing`` :raw-html:`<a id="use_missing" title="Permalink to this parameter" href="#use_missing">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울
 
@@ -722,17 +722,17 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``zero_as_missing`` :raw-html:`<a id="zero_as_missing" title="Permalink to this parameter" href="#zero_as_missing">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  0을 결측값으로 처리하려면 이 값을 ``true`` 로 설정합니다(LibSVM/희소(sparse) 행렬에 나타나지 않은 값 포함).
+   -  0을 결측값으로 취급하려면 이 값을 ``true`` 로 설정합니다(LibSVM/희소(sparse) 행렬에 나타나지 않은 값 포함).
 
    -  결측값을 표현하기 위해 ``na`` 를 사용하려면 이 값을 ``false`` 로 설정합니다.
 
 -  ``feature_pre_filter`` :raw-html:`<a id="feature_pre_filter" title="Permalink to this parameter" href="#feature_pre_filter">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울
 
-   -  이 값을 ``true`` (기본값)로 설정해 LightGBM이 ``min_data_in_leaf`` 에 따라 분할할 수 없는 변수를 무시하도록 설정합니다.
+   -  이 값을 ``true`` (기본값)로 설정해 LightGBM이 ``min_data_in_leaf`` 에 따라 분할할 수 없는 변수를 제외하도록 설정합니다.
 
    -  데이터셋 객체는 한 번만 초기화되고 그 이후에는 변경할 수 없으므로 ``min_data_in_leaf`` 로 파라미터를 탐색할 때, 이 값음 ``false`` 로 설정해야 하며, 데이터셋을 재구성하지 않을 경우 ``min_data_in_leaf`` 에 의해 변수들이 우선적으로 필터링됩니다.
 
-   -  **참고**: ``false`` 로 설정하면 학습 속도가 느려질 수 있습니다.
+   -  **주의**: ``false`` 로 설정하면 학습 속도가 느려질 수 있습니다.
 
 -  ``pre_partition`` :raw-html:`<a id="pre_partition" title="Permalink to this parameter" href="#pre_partition">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``is_pre_partition``
 
@@ -746,17 +746,17 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  기본적으로 LightGBM은 데이터 파일은 메모리에 매핑(mapping)하고 메모리에서 변수를 불러옵니다. 이렇게 하면 데이터 로딩 속도가 빨라지지만 데이터 파일이 매우 큰 경우 메모리 부족 오류가 발생할 수 있습니다.
 
-   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
+   -  **주의**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
 -  ``header`` :raw-html:`<a id="header" title="Permalink to this parameter" href="#header">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``has_header``
 
    -  입력 데이터에 헤더가 있는 경우 이 값을 ``true`` 로 설정하십시오.
 
-   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
+   -  **주의**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
 -  ``label_column`` :raw-html:`<a id="label_column" title="Permalink to this parameter" href="#label_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 또는 문자열, 별칭: ``label``
 
-   -  레이블 열을 지정하는데 사용합니다.
+   -  레이블 열을 지정하는 데 사용합니다.
 
    -  인덱스 숫자를 사용하세요(예: ``label=0`` 은 열\_0이 레이블 열임을 뜻합니다).
 
@@ -764,7 +764,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  생략할 경우 학습 데이터의 1번째 열이 레이블로 사용됩니다.
 
-   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
+   -  **주의**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
 -  ``weight_column`` :raw-html:`<a id="weight_column" title="Permalink to this parameter" href="#weight_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 또는 문자열, 별칭: ``weight``
 
@@ -774,81 +774,82 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``weight=name:weight``).
 
-   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
+   -  **주의**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
-   -  **참고**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다(예: 레이블이 열\_0이고 가중치가 열\_1인 경우, ``weight=0`` 이 올바른 파라미터입니다).
+   -  **주의**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다(예: 레이블이 열\_0이고 가중치가 열\_1인 경우, ``weight=0`` 이 올바른 파라미터입니다).
 
 -  ``group_column`` :raw-html:`<a id="group_column" title="Permalink to this parameter" href="#group_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 정수형 또는 문자열, 별칭: ``group``, ``group_id``, ``query_column``, ``query``, ``query_id``
 
-   -  쿼리/그룹 아이디 열을 지정하는데 사용합니다.
+   -  쿼리/그룹 아이디 열을 지정하는 데 사용합니다.
 
    -  인덱스 숫자를 사용하세요(예: ``query=0`` 은 열\_0이 쿼리 아이디임을 뜻합니다).
 
    -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``query=name:query_id``).
 
-   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
+   -  **주의**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
-   -  **참고**: 데이터는 쿼리\_아이디별로 그룹화해야 하며 자세한 내용은 `쿼리 데이터 <#query-data>`__ 를 참조하십시오.
+   -  **주의**: 데이터는 쿼리\_아이디별로 그룹화해야 하며 자세한 내용은 `쿼리 데이터 <#query-data>`__ 를 참조하십시오.
 
-   -  **참고**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다(예: 레이블이 열\_0이고 쿼리\_아이디가 열\_1인 경우, ``query=0`` 이 올바른 파라미터입니다).
+   -  **주의**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다(예: 레이블이 열\_0이고 쿼리\_아이디가 열\_1인 경우, ``query=0`` 이 올바른 파라미터입니다).
 
 -  ``ignore_column`` :raw-html:`<a id="ignore_column" title="Permalink to this parameter" href="#ignore_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 정수형(multi-int) or string, 별칭: ``ignore_feature``, ``blacklist``
 
-   -  학습할 때 제외할 열을 지정하는데 사용합니다.
+   -  학습할 때 제외할 열을 지정하는 데 사용합니다.
 
-   -  인덱스 숫자를 사용하세요(예: ``ignore_column=0,1,2`` 는 열\_0, 열\_1, 열\_2 가 제외되는 것을뜻합니다.
+   -  인덱스 숫자를 사용하세요(예: ``ignore_column=0,1,2`` 는 열\_0, 열\_1, 열\_2 가 제외됨을 뜻합니다).
 
-   -  add a prefix ``name:`` for column name, e.g. ``ignore_column=name:c1,c2,c3`` means c1, c2 and c3 will be ignored
+   -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``ignore_column=name:c1,c2,c3`` 은 c1, c2, c3이 제외됨을 뜻합니다).
 
-   -  **참고**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
+   -  **주의**: 텍스트 파일에서 직접 데이터를 불러오는 경우에만 작동합니다.
 
-   -  **참고**: index starts from ``0`` and it doesn't count the label column when passing type is ``int``
+   -  **주의**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다.
 
-   -  **참고**: despite the fact that specified columns will be completely ignored during the training, they still should have a valid format allowing LightGBM to load file successfully
+   -  **주의**: 지정된 열이 학습 중에 완전히 제외되는 것과 관계없이 여전히 유효한 형식을 갖춰야 LightGBM이 파일을 성공적으로 불러올 수 있습니다.
 
--  ``categorical_feature`` :raw-html:`<a id="categorical_feature" title="Permalink to this parameter" href="#categorical_feature">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 정수형(multi-int) or string, 별칭: ``cat_feature``, ``categorical_column``, ``cat_column``, ``categorical_features``
+-  ``categorical_feature`` :raw-html:`<a id="categorical_feature" title="Permalink to this parameter" href="#categorical_feature">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 정수형(multi-int) 또는 문자열, 별칭: ``cat_feature``, ``categorical_column``, ``cat_column``, ``categorical_features``
 
-   -  used to specify categorical features
+   -  범주형 변수를 지정하는 데 사용합니다.
 
-   -  use number for index, e.g. ``categorical_feature=0,1,2`` means column\_0, column\_1 and column\_2 are categorical features
+   -  인덱스 숫자를 사용하세요(예: ``categorical_feature=0,1,2`` 는 열\_0, 열\_1, 열\_2 가 범주형 변수임을 뜻합니다).
 
-   -  add a prefix ``name:`` for column name, e.g. ``categorical_feature=name:c1,c2,c3`` means c1, c2 and c3 are categorical features
+   -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``categorical_feature=name:c1,c2,c3`` 은 c1, c2, c3이 범주형 변수임을 뜻합니다).
 
-   -  **참고**: only supports categorical with ``int`` type (not applicable for data represented as pandas DataFrame in Python-package)
+   -  **주의**: ``int`` 타입의 범주형만 지원합니다(파이썬 패키지인 pandas의 DataFrame으로 표현되는 데이터는 지원하지 않음).
 
-   -  **참고**: index starts from ``0`` and it doesn't count the label column when passing type is ``int``
+   -  **주의**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다.
 
-   -  **참고**: all values should be less than ``Int32.MaxValue`` (2147483647)
+   -  **주의**: 모든 값은 ``Int32.MaxValue``(2147483647)보다 작아야 합니다.
 
-   -  **참고**: using large values could be memory consuming. Tree decision rule works best when categorical features are presented by consecutive integers starting from zero
+   -  **주의**: 큰 값을 사용하면 메모리가 많이 소모될 수 있습니다. 트리의 결정 방식은 범주형 변수가 0부터 시작하는 연속된 정수로 제공될 때 가장 잘 동작합니다.
 
-   -  **참고**: all negative values will be treated as **missing values**
+   -  **주의**: 모든 음수 값은 **결측값** 으로 취급됩니다.
 
-   -  **참고**: the output cannot be monotonically constrained with respect to a categorical feature
+   -  **주의**: 범주형 변수에 대해서는 결과가 단조롭게 제약되도록(monotonically constrained) 할 수 없습니다.
 
 -  ``forcedbins_filename`` :raw-html:`<a id="forcedbins_filename" title="Permalink to this parameter" href="#forcedbins_filename">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열
 
-   -  path to a ``.json`` file that specifies bin upper bounds for some or all features
+   -  일부 또는 모든 변수에 대한 구간 상한(bin upper)을 설정하는 ``.json`` 파일의 경로입니다.
 
    -  ``.json`` file should contain an array of objects, each containing the word ``feature`` (integer feature index) and ``bin_upper_bound`` (array of thresholds for binning)
+   -  ``.json`` 파일은 각각 ``feature``(정수 변수 인덱스) 와 ``bin_upper_bound``(구간화(binning)를 위한 임계값 배열)라는 단어가 포함된 객체 배열을 포함해야 합니다.
 
-   -  see `this file <https://github.com/microsoft/LightGBM/tree/master/examples/regression/forced_bins.json>`__ as an example
+   -  `이 파일 <https://github.com/microsoft/LightGBM/tree/master/examples/regression/forced_bins.json>`__ 을 예제로 참고하십시오.
 
 -  ``save_binary`` :raw-html:`<a id="save_binary" title="Permalink to this parameter" href="#save_binary">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``is_save_binary``, ``is_save_binary_file``
 
-   -  if ``true``, LightGBM will save the dataset (including validation data) to a binary file. This speed ups the data loading for the next time
+   -  ``true`` 로 설정하면 LightGBM은 데이터셋을 바이너리 파일에 저장합니다. 이로써 다음 번의 데이터 로딩 속도가 빨라집니다.
 
-   -  **참고**: ``init_score`` is not saved in binary file
+   -  **주의**: ``init_score`` 은 바이너리 파일에 저장되지 않습니다.
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.; for language-specific packages you can use the correspondent function
+   -  **주의**: CLI 버전에만 사용되며, 각 언어별 패키지가 제공하는 동일한 기능의 함수를 사용할 수도 있습니다.
 
 -  ``precise_float_parser`` :raw-html:`<a id="precise_float_parser" title="Permalink to this parameter" href="#precise_float_parser">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  use precise floating point number parsing for text parser (e.g. CSV, TSV, LibSVM input)
+   -  이 파라미터는 (CSV, TSV, LibSVM와 같은) 텍스트 구문 분석기(parser)로 정확한 부동 소숫점 구문 분석(parsing)을 활용합니다.
 
-   -  **참고**: setting this to ``true`` may lead to much slower text parsing
+   -  **주의**: ``true`` 로 설정하면 텍스트 구문 분석(parsing) 속도가 느려질 수 있습니다.
 
-Predict Parameters
+예측 파라미터
 ~~~~~~~~~~~~~~~~~~
 
 -  ``start_iteration_predict`` :raw-html:`<a id="start_iteration_predict" title="Permalink to this parameter" href="#start_iteration_predict">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형
@@ -889,11 +890,11 @@ Predict Parameters
 
    -  produces ``#features + 1`` values where the last value is the expected value of the model output over the training data
 
-   -  **참고**: if you want to get more explanation for your model's predictions using SHAP values like SHAP interaction values, you can install `shap package <https://github.com/slundberg/shap>`__
+   -  **주의**: if you want to get more explanation for your model's predictions using SHAP values like SHAP interaction values, you can install `shap package <https://github.com/slundberg/shap>`__
 
-   -  **참고**: unlike the shap package, with ``predict_contrib`` we return a matrix with an extra column, where the last column is the expected value
+   -  **주의**: unlike the shap package, with ``predict_contrib`` we return a matrix with an extra column, where the last column is the expected value
 
-   -  **참고**: this feature is not implemented for linear trees
+   -  **주의**: this feature is not implemented for linear trees
 
 -  ``predict_disable_shape_check`` :raw-html:`<a id="predict_disable_shape_check" title="Permalink to this parameter" href="#predict_disable_shape_check">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
@@ -905,7 +906,7 @@ Predict Parameters
 
    -  if ``true``, LightGBM will attempt to predict on whatever data you provide. This is dangerous because you might get incorrect predictions, but you could use it in situations where it is difficult or expensive to generate some features and you are very confident that they were never chosen for splits in the model
 
-   -  **참고**: be very careful setting this parameter to ``true``
+   -  **주의**: be very careful setting this parameter to ``true``
 
 -  ``pred_early_stop`` :raw-html:`<a id="pred_early_stop" title="Permalink to this parameter" href="#pred_early_stop">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
@@ -915,7 +916,7 @@ Predict Parameters
 
    -  if ``true``, will use early-stopping to speed up the prediction. May affect the accuracy
 
-   -  **참고**: cannot be used with ``rf`` boosting type or custom objective function
+   -  **주의**: cannot be used with ``rf`` boosting type or custom objective function
 
 -  ``pred_early_stop_freq`` :raw-html:`<a id="pred_early_stop_freq" title="Permalink to this parameter" href="#pred_early_stop_freq">&#x1F517;&#xFE0E;</a>`, 기본값 = ``10``, 타입 = 정수형
 
@@ -935,7 +936,7 @@ Predict Parameters
 
    -  filename of prediction result
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 Convert Parameters
 ~~~~~~~~~~~~~~~~~~
@@ -948,7 +949,7 @@ Convert Parameters
 
    -  if ``convert_model_language`` is set and ``task=train``, the model will be also converted
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``convert_model`` :raw-html:`<a id="convert_model" title="Permalink to this parameter" href="#convert_model">&#x1F517;&#xFE0E;</a>`, 기본값 = ``gbdt_prediction.cpp``, 타입 = 문자열, 별칭: ``convert_model_file``
 
@@ -956,7 +957,7 @@ Convert Parameters
 
    -  output filename of converted model
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 Objective Parameters
 --------------------
@@ -977,9 +978,9 @@ Objective Parameters
 
    -  set this to ``true`` if training data are unbalanced
 
-   -  **참고**: while enabling this should increase the overall performance metric of your model, it will also result in poor estimates of the individual class probabilities
+   -  **주의**: while enabling this should increase the overall performance metric of your model, it will also result in poor estimates of the individual class probabilities
 
-   -  **참고**: this parameter cannot be used at the same time with ``scale_pos_weight``, choose only **one** of them
+   -  **주의**: this parameter cannot be used at the same time with ``scale_pos_weight``, choose only **one** of them
 
 -  ``scale_pos_weight`` :raw-html:`<a id="scale_pos_weight" title="Permalink to this parameter" href="#scale_pos_weight">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``scale_pos_weight > 0.0``
 
@@ -987,9 +988,9 @@ Objective Parameters
 
    -  weight of labels with positive class
 
-   -  **참고**: while enabling this should increase the overall performance metric of your model, it will also result in poor estimates of the individual class probabilities
+   -  **주의**: while enabling this should increase the overall performance metric of your model, it will also result in poor estimates of the individual class probabilities
 
-   -  **참고**: this parameter cannot be used at the same time with ``is_unbalance``, choose only **one** of them
+   -  **주의**: this parameter cannot be used at the same time with ``is_unbalance``, choose only **one** of them
 
 -  ``sigmoid`` :raw-html:`<a id="sigmoid" title="Permalink to this parameter" href="#sigmoid">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``sigmoid > 0.0``
 
@@ -1126,13 +1127,13 @@ Metric Parameters
 
    -  frequency for metric output
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``is_provide_training_metric`` :raw-html:`<a id="is_provide_training_metric" title="Permalink to this parameter" href="#is_provide_training_metric">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``training_metric``, ``is_training_metric``, ``train_metric``
 
    -  set this to ``true`` to output metric result over training dataset
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``eval_at`` :raw-html:`<a id="eval_at" title="Permalink to this parameter" href="#eval_at">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1,2,3,4,5``, 타입 = 다중 정수형(multi-int), 별칭: ``ndcg_eval_at``, ``ndcg_at``, ``map_eval_at``, ``map_at``
 
@@ -1177,7 +1178,7 @@ Network Parameters
 
    -  TCP listen port for local machines
 
-   -  **참고**: don't forget to allow this port in firewall settings before training
+   -  **주의**: don't forget to allow this port in firewall settings before training
 
 -  ``time_out`` :raw-html:`<a id="time_out" title="Permalink to this parameter" href="#time_out">&#x1F517;&#xFE0E;</a>`, 기본값 = ``120``, 타입 = 정수형, 제약 조건: ``time_out > 0``
 
@@ -1189,7 +1190,7 @@ Network Parameters
 
    -  each line contains one IP and one port for one machine. The format is ``ip port`` (space as a separator)
 
-   -  **참고**: CLI 버전에서만 사용 가능합니다.
+   -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``machines`` :raw-html:`<a id="machines" title="Permalink to this parameter" href="#machines">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``workers``, ``nodes``
 
@@ -1204,7 +1205,7 @@ GPU Parameters
 
    -  ``-1`` means the system-wide default platform
 
-   -  **참고**: refer to `GPU Targets <./GPU-Targets.rst#query-opencl-devices-in-your-system>`__ for more details
+   -  **주의**: refer to `GPU Targets <./GPU-Targets.rst#query-opencl-devices-in-your-system>`__ for more details
 
 -  ``gpu_device_id`` :raw-html:`<a id="gpu_device_id" title="Permalink to this parameter" href="#gpu_device_id">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형
 
@@ -1212,19 +1213,19 @@ GPU Parameters
 
    -  ``-1`` means the default device in the selected platform
 
-   -  **참고**: refer to `GPU Targets <./GPU-Targets.rst#query-opencl-devices-in-your-system>`__ for more details
+   -  **주의**: refer to `GPU Targets <./GPU-Targets.rst#query-opencl-devices-in-your-system>`__ for more details
 
 -  ``gpu_use_dp`` :raw-html:`<a id="gpu_use_dp" title="Permalink to this parameter" href="#gpu_use_dp">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
    -  set this to ``true`` to use double precision math on GPU (by default single precision is used)
 
-   -  **참고**: can be used only in OpenCL implementation, in CUDA implementation only double precision is currently supported
+   -  **주의**: can be used only in OpenCL implementation, in CUDA implementation only double precision is currently supported
 
 -  ``num_gpu`` :raw-html:`<a id="num_gpu" title="Permalink to this parameter" href="#num_gpu">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 제약 조건: ``num_gpu > 0``
 
    -  number of GPUs
 
-   -  **참고**: can be used only in CUDA implementation
+   -  **주의**: can be used only in CUDA implementation
 
 .. end params list
 
@@ -1291,7 +1292,7 @@ For wrapper libraries like in Python and R, this information can also be provide
 
 For example, if you have a 112-document dataset with ``group = [27, 18, 67]``, that means that you have 3 groups, where the first 27 records are in the first group, records 28-45 are in the second group, and records 46-112 are in the third group.
 
-**참고**: data should be ordered by the query.
+**주의**: data should be ordered by the query.
 
 If the name of data file is ``train.txt``, the query file should be named as ``train.txt.query`` and placed in the same folder as the data file.
 In this case, LightGBM will load the query file automatically if it exists.
