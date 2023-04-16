@@ -1,53 +1,54 @@
 Features
 ========
 
-This is a conceptual overview of how LightGBM works\ `[1] <#references>`__. We assume familiarity with decision tree boosting algorithms to focus instead on aspects of LightGBM that may differ from other boosting packages. For detailed algorithms, please refer to the citations or source code.
+본 글은 LightGBM이 어떻게 작동하는가에 대한 개요입니다 \ `[1] <#references>`__. 독자가 의사결정나무 부스팅 알고리즘 (decision tree boosting algorithms)에 익숙하다는 전제 하에 LightGBM이 다른 부스팅 패키지와 어떻게 다른가에 초점을 맞추었습니다. 알고리즘에 대한 상세한 설명은 인용글 혹은 소스코드를 참고 부탁합니다.
 
-Optimization in Speed and Memory Usage
+
+연산속도와 메모리 사용량 최적화 
 --------------------------------------
 
-Many boosting tools use pre-sort-based algorithms\ `[2, 3] <#references>`__ (e.g. default algorithm in xgboost) for decision tree learning. It is a simple solution, but not easy to optimize.
+많은 부스팅 패키지들은 의사결정나무 학습을 위해 사전 정렬 기반의 알고리즘을 사용합니다 \ `[2, 3] <#references>`__ (예. xgboost의 기본설정 알고리즘). 이 해법은 간단한 대신 최적화가 쉽지 않습니다.
 
-LightGBM uses histogram-based algorithms\ `[4, 5, 6] <#references>`__, which bucket continuous feature (attribute) values into discrete bins. This speeds up training and reduces memory usage. Advantages of histogram-based algorithms include the following:
+LightGBM은 히스토그램 기반의 알고리즘을 사용함으로써\ `[4, 5, 6] <#references>`__, 연속형 변수 (특성)를 이산형 변수로 범주화 시킵니다. 이는 학습 속도를 올리며 메모리 사용량을 감소시킵니다. 히스토그램 기반의 알고리즘이 갖는 우위는 다음과 같습니다:
 
--  **Reduced cost of calculating the gain for each split**
+-  **각 분할(split)의 정보획득(gain) 계산비용 감소**
 
-   -  Pre-sort-based algorithms have time complexity ``O(#data)``
-
-   -  Computing the histogram has time complexity ``O(#data)``, but this involves only a fast sum-up operation. Once the histogram is constructed, a histogram-based algorithm has time complexity ``O(#bins)``, and ``#bins`` is far smaller than ``#data``.
-
--  **Use histogram subtraction for further speedup**
-
-   -  To get one leaf's histograms in a binary tree, use the histogram subtraction of its parent and its neighbor
-
-   -  So it needs to construct histograms for only one leaf (with smaller ``#data`` than its neighbor). It then can get histograms of its neighbor by histogram subtraction with small cost (``O(#bins)``)
+   -  사전 정렬 기반의 알고리즘은 ``0(#data)`` 의 시간 복잡도(time complexity)를 가집니다 (인풋 데이터 양과 연산속도의 관계가 선형적). 
    
--  **Reduce memory usage**
+   -  히스토그램을 계산하는 것도 ``O(#data)`` 의 시간 복잡도를 가지지만, 이는 오직 합산 연산에서만 빠르게 일어납니다. 일단 히스토그램이 만들어지기만 하면, 히스토그램 기반 알고리즘은 ``O(#bins)`` 의 시간 복잡도를 가지며, #bins는 #data보다 훨씬 작습니다.  
 
-   -  Replaces continuous values with discrete bins. If ``#bins`` is small, can use small data type, e.g. uint8\_t, to store training data
+-  **히스토그램 감법(뺄셈)을 통한 추가적 속도향상**
 
-   -  No need to store additional information for pre-sorting feature values
+   -  이진(binary) 나무에서 한 잎사귀(leaf)의 히스토그램을 계산하기 위해, 그 잎사귀의 부모노드와 이웃 잎사귀의 차를 이용합니다. 
+
+   -  따라서 이 트리는 오직 하나의 잎사귀에 대해서만 히스토그램을 만들면 되며, 더 작은 데이터(``#data``)를 가진 이웃 잎사귀가 히스토그램을 만들게 됩니다. 그 다음, 나머지 잎사귀의 히스토그램은 히스토그램 감법을 통해 작은 연산비용 (``O(#bins)``)으로 얻을 수 있게 됩니다.   
+   
+-  **메모리 사용량 감소**
+
+   -  연속형 변수를 이산형 변수로 바꿉니다. 만약 구간 개수 (``#bins``)가 적다면 작은 데이터 타입 (예. uint8\_t)을 사용하여 학습 데이터를 저장할 수도 있습니다. (???)      
+
+   -  변수를 사전 정렬하는 데 드는 추가적 정보를 저장할 필요도 없습니다. (???)
 
 -  **Reduce communication cost for distributed learning**
 
-Sparse Optimization
--------------------
+희소 최적화 (Sparse Optimization)
+------------------------------
 
--  Need only ``O(2 * #non_zero_data)`` to construct histogram for sparse features
+-  희소행렬의 변수 (sparse feature)에 대한 히스토그램을 만들 때에도 오직 '2 * 0이 아닌 데이터의 개수' (``O(2 * #non_zero_data)``)만 있으면 됩니다. 
 
-Optimization in Accuracy
-------------------------
+정확도 최적화 (Accuracy Optimization)
+----------------------------------
 
-Leaf-wise (Best-first) Tree Growth
+잎사귀단위의 (Best-first) 나무 성장
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Most decision tree learning algorithms grow trees by level (depth)-wise, like the following image:
+대부분의 의사결정 나무 학습 알고리즘은 아래 그림과 같이, 나무를 수준단위 (level-wise;depth-wise)로 성장시킵니다.
 
 .. image:: ./_static/images/level-wise.png
    :align: center
-   :alt: A diagram depicting level wise tree growth in which the best possible node is split one level down. The strategy results in a symmetric tree, where every node in a level has child nodes resulting in an additional layer of depth.
+   :alt: 수준단위 나무 성장을 표현하는 도표로, 가장 최선의 노드가 새로운 수준을 하나를 만들게 됨을 보여준다. 이 전략은 대칭형태의 나무를 만들어 내며, 한 수준(level) 내의 모든 노드들은 자식 노드들을 가짐으로써 추가적으로 층을 형성시킨다.
 
-LightGBM grows trees leaf-wise (best-first)\ `[7] <#references>`__. It will choose the leaf with max delta loss to grow.
+LightGBM은 잎사귀단위의 (Best-first) 증가를 보입니다\ `[7] <#references>`__. It will choose the leaf with max delta loss to grow.
 Holding ``#leaf`` fixed, leaf-wise algorithms tend to achieve lower loss than level-wise algorithms.
 
 Leaf-wise may cause over-fitting when ``#data`` is small, so LightGBM includes the ``max_depth`` parameter to limit tree depth. However, trees still grow leaf-wise even when ``max_depth`` is specified.
@@ -165,31 +166,31 @@ Voting Parallel
 Voting parallel further reduces the communication cost in `Data Parallel <#data-parallel>`__ to constant cost.
 It uses two-stage voting to reduce the communication cost of feature histograms\ `[10] <#references>`__.
 
-GPU Support
+GPU 지원
 -----------
 
-Thanks `@huanzhang12 <https://github.com/huanzhang12>`__ for contributing this feature. Please read `[11] <#references>`__ to get more details.
+기여해 주신 `@huanzhang12 <https://github.com/huanzhang12>`__ 님 감사합니다. 더 자세한 것은 `[11] <#references>`__ 을 참고 부탁드립니다. 
 
-- `GPU Installation <./Installation-Guide.rst#build-gpu-version>`__
+- `GPU 설치 <./Installation-Guide.rst#build-gpu-version>`__
 
-- `GPU Tutorial <./GPU-Tutorial.rst>`__
+- `GPU 튜토리얼 <./GPU-Tutorial.rst>`__
 
 Applications and Metrics
 ------------------------
 
-LightGBM supports the following applications:
+LightGBM은 다음과 같은 활용이 가능합니다:
 
--  regression, the objective function is L2 loss
+-  회귀, 목적함수는 L2 loss
 
--  binary classification, the objective function is logloss
+-  이진 분류, 목적함수는 logloss
 
--  multi classification
+-  다중 분류
 
--  cross-entropy, the objective function is logloss and supports training on non-binary labels
+-  크로스 엔트로피, 목적함수는 logloss 그리고 이진 클래스가 아닌 경우에 대해서도 학습을 지원함
 
--  LambdaRank, the objective function is LambdaRank with NDCG
+-  LambdaRank, 목적함수는 LambdaRank with NDCG
 
-LightGBM supports the following metrics:
+LightGBM이 지원하는 평가 매트릭스는 다음과 같습니다:
 
 -  L1 loss
 
@@ -229,40 +230,40 @@ LightGBM supports the following metrics:
 
 -  Tweedie
 
-For more details, please refer to `Parameters <./Parameters.rst#metric-parameters>`__.
+더 자세한 것은 `Parameters <./Parameters.rst#metric-parameters>`__ 을 참고 부탁드립니다.
 
-Other Features
+기타 피쳐
 --------------
 
--  Limit ``max_depth`` of tree while grows tree leaf-wise
+-  나무가 잎사귀단위로 증가하면서도 ``max_depth`` 를 제한시킴
 
 -  `DART <https://arxiv.org/abs/1505.01866>`__
 
--  L1/L2 regularization
+-  L1/L2 정규화
 
--  Bagging
+-  배깅 (Bagging)
 
--  Column (feature) sub-sample
+-  컬럼 (변수) 부분추출
 
 -  Continued train with input GBDT model
 
 -  Continued train with the input score file
 
--  Weighted training
+-  가중치 학습
 
 -  Validation metric output during training
 
--  Multiple validation data
+-  다수의 검증 (validation) 데이터
 
--  Multiple metrics
+-  다수의 평가 매트릭스
 
--  Early stopping (both training and prediction)
+-  Early stopping (학습, 예측 모두)
 
 -  Prediction for leaf index
 
-For more details, please refer to `Parameters <./Parameters.rst>`__.
+더 자세한 것은 `Parameters <./Parameters.rst>`__ 을 참고 부탁드립니다.
 
-References
+참고문헌
 ----------
 
 [1] Guolin Ke, Qi Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, Tie-Yan Liu. "`LightGBM\: A Highly Efficient Gradient Boosting Decision Tree`_." Advances in Neural Information Processing Systems 30 (NIPS 2017), pp. 3149-3157.
