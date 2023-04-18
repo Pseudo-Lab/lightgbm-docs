@@ -48,123 +48,118 @@ LightGBM은 히스토그램 기반의 알고리즘을 사용함으로써\ `[4, 5
    :align: center
    :alt: 수준단위 나무 성장을 표현하는 도표로, 가장 최선의 노드가 새로운 수준을 하나를 만들게 됨을 보여준다. 이 전략은 대칭형태의 나무를 만들어 내며, 한 수준(level) 내의 모든 노드들은 자식 노드들을 가짐으로써 추가적으로 층을 형성시킨다.
 
-LightGBM은 잎사귀단위의 (Best-first) 증가를 보입니다\ `[7] <#references>`__. It will choose the leaf with max delta loss to grow.
-Holding ``#leaf`` fixed, leaf-wise algorithms tend to achieve lower loss than level-wise algorithms.
+LightGBM은 (최고의 1등) 잎사귀단위로 성장합니다. \ `[7] <#references>`__. 알고리즘은 최대 델타 손실 (maximun delta loss)을 만드는 잎사귀가 자라도록 합니다. 잎사귀수 (``#leaf``)는 고정한다고 했을 때, 잎사귀단위 알고리즘이 수준단위 알고리즘보다 손실이 작은 경향이 있습니다.
 
 Leaf-wise may cause over-fitting when ``#data`` is small, so LightGBM includes the ``max_depth`` parameter to limit tree depth. However, trees still grow leaf-wise even when ``max_depth`` is specified.
+
+잎사귀단위 증가는 데이터 (`#data``)가 작을 때 과적합을 일으킬 수 있으므로 LightGBM은 이 나무의 깊이를 제한시키는 ``max_depth``라는 파라미터를 갖고있습니다. 하지만, ``max_depth``가 지정되어도 여전히 나무는 잎사귀 단위의 성장을 계속합니다. 
+
 
 .. image:: ./_static/images/leaf-wise.png
    :align: center
    :alt: A diagram depicting leaf wise tree growth in which only the node with the highest loss change is split and not bother with the rest of the nodes in the same level. This results in an asymmetrical tree where subsequent splitting is happening only on one side of the tree.
 
-Optimal Split for Categorical Features
+범주형 특성변수에 최적의 분할 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is common to represent categorical features with one-hot encoding, but this approach is suboptimal for tree learners. Particularly for high-cardinality categorical features, a tree built on one-hot features tends to be unbalanced and needs to grow very deep to achieve good accuracy.
+범주형 변수는 보통 원-핫 인코딩 (one-hot encoding)으로 변환하기는 하지만, 사실 나무 학습기에는 최선책이 아닙니다. 특히, 카디널리티가 높은 범주형 변수를 원-핫 인코딩으로 변환한 나무모형은 불균형한 경향이 있으며, 준수한 정확도를 얻기 위해 매우 깊게 자라야 합니다.      
 
-Instead of one-hot encoding, the optimal solution is to split on a categorical feature by partitioning its categories into 2 subsets. If the feature has ``k`` categories, there are ``2^(k-1) - 1`` possible partitions.
-But there is an efficient solution for regression trees\ `[8] <#references>`__. It needs about ``O(k * log(k))`` to find the optimal partition.
+원-핫 인코딩 대신, 최적의 해법은 한 범주형 변수의 범주들을 두 개의 부분집합으로 나눠서 분기 (split)하는 것입니다. 예를 들어 ``k`` 개의 범주를 가진 변수라면, 총 ``2^(k-1) - 1`` 개의 분할 경우의 수가 있습니다. 하지만 회귀나무에서는 이 연산에 대해 효율적인 해법을 갖고 있습니다 \ `[8] <#references>`__. 회귀나무에서는 범주형 변수의 최적의 분할을 찾는 데 약 ``O(k * log(k))`` 정도가 걸립니다.  
 
-The basic idea is to sort the categories according to the training objective at each split.
-More specifically, LightGBM sorts the histogram (for a categorical feature) according to its accumulated values (``sum_gradient / sum_hessian``) and then finds the best split on the sorted histogram.
+기본 아이디어는, 각 분할점에서 학습 목적에 맞게 범주들을 정렬해주는 것입니다. 좀더 구체적으로 설명하자면, LightGBM은 (범주형 변수에 대해) 히스토그램을 (``sum_gradient / sum_hessian``) 누적값 순으로 정렬시키고 나서 정렬된 히스토그램에서 최고의 분할점을 찾습니다.    
 
-Optimization in Network Communication
+네트워크 커뮤니케이션에서의 최적화 
 -------------------------------------
 
-It only needs to use some collective communication algorithms, like "All reduce", "All gather" and "Reduce scatter", in distributed learning of LightGBM.
-LightGBM implements state-of-art algorithms\ `[9] <#references>`__.
-These collective communication algorithms can provide much better performance than point-to-point communication.
+LightGBM의 분산학습에서는 "All reduce", "All gather", "Reduce scatter" 같은 몇 개의 collective communication 알고리즘만 사용하면 됩니다. 
+LightGBM은 최신 알고리즘을 사용했습니다 \ `[9] <#references>`__.
+이 collective communication 알고리즘들은 point-to-point communication보다 훨씬 좋은 성능을 제공합니다.
 
-.. _Optimization in Parallel Learning:
+.. _병렬학습에서의 최적화 (Optimization in Parallel Learning):
 
-Optimization in Distributed Learning
+분산학습에서의 최적화 
 ------------------------------------
 
-LightGBM provides the following distributed learning algorithms.
+LightGBM이 제공하는 분산학습 알고리즘은 아래와 같습니다.
 
-Feature Parallel
-~~~~~~~~~~~~~~~~
+특성 병렬 (Feature Parallel)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Traditional Algorithm
+전통적 알고리즘
 ^^^^^^^^^^^^^^^^^^^^^
 
-Feature parallel aims to parallelize the "Find Best Split" in the decision tree. The procedure of traditional feature parallel is:
+특성 병렬은 의사결정 나무에서 "최고의 분할점 찾기"를 병렬처리 하는 것을 목표로 합니다. 전통적 특성 병렬 과정: 
 
-1. Partition data vertically (different machines have different feature set).
+1. 데이터를 수직 방향으로 분할합니다 (기계들은 서로 다른 피처셋 (feature set)을 갖고 있음).
 
-2. Workers find local best split point {feature, threshold} on local feature set.
+2. 작업기기가 국소 피처셋에서 국소 최적 분할점 (local best split) {특성변수, 임계치}을 찾습니다.
 
-3. Communicate local best splits with each other and get the best one.
+3. 서로 국소 최적 분할점들에 대해 통신 후 가장 최적의 값을 선택합니다.
 
-4. Worker with best split to perform split, then send the split result of data to other workers.
+4. 가장 좋은 분할점을 찾은 기계가 분할을 수행하고, 그 결과 데이터를 다른 기기에 전달합니다.
 
-5. Other workers split data according to received data.
+5. 다른 작업기기들은 전달받은 데이터에 따라 데이터를 분할합니다.
 
-The shortcomings of traditional feature parallel:
+전통적 특성 병렬의 한계점:
 
--  Has computation overhead, since it cannot speed up "split", whose time complexity is ``O(#data)``.
-   Thus, feature parallel cannot speed up well when ``#data`` is large.
+- 시간 복잡도가 ``O(#data)``를 따라서 "분할"에 속도를 낼 수 없기 때문에, 계산비용이 있습니다.
+   따라서, 데이터 사이즈 (``#data``)가 클떄 특성 병렬은 속도를 잘 낼 수 없습니다. 
 
--  Need communication of split result, which costs about ``O(#data / 8)`` (one bit for one data).
+- 분할 결과에 대해 소통이 필요하며, 이는 대략 ``O(#data / 8)`` (한 데이터 당 1 bit) 정도를 소모시킵니다.
 
-Feature Parallel in LightGBM
+LightGBM의 특성 병렬
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Since feature parallel cannot speed up well when ``#data`` is large, we make a little change: instead of partitioning data vertically, every worker holds the full data.
-Thus, LightGBM doesn't need to communicate for split result of data since every worker knows how to split data.
-And ``#data`` won't be larger, so it is reasonable to hold the full data in every machine.
+특성 병렬은 데이터 사이즈 (``#data``)가 크면 속도를 잘 낼 수 없기 때문에, LightGBM은 작은 변화를 주었습니다: 데이터를 수직으로 분할하는 것이 아니라, 모든 작업기기들은 전체 데이터셋을 갖고 있습니다. 그러므로, LightGBM은 분할 결과 데이터를 통신할 필요가 없습니다. 모든 작업기기가 어떻게 데이터를 분할하는지 알고있기 때문입니다. 그리고 데이터가 더 커지지는 않을 것이기 때문에, 각 장치마다 전체 데이터셋을 갖고 있는 것은 합리적이라 할 수 있습니다.       
+LightGBM의 특성 병렬 과정:
 
-The procedure of feature parallel in LightGBM:
+1. 작업기기들이 국소 피처셋에서 국소 최적 분할점 (local best split) {특성변수, 임계치}을 찾습니다.
 
-1. Workers find local best split point {feature, threshold} on local feature set.
+2. 서로 국소 최적 분할점들에 대해 통신 후 가장 최적의 값을 선택합니다.
 
-2. Communicate local best splits with each other and get the best one.
+3. 가장 최적의 분할을 수행합니다.
 
-3. Perform best split.
+그러나, 이 특성 병렬 알고리즘도 데이터 (#data)가 클 때는 여전히 "분할"에 드는 연산비용의 부담이 있습니다. 그래서 데이터 (#data)가 클 때는 데이터 병렬을 사용하는 것이 낫습니다.   
 
-However, this feature parallel algorithm still suffers from computation overhead for "split" when ``#data`` is large.
-So it will be better to use data parallel when ``#data`` is large.
-
-Data Parallel
+데이터 병렬
 ~~~~~~~~~~~~~
 
-Traditional Algorithm
+전통적 알고리즘
 ^^^^^^^^^^^^^^^^^^^^^
 
-Data parallel aims to parallelize the whole decision learning. The procedure of data parallel is:
+데이터 병렬은 전체 의사결정 학습을 병렬처리 하는 것을 목표로 합니다. 데이터 병렬의 과정:
 
-1. Partition data horizontally.
+1. 데이터를 수평으로 분할합니다.
 
-2. Workers use local data to construct local histograms.
+2. 작업기기들이 국소 데이터를 사용하여 국소 히스토그램을 만듭니다. (???)
 
-3. Merge global histograms from all local histograms.
+3. 모든 국소 히스토그램들로부터 전역 (global) 히스토그램들을 병합합니다. (???)
 
-4. Find best split from merged global histograms, then perform splits.
+4. 병합한 글로벌 히스토그램들로부터 가장 최적의 분할점을 찾고, 분할작업들을 수행합니다. (???)
 
-The shortcomings of traditional data parallel:
+전통적 데이터 병렬의 한계점:
 
--  High communication cost.
-   If using point-to-point communication algorithm, communication cost for one machine is about ``O(#machine * #feature * #bin)``.
-   If using collective communication algorithm (e.g. "All Reduce"), communication cost is about ``O(2 * #feature * #bin)`` (check cost of "All Reduce" in chapter 4.5 at `[9] <#references>`__).
+-  높은 커뮤니케이션 비용.
+   만약 point-to-point 커뮤니케이션 알고리즘을 사용한다면, 한 장치 당 커뮤니케이션 비용은 대략 ``O(#machine * #feature * #bin)`` 이 듭니다.
+   만약 collective 커뮤니케이션 알고리즘 (예. "All Reduce")을 사용한다면, 이 비용은 약 ``O(2 * #feature * #bin)`` 정도입니다 ("All Reduce" 가격 4.5 at `[9] <#references>`__).
 
-Data Parallel in LightGBM
+LightGBM의 데이터 병렬
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We reduce communication cost of data parallel in LightGBM:
+LightGBM은 데이터 병렬에서 커뮤니케이션 비용을 줄였습니다.  
 
-1. Instead of "Merge global histograms from all local histograms", LightGBM uses "Reduce Scatter" to merge histograms of different (non-overlapping) features for different workers.
-   Then workers find the local best split on local merged histograms and sync up the global best split.
+1. "모든 국소 히스토그램들로부터 전역 (global) 히스토그램들을 병합"하는 것 대신, LightGBM은 "Reduce Scatter"을 사용하여 서로 다른 (포개지지 않는) 변수들의 히스토그램들을 병합합니다. 그 다음, 작업장치들은 국소 병합 히스토그램들 내에서 국소 최적 분할점을 찾고 전역 최적 분할점을 동기화 합니다. (???)
+   
+2. 앞에서 언급했듯이, LightGBM은 학습 속도를 높이기 위해 히스토그램 감법 (subtraction)을 사용합니다. 이를 기반으로, 알고리즘은 한쪽 잎사귀에 대해서만 히스토그램을 연산하면 되는 것이고, 이웃의 히스토그램 또한 감법을 이용하여 구할 수 있습니다.
 
-2. As aforementioned, LightGBM uses histogram subtraction to speed up training.
-   Based on this, we can communicate histograms only for one leaf, and get its neighbor's histograms by subtraction as well.
+모든 것을 고려했을 때, LightGBM의 데이터 병렬은 ``O(0.5 * #feature * #bin)``의 시간복잡도를 가집니다.
 
-All things considered, data parallel in LightGBM has time complexity ``O(0.5 * #feature * #bin)``.
+투표 병렬 (Voting Parallel) (???)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Voting Parallel
-~~~~~~~~~~~~~~~
+투표 병렬은 `Data Parallel <#data-parallel>`__ 에서의 커뮤니케이션 비용을 constant cost로 보다 크게 줄여줍니다. (???)
 
-Voting parallel further reduces the communication cost in `Data Parallel <#data-parallel>`__ to constant cost.
-It uses two-stage voting to reduce the communication cost of feature histograms\ `[10] <#references>`__.
+특성변수 히스토그램의 커뮤니케이션 비용을 줄이기 위해 2단계 투표를 사용합니다 \ `[10] <#references>`__.
 
 GPU 지원
 -----------
@@ -175,7 +170,7 @@ GPU 지원
 
 - `GPU 튜토리얼 <./GPU-Tutorial.rst>`__
 
-Applications and Metrics
+응용, 평가 매트릭스
 ------------------------
 
 LightGBM은 다음과 같은 활용이 가능합니다:
@@ -235,7 +230,7 @@ LightGBM이 지원하는 평가 매트릭스는 다음과 같습니다:
 기타 피쳐
 --------------
 
--  나무가 잎사귀단위로 증가하면서도 ``max_depth`` 를 제한시킴
+-  나무가 잎사귀단위로 증가하면서도 ``max_depth`` 로 제한
 
 -  `DART <https://arxiv.org/abs/1505.01866>`__
 
