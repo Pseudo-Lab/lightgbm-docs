@@ -372,7 +372,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  매우 무작위적인 트리를 사용합니다.
 
-   -  ``true`` 로 설정하면, 노드의 분할을 계산할 때 LightGBM은 각 변수에 대해 임의로 선택한 임계값(threshold) 하나만 확인합니다.
+   -  ``true`` 로 설정하면 노드의 분할을 계산할 때 LightGBM은 각 변수에 대해 임의로 선택한 임계값(threshold) 하나만 확인합니다.
 
    -  학습 속도를 높이기 위해 사용됩니다.
 
@@ -712,7 +712,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``enable_bundle`` :raw-html:`<a id="enable_bundle" title="Permalink to this parameter" href="#enable_bundle">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울, 별칭: ``is_enable_bundle``, ``bundle``
 
-   -  이를 ``false`` 로 설정하면 `LightGBM: A Highly Efficient Gradient Boosting Decision Tree <https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree>`__ 에 설명되어있는 배타적 변수 묶기(EFB: Exclusive Feature Bundling)가 비활성화됩니다.
+   -  ``false`` 로 설정하면 `LightGBM: A Highly Efficient Gradient Boosting Decision Tree <https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision-tree>`__ 에 설명되어있는 배타적 변수 묶기(EFB: Exclusive Feature Bundling)가 비활성화됩니다.
 
    -  **주의**: 이 기능을 비활성화하면 희소한(sparse) 데이터의 학습 속도가 느려질 수 있습니다.
 
@@ -854,87 +854,87 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``start_iteration_predict`` :raw-html:`<a id="start_iteration_predict" title="Permalink to this parameter" href="#start_iteration_predict">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  used to specify from which iteration to start the prediction
+   -  예측을 시작할 반복 횟수를 지정하는데 사용합니다.
 
-   -  ``<= 0`` means from the first iteration
+   -  ``<= 0`` 은 첫 번째 반복부터를 의미합니다.
 
 -  ``num_iteration_predict`` :raw-html:`<a id="num_iteration_predict" title="Permalink to this parameter" href="#num_iteration_predict">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  used to specify how many trained iterations will be used in prediction
+   -  예측에 사용할 학습 반복 횟수를 지정하는데 사용합니다. used to specify how many trained iterations will be used in prediction
 
-   -  ``<= 0`` means no limit
+   -  ``<= 0`` 은 무제한을 의미합니다.
 
 -  ``predict_raw_score`` :raw-html:`<a id="predict_raw_score" title="Permalink to this parameter" href="#predict_raw_score">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``is_predict_raw_score``, ``predict_rawscore``, ``raw_score``
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  set this to ``true`` to predict only the raw scores
+   -  원 점수를 예측하려면 이 값을 ``true`` 로 설정하세요.
 
-   -  set this to ``false`` to predict transformed scores
+   -  변환된 점수를 예측하려면 이 값을 ``false`` 로 설정하세요.
 
 -  ``predict_leaf_index`` :raw-html:`<a id="predict_leaf_index" title="Permalink to this parameter" href="#predict_leaf_index">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``is_predict_leaf_index``, ``leaf_index``
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  set this to ``true`` to predict with leaf index of all trees
+   -  모든 트리의 리프 인덱스로 예측하려면 이 값을 ``true`` 로 설정하세요.
 
 -  ``predict_contrib`` :raw-html:`<a id="predict_contrib" title="Permalink to this parameter" href="#predict_contrib">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``is_predict_contrib``, ``contrib``
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  set this to ``true`` to estimate `SHAP values <https://arxiv.org/abs/1706.06060>`__, which represent how each feature contributes to each prediction
+   -  `SHAP values <https://arxiv.org/abs/1706.06060>`__(예측에 대한 각 변수의 기여도) 를 추정하려먼 이 값을 ``true`` 로 설정하세요.
 
-   -  produces ``#features + 1`` values where the last value is the expected value of the model output over the training data
+   -  변수의 개수+1개의 값을 생성합니다. 마지막 값은 학습 데이터에 대한 모델의 예상 기댓값입니다.
 
-   -  **주의**: if you want to get more explanation for your model's predictions using SHAP values like SHAP interaction values, you can install `shap package <https://github.com/slundberg/shap>`__
+   -  **주의**: SHAP 상호작용(interaction) 값과 같은 SHAP 값을 사용하여 모델의 예측에 대한 자세한 설명을 얻으려면 `shap package <https://github.com/slundberg/shap>`__ 를 설치하세요.
 
-   -  **주의**: unlike the shap package, with ``predict_contrib`` we return a matrix with an extra column, where the last column is the expected value
+   -  **주의**: SHAP 패키지와 달리 ``predict_contrib`` 를 사용하면 추가적인 열(기댓값)을 포함한 행렬을 반환합니다.
 
-   -  **주의**: this feature is not implemented for linear trees
+   -  **주의**: 이 기능은 선형 트리에는 구현되지 않았습니다.
 
 -  ``predict_disable_shape_check`` :raw-html:`<a id="predict_disable_shape_check" title="Permalink to this parameter" href="#predict_disable_shape_check">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  control whether or not LightGBM raises an error when you try to predict on data with a different number of features than the training data
+   -  학습 데이터와 변수의 개수가 다른 데이터를 예측하고자 할 때 LightGBM이 오류를 발생시킬지 여부를 제어합니다.
 
-   -  if ``false`` (the default), a fatal error will be raised if the number of features in the dataset you predict on differs from the number seen during training
+   -  ``false``(기본값)인 경우, 예측되는 데이터의 변수 개수가 학습에 사용된 데이터의 변수 개수와 다를 때 치명적인 오류를 발생시킵니다.
 
-   -  if ``true``, LightGBM will attempt to predict on whatever data you provide. This is dangerous because you might get incorrect predictions, but you could use it in situations where it is difficult or expensive to generate some features and you are very confident that they were never chosen for splits in the model
+   -  ``true`` 로 설정하면 LightGBM은 사용자가 제공하는 데이터에 대해 예측을 시도합니다. 이를 통해 잘못된 예측값을 얻을 위험이 있지만, 일부 변수를 생성하는 것이 어렵거나 비용이 많이 드는 상황 혹은 모델의 분할에 사용된적이(chosen) 없다고 확신하는 상황에서 사용할 수 있습니다.
 
-   -  **주의**: be very careful setting this parameter to ``true``
+   -  **주의**: 이 파라미터를 ``true`` 로 설정할 때는 매우 신중해야 합니다.
 
 -  ``pred_early_stop`` :raw-html:`<a id="pred_early_stop" title="Permalink to this parameter" href="#pred_early_stop">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  used only in ``classification`` and ``ranking`` applications
+   -  ``classification`` 와 ``ranking`` 에서만 사용됩니다.
 
-   -  if ``true``, will use early-stopping to speed up the prediction. May affect the accuracy
+   -  ``true`` 로 설정하면 조기 종료(early-stopping)를 사용해 예측 속도를 높입니다. 정확도에 영향을 줄 수 있습니다.
 
-   -  **주의**: cannot be used with ``rf`` boosting type or custom objective function
+   -  **주의**: ``rf`` 부스팅 타입이나 사용자 지정 목적 함수와 함께 사용할 수 없습니다.
 
 -  ``pred_early_stop_freq`` :raw-html:`<a id="pred_early_stop_freq" title="Permalink to this parameter" href="#pred_early_stop_freq">&#x1F517;&#xFE0E;</a>`, 기본값 = ``10``, 타입 = 정수형
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  the frequency of checking early-stopping prediction
+   -  조기 종료(early-stopping) 예측 확인 빈도
 
 -  ``pred_early_stop_margin`` :raw-html:`<a id="pred_early_stop_margin" title="Permalink to this parameter" href="#pred_early_stop_margin">&#x1F517;&#xFE0E;</a>`, 기본값 = ``10.0``, 타입 = 부동 소숫점(double)
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  the threshold of margin in early-stopping prediction
+   -  조기 종료(early-stopping) 예측 마진(margin)의 임계값(threshold)
 
 -  ``output_result`` :raw-html:`<a id="output_result" title="Permalink to this parameter" href="#output_result">&#x1F517;&#xFE0E;</a>`, 기본값 = ``LightGBM_predict_result.txt``, 타입 = 문자열, 별칭: ``predict_result``, ``prediction_result``, ``predict_name``, ``prediction_name``, ``pred_name``, ``name_pred``
 
-   -  used only in ``prediction`` task
+   -  ``prediction`` 과 함께 사용됩니다.
 
-   -  filename of prediction result
+   -  예측 결과의 파일 이름
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
