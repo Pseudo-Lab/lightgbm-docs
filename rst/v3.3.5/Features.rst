@@ -48,9 +48,7 @@ LightGBM은 히스토그램 기반의 알고리즘을 사용함으로써\ `[4, 5
    :align: center
    :alt: 수준단위 나무 성장을 표현하는 도표로, 가장 최선의 노드가 새로운 수준을 하나를 만들게 됨을 보여준다. 이 전략은 대칭형태의 나무를 만들어 내며, 한 수준(level) 내의 모든 노드들은 자식 노드들을 가짐으로써 추가적으로 층을 형성시킨다.
 
-LightGBM은 (최고의 1등) 잎사귀단위로 성장합니다. \ `[7] <#references>`__. 알고리즘은 최대 델타 손실 (maximun delta loss)을 만드는 잎사귀가 자라도록 합니다. 잎사귀수 (``#leaf``)는 고정한다고 했을 때, 잎사귀단위 알고리즘이 수준단위 알고리즘보다 손실이 작은 경향이 있습니다.
-
-Leaf-wise may cause over-fitting when ``#data`` is small, so LightGBM includes the ``max_depth`` parameter to limit tree depth. However, trees still grow leaf-wise even when ``max_depth`` is specified.
+LightGBM은 (최고의 1등) 잎사귀단위로 성장합니다. \ `[7] <#references>`__. 알고리즘은 최대 델타 손실 (maximun delta loss)을 만드는 잎사귀가 자라도록 합니다. 잎사귀수 (``#leaf``)는 둘 다 같다고 했을 때, 잎사귀단위 알고리즘이 수준단위 알고리즘보다 손실이 작은 편입니다.
 
 잎사귀단위 증가는 데이터 (`#data``)가 작을 때 과적합을 일으킬 수 있으므로 LightGBM은 이 나무의 깊이를 제한시키는 ``max_depth``라는 파라미터를 갖고있습니다. 하지만, ``max_depth``가 지정되어도 여전히 나무는 잎사귀 단위의 성장을 계속합니다. 
 
@@ -62,18 +60,18 @@ Leaf-wise may cause over-fitting when ``#data`` is small, so LightGBM includes t
 범주형 특성변수에 최적의 분할 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-범주형 변수는 보통 원-핫 인코딩 (one-hot encoding)으로 변환하기는 하지만, 사실 나무 학습기에는 최선책이 아닙니다. 특히, 카디널리티가 높은 범주형 변수를 원-핫 인코딩으로 변환한 나무모형은 불균형한 경향이 있으며, 준수한 정확도를 얻기 위해 매우 깊게 자라야 합니다.      
+범주형 변수는 보통 원-핫 인코딩 (one-hot encoding)으로 변환하기는 하지만, 사실 나무 학습기에는 최선책이 아닙니다. 특히, 카디널리티가 높은 범주형 변수를 원-핫 인코딩으로 변환한 나무모형은 불균형한 경향이 있으며, 준수한 정확도를 얻으려면 매우 깊게 자라야 합니다.      
 
-원-핫 인코딩 대신, 최적의 해법은 한 범주형 변수의 범주들을 두 개의 부분집합으로 나눠서 분기 (split)하는 것입니다. 예를 들어 ``k`` 개의 범주를 가진 변수라면, 총 ``2^(k-1) - 1`` 개의 분할 경우의 수가 있습니다. 하지만 회귀나무에서는 이 연산에 대해 효율적인 해법을 갖고 있습니다 \ `[8] <#references>`__. 회귀나무에서는 범주형 변수의 최적의 분할을 찾는 데 약 ``O(k * log(k))`` 정도가 걸립니다.  
+원-핫 인코딩 대신, 최적의 해법은 범주들을 두 개의 부분집합으로 나눠서 분기 (split)하는 것입니다. 예를 들어 ``k`` 개의 범주를 가진 변수라면, 총 ``2^(k-1) - 1`` 개의 분할 경우의 수가 생깁니다. 회귀나무에서는 이 연산에 대해 효율적인 해법을 갖고 있습니다 \ `[8] <#references>`__. 회귀나무에서는 범주형 변수의 최적의 분할을 찾는 데 약 ``O(k * log(k))`` 정도가 걸립니다.  
 
-기본 아이디어는, 각 분할점에서 학습 목적에 맞게 범주들을 정렬해주는 것입니다. 좀더 구체적으로 설명하자면, LightGBM은 (범주형 변수에 대해) 히스토그램을 (``sum_gradient / sum_hessian``) 누적값 순으로 정렬시키고 나서 정렬된 히스토그램에서 최고의 분할점을 찾습니다.    
+기본 아이디어는 각 분할점에서 학습 목적에 맞게 범주들을 정렬해주는 것입니다. 구체적으로, LightGBM은 (범주형 변수에 대해) 히스토그램을 ``sum_gradient / sum_hessian`` 의 누적값을 기준으로 정렬시키고 나서 정렬된 히스토그램에서 최고의 분할점을 찾습니다.    
 
-네트워크 커뮤니케이션에서의 최적화 
+네트워크 커뮤니케이션에서의 최적화 (???)
 -------------------------------------
 
-LightGBM의 분산학습에서는 "All reduce", "All gather", "Reduce scatter" 같은 몇 개의 collective communication 알고리즘만 사용하면 됩니다. 
-LightGBM은 최신 알고리즘을 사용했습니다 \ `[9] <#references>`__.
-이 collective communication 알고리즘들은 point-to-point communication보다 훨씬 좋은 성능을 제공합니다.
+LightGBM의 분산학습에서는 "All reduce", "All gather", "Reduce scatter" 같은 몇 개의 collective communication 알고리즘만 사용하면 됩니다. (???)
+LightGBM은 최신 알고리즘을 사용했습니다 \ `[9] <#references>`__. (???)
+이 collective communication 알고리즘들은 point-to-point communication보다 훨씬 좋은 성능을 제공합니다. (???)
 
 .. _병렬학습에서의 최적화 (Optimization in Parallel Learning):
 
