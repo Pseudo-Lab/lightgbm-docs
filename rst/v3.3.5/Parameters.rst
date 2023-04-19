@@ -552,9 +552,9 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``refit_decay_rate`` :raw-html:`<a id="refit_decay_rate" title="Permalink to this parameter" href="#refit_decay_rate">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.9``, 타입 = 부동 소숫점(double), 제약 조건: ``0.0 <= refit_decay_rate <= 1.0``
 
-   -  ``refit`` 작업의 감쇠율(decay rate)은 ``leaf_output = refit_decay_rate * old_leaf_output + (1.0 - refit_decay_rate) * new_leaf_output`` 를 사용하여 트리를 재학습(refit)합니다.
+   -  ``refit`` 의 감쇠율(decay rate)은 ``leaf_output = refit_decay_rate * old_leaf_output + (1.0 - refit_decay_rate) * new_leaf_output`` 를 사용하여 트리를 재학습(refit)합니다.
 
-   -  CLI 버전의 ``refit``나 각 언어별 패키지가 제공하는 ``refit`` 함수의 인자로 사용됩니다.
+   -  CLI 버전의 ``refit`` 나 각 언어별 패키지가 제공하는 ``refit`` 함수의 인자로 사용됩니다.
 
 -  ``cegb_tradeoff`` :raw-html:`<a id="cegb_tradeoff" title="Permalink to this parameter" href="#cegb_tradeoff">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``cegb_tradeoff >= 0.0``
 
@@ -938,24 +938,24 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
-Convert Parameters
+변환 파라미터
 ~~~~~~~~~~~~~~~~~~
 
 -  ``convert_model_language`` :raw-html:`<a id="convert_model_language" title="Permalink to this parameter" href="#convert_model_language">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열
 
-   -  used only in ``convert_model`` task
+   -  ``convert_model`` 과 함께 사용됩니다.
 
-   -  only ``cpp`` is supported yet; for conversion model to other languages consider using `m2cgen <https://github.com/BayesWitnesses/m2cgen>`__ utility
+   -  아직 ``cpp`` 만 지원되며, 모델을 다른 언어로 변환하려면 `m2cgen <https://github.com/BayesWitnesses/m2cgen>`__ 유틸리티를 사용하세요.
 
-   -  if ``convert_model_language`` is set and ``task=train``, the model will be also converted
+   -  ``convert_model_language`` 가 설정되어 있고 ``task=train`` 이면 모델도 변환됩니다.
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``convert_model`` :raw-html:`<a id="convert_model" title="Permalink to this parameter" href="#convert_model">&#x1F517;&#xFE0E;</a>`, 기본값 = ``gbdt_prediction.cpp``, 타입 = 문자열, 별칭: ``convert_model_file``
 
-   -  used only in ``convert_model`` task
+   -  ``convert_model`` 과 함께 사용됩니다.
 
-   -  output filename of converted model
+   -  변환된 모델의 출력 파일명
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
