@@ -29,7 +29,7 @@ LightGBM은 히스토그램 기반의 알고리즘을 사용함으로써\ `[4, 5
 
    -  특성변수를 사전 정렬하는 데 드는 추가적 정보를 저장할 필요도 없습니다. (???)
 
--  **Reduce communication cost for distributed learning**
+-  **분산학습에 드는 커뮤니케이션 비용 (communication cost) 감소**
 
 희소 최적화 (Sparse Optimization)
 ------------------------------
@@ -50,7 +50,7 @@ LightGBM은 히스토그램 기반의 알고리즘을 사용함으로써\ `[4, 5
 
 LightGBM은 (최고의 1등) 잎사귀단위로 성장합니다. \ `[7] <#references>`__. 알고리즘은 최대 델타 손실 (maximun delta loss)을 만드는 잎사귀가 자라도록 합니다. 잎사귀수 (``#leaf``)는 둘 다 같다고 했을 때, 잎사귀단위 알고리즘이 수준단위 알고리즘보다 손실이 작은 편입니다.
 
-잎사귀단위 증가는 데이터 (`#data``)가 작을 때 과적합을 일으킬 수 있으므로 LightGBM은 이 나무의 깊이를 제한시키는 ``max_depth``라는 파라미터를 갖고있습니다. 하지만, ``max_depth``가 지정되어도 여전히 나무는 잎사귀 단위의 성장을 계속합니다. 
+잎사귀단위 증가는 데이터 (``#data``)가 작을 때 과적합을 일으킬 수 있으므로 LightGBM은 이 나무의 깊이를 제한시키는 ``max_depth`` 라는 파라미터를 갖고있습니다. 하지만, ``max_depth`` 가 지정되어도 여전히 나무는 잎사귀 단위의 성장을 계속합니다. 
 
 
 .. image:: ./_static/images/leaf-wise.png
@@ -100,7 +100,7 @@ LightGBM이 제공하는 분산학습 알고리즘은 아래와 같습니다.
 
 전통적 특성 병렬의 한계점:
 
-- 시간 복잡도가 ``O(#data)``를 따라서 "분할"에 속도를 낼 수 없기 때문에, 계산비용이 있습니다.
+- 시간 복잡도가 ``O(#data)`` 를 따라서 "분할"에 속도를 낼 수 없기 때문에, 계산비용이 있습니다.
    따라서, 데이터 사이즈 (``#data``)가 클떄 특성 병렬은 속도를 잘 낼 수 없습니다. 
 
 - 분할 결과에 대해 소통이 필요하며, 이는 대략 ``O(#data / 8)`` (한 데이터 당 1 bit) 정도를 소모시킵니다.
@@ -139,7 +139,7 @@ LightGBM의 특성 병렬 과정:
 
 -  높은 커뮤니케이션 비용.
    만약 point-to-point 커뮤니케이션 알고리즘을 사용한다면, 한 장치 당 커뮤니케이션 비용은 대략 ``O(#machine * #feature * #bin)`` 이 듭니다.
-   만약 collective 커뮤니케이션 알고리즘 (예. "All Reduce")을 사용한다면, 이 비용은 약 ``O(2 * #feature * #bin)`` 정도입니다 ("All Reduce" 가격 4.5 at `[9] <#references>`__).
+   만약 collective 커뮤니케이션 알고리즘 (예. "All Reduce")을 사용한다면, 이 비용은 약 ``O(2 * #feature * #bin)`` 정도입니다 ("All Reduce" 가격 4.5 `[9] <#references>`__).
 
 LightGBM의 데이터 병렬
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -150,7 +150,7 @@ LightGBM은 데이터 병렬에서 커뮤니케이션 비용을 줄였습니다.
    
 2. 앞에서 언급했듯이, LightGBM은 학습 속도를 높이기 위해 히스토그램 감법 (subtraction)을 사용합니다. 이를 기반으로, 알고리즘은 한쪽 잎사귀에 대해서만 히스토그램을 연산하면 되는 것이고, 이웃의 히스토그램 또한 감법을 이용하여 구할 수 있습니다.
 
-모든 것을 고려했을 때, LightGBM의 데이터 병렬은 ``O(0.5 * #feature * #bin)``의 시간복잡도를 가집니다.
+모든 것을 고려했을 때, LightGBM의 데이터 병렬은 ``O(0.5 * #feature * #bin)`` 의 시간복잡도를 가집니다.
 
 투표 병렬 (Voting Parallel) (???)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -246,13 +246,13 @@ LightGBM이 지원하는 평가 매트릭스는 다음과 같습니다:
 
 -  Validation metric output during training
 
--  다수의 검증 (validation) 데이터
+-  여러 검증 (validation) 데이터
 
--  다수의 평가 매트릭스
+-  여러 평가 매트릭스
 
 -  Early stopping (학습, 예측 모두)
 
--  Prediction for leaf index
+-  Prediction for leaf index (???)
 
 더 자세한 것은 `Parameters <./Parameters.rst>`__ 을 참고 부탁드립니다.
 
