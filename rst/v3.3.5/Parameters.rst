@@ -125,7 +125,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  ``rank_xendcg`` 는 ``lambdarank`` 보다 빠르면서도 비슷한 수준의 성능을 보입니다.
 
-      -  레이블은 ``int`` 타입만 허용합니다. 큰 숫자는 높은 순위를 뜻합니다(예: 0:나쁨, 1:보통, 2:좋음, 3:완벽).
+      -  레이블은 ``int`` 타입만 허용합니다. 큰 숫자는 높은 순위를 뜻합니다(예: 0:나쁨, 1:보통, 2:좋음, 3:최고).
 
 -  ``boosting`` :raw-html:`<a id="boosting" title="Permalink to this parameter" href="#boosting">&#x1F517;&#xFE0E;</a>`, 기본값 = ``gbdt``, 타입 = 열거형, 옵션: ``gbdt``, ``rf``, ``dart``, ``goss``, 별칭: ``boosting_type``, ``boost``
 
@@ -147,7 +147,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``valid`` :raw-html:`<a id="valid" title="Permalink to this parameter" href="#valid">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``test``, ``valid_data``, ``valid_data_file``, ``test_data``, ``test_data_file``, ``valid_filenames``
 
-   -  검증/테스트 데이터의 경로를 지정하면 LightGBM이 평가지표(Metric)에 기반하여 해당 데이터에 대한 결과를 출력합니다.
+   -  검증/테스트 데이터의 경로를 지정하면 LightGBM이 평가지표(metric)에 기반하여 해당 데이터에 대한 결과를 출력합니다.
 
    -  ``,`` 를 활용하여 여러 개의 검증 데이터를 사용할 수 있습니다.
 
@@ -384,7 +384,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``early_stopping_round`` :raw-html:`<a id="early_stopping_round" title="Permalink to this parameter" href="#early_stopping_round">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형, 별칭: ``early_stopping_rounds``, ``early_stopping``, ``n_iter_no_change``
 
-   -  만약 검증 데이터의 평가지표(Metric)가 이전 ``early_stopping_round`` 라운드보다 개선되지 않으면 학습을 멈춥니다.
+   -  만약 검증 데이터의 평가지표(metric)가 이전 ``early_stopping_round`` 라운드보다 개선되지 않으면 학습을 멈춥니다.
 
    -  ``<= 0`` 은 비활성화를 뜻합니다.
 
@@ -392,7 +392,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``first_metric_only`` :raw-html:`<a id="first_metric_only" title="Permalink to this parameter" href="#first_metric_only">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  LightGBM은 다양한 평가지표(Metric)를 제공합니다. 조기 학습 종료(early stopping)를 위한 첫 번째 평가지표만 사용하려면 이 값을 ``true``로 설정하세요.
+   -  LightGBM은 다양한 평가지표(metric)를 제공합니다. 조기 학습 종료(early stopping)를 위한 첫 번째 평가지표만 사용하려면 이 값을 ``true``로 설정하세요.
 
 -  ``max_delta_step`` :raw-html:`<a id="max_delta_step" title="Permalink to this parameter" href="#max_delta_step">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 별칭: ``max_tree_output``, ``max_leaf_output``
 
@@ -456,7 +456,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``dart`` 옵션에서만 사용됩니다.
 
-   -  무작위 시드(seed)로 드롭(dropping) 모델을 선택합니다.
+   -  무작위 시드(random seed)로 드롭(dropping) 모델을 선택합니다.
 
 -  ``top_rate`` :raw-html:`<a id="top_rate" title="Permalink to this parameter" href="#top_rate">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.2``, 타입 = 부동 소숫점(double), 제약 조건: ``0.0 <= top_rate <= 1.0``
 
@@ -704,7 +704,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``data_random_seed`` :raw-html:`<a id="data_random_seed" title="Permalink to this parameter" href="#data_random_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 별칭: ``data_seed``
 
-   -  히스토그램 구간(bins)을 구성하기 위한 데이터 샘플링에 대한 무작위 시드
+   -  히스토그램 구간(bins)을 구성하기 위한 데이터 샘플링에 대한 무작위 시드(random seed)
 
 -  ``is_enable_sparse`` :raw-html:`<a id="is_enable_sparse" title="Permalink to this parameter" href="#is_enable_sparse">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울, 별칭: ``is_sparse``, ``enable_sparse``, ``sparse``
 
@@ -959,110 +959,110 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
-Objective Parameters
+목적 함수 파라미터
 --------------------
 
 -  ``objective_seed`` :raw-html:`<a id="objective_seed" title="Permalink to this parameter" href="#objective_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``5``, 타입 = 정수형
 
-   -  used only in ``rank_xendcg`` objective
+   -  ``rank_xendcg`` 목적 함수와 함께 사용됩니다.
 
-   -  random seed for objectives, if random process is needed
+   -  무작위 프로세스(random process)가 필요한 경우, 목적 함수의 무작위 시드(random seed)가 됩니다.
 
 -  ``num_class`` :raw-html:`<a id="num_class" title="Permalink to this parameter" href="#num_class">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 별칭: ``num_classes``, 제약 조건: ``num_class > 0``
 
-   -  used only in ``multi-class`` classification application
+   -  ``multi-class`` 분류 문제에서 사용됩니다.
 
 -  ``is_unbalance`` :raw-html:`<a id="is_unbalance" title="Permalink to this parameter" href="#is_unbalance">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``unbalance``, ``unbalanced_sets``
 
-   -  used only in ``binary`` and ``multiclassova`` applications
+   -  ``binary`` 및 ``multiclassova`` 문제에서 사용됩니다.
 
-   -  set this to ``true`` if training data are unbalanced
+   -  학습 데이터가 불균형한 경우 ``true`` 로 설정하십시오.
 
-   -  **주의**: while enabling this should increase the overall performance metric of your model, it will also result in poor estimates of the individual class probabilities
+   -  **주의**: 이 옵션을 활성화하면 모델의 전반적인 성능 지표는 향상되지만 각 클래스의 확률이 잘못 예측될 수 있습니다.
 
-   -  **주의**: this parameter cannot be used at the same time with ``scale_pos_weight``, choose only **one** of them
+   -  **주의**: 이 파라미터는 ``scale_pos_weight`` 와 동시에 사용할 수 없으며, 둘 중 **하나** 만 선택해야 합니다.
 
 -  ``scale_pos_weight`` :raw-html:`<a id="scale_pos_weight" title="Permalink to this parameter" href="#scale_pos_weight">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``scale_pos_weight > 0.0``
 
-   -  used only in ``binary`` and ``multiclassova`` applications
+   -  ``binary`` 및 ``multiclassova`` 문제에서 사용됩니다.
 
-   -  weight of labels with positive class
+   -  클래스가 양성(positive)인 클래스의 가중치
 
-   -  **주의**: while enabling this should increase the overall performance metric of your model, it will also result in poor estimates of the individual class probabilities
+   -  **주의**: 이 옵션을 활성화하면 모델의 전반적인 성능 지표는 향상되지만 각 클래스의 확률이 잘못 예측될 수 있습니다.
 
-   -  **주의**: this parameter cannot be used at the same time with ``is_unbalance``, choose only **one** of them
+   -  **주의**: 이 파라미터는 ``is_unbalance`` 와 동시에 사용할 수 없으며, 둘 중 **하나** 만 선택해야 합니다.
 
 -  ``sigmoid`` :raw-html:`<a id="sigmoid" title="Permalink to this parameter" href="#sigmoid">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``sigmoid > 0.0``
 
-   -  used only in ``binary`` and ``multiclassova`` classification and in ``lambdarank`` applications
+   -  ``binary`` 와 ``multiclassova`` 분류 문제 그리고 ``lambdarank`` 문제에서 사용됩니다.
 
-   -  parameter for the sigmoid function
+   -  시그모이드 함수에 대한 파라미터입니다.
 
 -  ``boost_from_average`` :raw-html:`<a id="boost_from_average" title="Permalink to this parameter" href="#boost_from_average">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울
 
-   -  used only in ``regression``, ``binary``, ``multiclassova`` and ``cross-entropy`` applications
+   -  ``regression``, ``binary``, ``multiclassova`` 및 ``cross-entropy`` 문제에서 사용됩니다.
 
-   -  adjusts initial score to the mean of labels for faster convergence
+   -  빠른 수렴을 위해 초기 값(initial score)을 레이블의 평균으로 조정합니다.
 
 -  ``reg_sqrt`` :raw-html:`<a id="reg_sqrt" title="Permalink to this parameter" href="#reg_sqrt">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  used only in ``regression`` application
+   -  ``regression`` 문제에서 사용됩니다.
 
-   -  used to fit ``sqrt(label)`` instead of original values and prediction result will be also automatically converted to ``prediction^2``
+   -  이를 사용하면 원래 값 대신 ``sqrt(label)`` 를 맞추는데 사용되며 예측 결과도 ``prediction^2``로 자동 변환됩니다.
 
-   -  might be useful in case of large-range labels
+   -  범위가 큰 레이블의 경우 유용할 수 있습니다.
 
 -  ``alpha`` :raw-html:`<a id="alpha" title="Permalink to this parameter" href="#alpha">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.9``, 타입 = 부동 소숫점(double), 제약 조건: ``alpha > 0.0``
 
-   -  used only in ``huber`` and ``quantile`` ``regression`` applications
+   -  ``huber`` ``regression`` 과 ``quantile`` ``regression`` 문제에서 사용됩니다.
 
-   -  parameter for `Huber loss <https://en.wikipedia.org/wiki/Huber_loss>`__ and `Quantile regression <https://en.wikipedia.org/wiki/Quantile_regression>`__
+   -  `Huber loss <https://en.wikipedia.org/wiki/Huber_loss>`__ 와 `Quantile regression <https://en.wikipedia.org/wiki/Quantile_regression>`__ 에 대한 파라미터입니다.
 
 -  ``fair_c`` :raw-html:`<a id="fair_c" title="Permalink to this parameter" href="#fair_c">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``fair_c > 0.0``
 
-   -  used only in ``fair`` ``regression`` application
+   -  ``fair`` ``regression`` 문제에서 사용됩니다.
 
-   -  parameter for `Fair loss <https://www.kaggle.com/c/allstate-claims-severity/discussion/24520>`__
+   -  `Fair loss <https://www.kaggle.com/c/allstate-claims-severity/discussion/24520>`__ 에 대한 파라미터입니다.
 
 -  ``poisson_max_delta_step`` :raw-html:`<a id="poisson_max_delta_step" title="Permalink to this parameter" href="#poisson_max_delta_step">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.7``, 타입 = 부동 소숫점(double), 제약 조건: ``poisson_max_delta_step > 0.0``
 
-   -  used only in ``poisson`` ``regression`` application
+   -  ``poisson`` ``regression`` 문제에서 사용됩니다.
 
-   -  parameter for `Poisson regression <https://en.wikipedia.org/wiki/Poisson_regression>`__ to safeguard optimization
+   -  `Poisson regression <https://en.wikipedia.org/wiki/Poisson_regression>`__ 파라미터를 설정하여 최적화를 안전하게 보호합니다.
 
 -  ``tweedie_variance_power`` :raw-html:`<a id="tweedie_variance_power" title="Permalink to this parameter" href="#tweedie_variance_power">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.5``, 타입 = 부동 소숫점(double), 제약 조건: ``1.0 <= tweedie_variance_power < 2.0``
 
-   -  used only in ``tweedie`` ``regression`` application
+   -  ``tweedie`` ``regression`` 문제에서 사용됩니다.
 
-   -  used to control the variance of the tweedie distribution
+   -  트위디 분포(tweedie distribution)의 분산을 제어하는데 사용됩니다.
 
-   -  set this closer to ``2`` to shift towards a **Gamma** distribution
+   -  이 값이 ``2`` 에 가까울수록 **감마** 분포에 가깝게 합니다.
 
-   -  set this closer to ``1`` to shift towards a **Poisson** distribution
+   -  이 값이 ``1`` 에 가까울수록 **포아송** 분포에 가깝게 합니다.
 
 -  ``lambdarank_truncation_level`` :raw-html:`<a id="lambdarank_truncation_level" title="Permalink to this parameter" href="#lambdarank_truncation_level">&#x1F517;&#xFE0E;</a>`, 기본값 = ``30``, 타입 = 정수형, 제약 조건: ``lambdarank_truncation_level > 0``
 
-   -  used only in ``lambdarank`` application
+   -  ``lambdarank`` 문제에서 활용됩니다.
 
-   -  controls the number of top-results to focus on during training, refer to "truncation level" in the Sec. 3 of `LambdaMART paper <https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/MSR-TR-2010-82.pdf>`__
+   -  학습 중 집중할 상위 결과의 수를 제어합니다(`LambdaMART 논문 <https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/MSR-TR-2010-82.pdf>`__ 3장의 "절단 수준(truncation level)" 참조).
 
-   -  this parameter is closely related to the desirable cutoff ``k`` in the metric **NDCG@k** that we aim at optimizing the ranker for. The optimal setting for this parameter is likely to be slightly higher than ``k`` (e.g., ``k + 3``) to include more pairs of documents to train on, but perhaps not too high to avoid deviating too much from the desired target metric **NDCG@k**
+   -  이 파라미터는 랭커(ranker) 최적화를 위한 평가지표(metric) **NDCG@k** 의 적절한 커트라인 ``k`` 와 밀접한 관련이 있습니다. 이 파라미터의 최적 설정은 학습할 데이터 쌍을 더 많이 포함하기 위해 ``k`` 보다 약간 높은 값(예: ``k + 3``)이 적당하나, 목표 지표인 **NDCG@k** 에서 너무 많이 벗어나지 않도록 너무 높지 않아야 합니다.
 
 -  ``lambdarank_norm`` :raw-html:`<a id="lambdarank_norm" title="Permalink to this parameter" href="#lambdarank_norm">&#x1F517;&#xFE0E;</a>`, 기본값 = ``true``, 타입 = 부울
 
-   -  used only in ``lambdarank`` application
+   -  ``lambdarank`` 문제에서 활용됩니다.
 
-   -  set this to ``true`` to normalize the lambdas for different queries, and improve the performance for unbalanced data
+   -  다른 쿼리에 대해 람다를 정규화하고 불균형 데이터에 대한 성능을 개선하려면 이 값을 ``true`` 로 설정하세요.
 
-   -  set this to ``false`` to enforce the original lambdarank algorithm
+   -  원래의 람다랭크(lambdarank) 알고리즘을 적용하려면 이 값을 ``false`` 로 설정하십시오.
 
--  ``label_gain`` :raw-html:`<a id="label_gain" title="Permalink to this parameter" href="#label_gain">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0,1,3,7,15,31,63,...,2^30-1``, 타입 = multi-double
+-  ``label_gain`` :raw-html:`<a id="label_gain" title="Permalink to this parameter" href="#label_gain">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0,1,3,7,15,31,63,...,2^30-1``, 타입 = 다중 부동 소숫점(multi-double)
 
-   -  used only in ``lambdarank`` application
+   -  ``lambdarank`` 문제에서 활용됩니다.
 
-   -  relevant gain for labels. For example, the gain of label ``2`` is ``3`` in case of default label gains
+   -  레이블에 관련된 이득(gain). 예를 들어, 기본 레이블 이득의 경우 레이블 ``2`` 의 이득은 ``3`` 입니다.
 
-   -  separate by ``,``
+   -  ``,`` 로 구분됩니다.
 
 Metric Parameters
 -----------------
