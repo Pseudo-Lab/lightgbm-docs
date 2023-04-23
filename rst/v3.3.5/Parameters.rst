@@ -3,7 +3,7 @@
 .. role:: raw-html(raw)
     :format: html
 
-파라미터
+파라미터(Parameters)
 ==========
 
 이 페이지는 LightGBM의 모든 파라미터에 대한 설명을 다룹니다.
@@ -18,7 +18,7 @@
 
 - `Laurae++ 인터랙티브 문서`_
 
-파라미터 형식
+파라미터 형식(Parameters Format)
 -----------------
 
 파라미터를 지정하기 위해 ``key1=value1 key2=value2 ...`` 형식을 사용합니다.
@@ -50,7 +50,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 .. start params list
 
-주요 파라미터
+주요 파라미터(Core Parameters)
 ---------------
 
 -  ``config`` :raw-html:`<a id="config" title="Permalink to this parameter" href="#config">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``config_file``
@@ -77,9 +77,9 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  회귀에서의 활용
 
-      -  ``regression``, L2 loss, 별칭: ``regression_l2``, ``l2``, ``mean_squared_error``, ``mse``, ``l2_root``, ``root_mean_squared_error``, ``rmse``
+      -  ``regression``, L2 손실(loss), 별칭: ``regression_l2``, ``l2``, ``mean_squared_error``, ``mse``, ``l2_root``, ``root_mean_squared_error``, ``rmse``
 
-      -  ``regression_l1``, L1 loss, 별칭: ``l1``, ``mean_absolute_error``, ``mae``
+      -  ``regression_l1``, L1 손실(loss), 별칭: ``l1``, ``mean_absolute_error``, ``mae``
 
       -  ``huber``, `후버 손실(Huber Loss) <https://en.wikipedia.org/wiki/Huber_loss>`__
 
@@ -111,7 +111,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  교차 엔트로피(Cross Entropy)의 활용
 
-      -  ``cross_entropy``, 교차 엔트로피에 대한 목적 함수 (선형 가중치 옵션 포함), 별칭: ``xentropy``
+      -  ``cross_entropy``, (선형 가중치 옵션이 포함된) 교차 엔트로피에 대한 목적 함수, 별칭: ``xentropy``
 
       -  ``cross_entropy_lambda``, 교차 엔트로피를 대체하는 재매개변수화(reparametrization), 별칭: ``xentlambda``
 
@@ -229,7 +229,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  **주의**: ``deterministic=true`` 로 설정한 경우, 수치적(numerical) 문제로 인한 잠재적 불안정성을 피하려면 ``force_col_wise=true`` 나 ``force_row_wise=true`` 를 설정하십시오.
 
-학습 제어 파라미터
+학습 제어 파라미터(Learning Control Parameters)
 ---------------------------
 
 -  ``force_col_wise`` :raw-html:`<a id="force_col_wise" title="Permalink to this parameter" href="#force_col_wise">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
@@ -588,7 +588,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  값이 클수록 강한 정규화(regularization)를 제공합니다.
 
-      -  각 노드의 가중치(weights)는 ``(n / path_smooth) * w + w_p / (n / path_smooth + 1)`` 이며, 여기서 ``n`` 은 노드의 샘플 수, ``w`` 는 로스(loss)를 최소화하기 위한 최적의 노드 가중치(대략 ``-sum_gradients / sum_hessians``), ``w_p`` 는 부모 노드의 가중치입니다.
+      -  각 노드의 가중치(weights)는 ``(n / path_smooth) * w + w_p / (n / path_smooth + 1)`` 이며, 여기서 ``n`` 은 노드의 샘플 수, ``w`` 는 손실(loss)를 최소화하기 위한 최적의 노드 가중치(대략 ``-sum_gradients / sum_hessians``), ``w_p`` 는 부모 노드의 가중치입니다.
 
       -  루트 노드가 아닌 경우 부모 노드의 값(output) ``w_p`` 자체에 평활화(smoothing)가 적용되어 트리의 깊이에 따라 평활화 효과가 누적된다는 점에 유의하십시오.
 
@@ -644,10 +644,10 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
-입출력 파라미터
+입출력 파라미터(IO Parameters)
 -------------
 
-데이터셋 파라미터
+데이터셋 파라미터(Dataset Parameters)
 ~~~~~~~~~~~~~~~~~~
 
 -  ``linear_tree`` :raw-html:`<a id="linear_tree" title="Permalink to this parameter" href="#linear_tree">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``linear_trees``
@@ -849,7 +849,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  **주의**: ``true`` 로 설정하면 텍스트 구문 분석(parsing) 속도가 느려질 수 있습니다.
 
-예측 파라미터
+예측 파라미터(Predict Parameters)
 ~~~~~~~~~~~~~~~~~~
 
 -  ``start_iteration_predict`` :raw-html:`<a id="start_iteration_predict" title="Permalink to this parameter" href="#start_iteration_predict">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형
@@ -938,7 +938,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
-변환 파라미터
+변환 파라미터(Convert Parameters)
 ~~~~~~~~~~~~~~~~~~
 
 -  ``convert_model_language`` :raw-html:`<a id="convert_model_language" title="Permalink to this parameter" href="#convert_model_language">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열
@@ -959,7 +959,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
-목적 함수 파라미터
+목적 함수 파라미터(Objective Paremeters)
 --------------------
 
 -  ``objective_seed`` :raw-html:`<a id="objective_seed" title="Permalink to this parameter" href="#objective_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``5``, 타입 = 정수형
@@ -1016,19 +1016,19 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``huber`` ``regression`` 과 ``quantile`` ``regression`` 문제에서 사용됩니다.
 
-   -  `Huber loss <https://en.wikipedia.org/wiki/Huber_loss>`__ 와 `Quantile regression <https://en.wikipedia.org/wiki/Quantile_regression>`__ 에 대한 파라미터입니다.
+   -  `후버 손실(Huber Loss) <https://en.wikipedia.org/wiki/Huber_loss>`__ 와 `Quantile regression <https://en.wikipedia.org/wiki/Quantile_regression>`__ 에 대한 파라미터입니다.
 
 -  ``fair_c`` :raw-html:`<a id="fair_c" title="Permalink to this parameter" href="#fair_c">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``fair_c > 0.0``
 
    -  ``fair`` ``regression`` 문제에서 사용됩니다.
 
-   -  `Fair loss <https://www.kaggle.com/c/allstate-claims-severity/discussion/24520>`__ 에 대한 파라미터입니다.
+   -  `공정 손실(Fair loss) <https://www.kaggle.com/c/allstate-claims-severity/discussion/24520>`__ 에 대한 파라미터입니다.
 
 -  ``poisson_max_delta_step`` :raw-html:`<a id="poisson_max_delta_step" title="Permalink to this parameter" href="#poisson_max_delta_step">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.7``, 타입 = 부동 소숫점(double), 제약 조건: ``poisson_max_delta_step > 0.0``
 
    -  ``poisson`` ``regression`` 문제에서 사용됩니다.
 
-   -  `Poisson regression <https://en.wikipedia.org/wiki/Poisson_regression>`__ 파라미터를 설정하여 최적화를 안전하게 보호합니다.
+   -  `포아송 회귀(Poisson regression) <https://en.wikipedia.org/wiki/Poisson_regression>`__ 파라미터를 설정하여 최적화를 안전하게 보호합니다.
 
 -  ``tweedie_variance_power`` :raw-html:`<a id="tweedie_variance_power" title="Permalink to this parameter" href="#tweedie_variance_power">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.5``, 타입 = 부동 소숫점(double), 제약 조건: ``1.0 <= tweedie_variance_power < 2.0``
 
@@ -1064,38 +1064,38 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``,`` 로 구분됩니다.
 
-Metric Parameters
+평가지표 파라미터(Metric Parameters)
 -----------------
 
--  ``metric`` :raw-html:`<a id="metric" title="Permalink to this parameter" href="#metric">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = multi-enum, 별칭: ``metrics``, ``metric_types``
+-  ``metric`` :raw-html:`<a id="metric" title="Permalink to this parameter" href="#metric">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 열거형(multi-enum), 별칭: ``metrics``, ``metric_types``
 
-   -  metric(s) to be evaluated on the evaluation set(s)
+   -  평가 셋(evaluation set(s))에 평가될 평가지표(metric(s))
 
-      -  ``""`` (empty string or not specified) means that metric corresponding to specified ``objective`` will be used (this is possible only for pre-defined objective functions, otherwise no evaluation metric will be added)
+      -  ``""`` (빈 문자열 혹은 미지정)은 특정 ``objective`` 에 대응되는 평가지표가 사용됨을 의미합니다(사전에 정의된 목적 함수에 대해서만 가능하며, 그렇지 않은 경우 평가지표가 추가되지 않음).
 
-      -  ``"None"`` (string, **not** a ``None`` value) means that no metric will be registered, 별칭: ``na``, ``null``, ``custom``
+      -  ``"None"`` (문자열, ``None`` 값이 **아님**)은 평가지표가 지정되지 않음을 의미합니다. 별칭: ``na``, ``null``, ``custom``
 
-      -  ``l1``, absolute loss, 별칭: ``mean_absolute_error``, ``mae``, ``regression_l1``
+      -  ``l1``, 절대 손실(absolute loss), 별칭: ``mean_absolute_error``, ``mae``, ``regression_l1``
 
-      -  ``l2``, square loss, 별칭: ``mean_squared_error``, ``mse``, ``regression_l2``, ``regression``
+      -  ``l2``, 제곱 손실(square loss), 별칭: ``mean_squared_error``, ``mse``, ``regression_l2``, ``regression``
 
-      -  ``rmse``, root square loss, 별칭: ``root_mean_squared_error``, ``l2_root``
+      -  ``rmse``, 루트 제곱 손실(root square loss), 별칭: ``root_mean_squared_error``, ``l2_root``
 
-      -  ``quantile``, `Quantile regression <https://en.wikipedia.org/wiki/Quantile_regression>`__
+      -  ``quantile``, `분위수 회귀(Quantile Regression) <https://en.wikipedia.org/wiki/Quantile_regression>`__
 
-      -  ``mape``, `MAPE loss <https://en.wikipedia.org/wiki/Mean_absolute_percentage_error>`__, 별칭: ``mean_absolute_percentage_error``
+      -  ``mape``, `평균 절대 비율 오차 손실(MAPE loss) <https://en.wikipedia.org/wiki/Mean_absolute_percentage_error>`__, 별칭: ``mean_absolute_percentage_error``
 
-      -  ``huber``, `Huber loss <https://en.wikipedia.org/wiki/Huber_loss>`__
+      -  ``huber``, `후버 손실(Huber loss) <https://en.wikipedia.org/wiki/Huber_loss>`__
 
-      -  ``fair``, `Fair loss <https://www.kaggle.com/c/allstate-claims-severity/discussion/24520>`__
+      -  ``fair``, `공정 손실(Fair loss) <https://www.kaggle.com/c/allstate-claims-severity/discussion/24520>`__
 
-      -  ``poisson``, negative log-likelihood for `Poisson regression <https://en.wikipedia.org/wiki/Poisson_regression>`__
+      -  ``poisson``, `포아송 회귀(Poisson regression) <https://en.wikipedia.org/wiki/Poisson_regression>`__ 에 대한 음의 로그우도
 
-      -  ``gamma``, negative log-likelihood for **Gamma** regression
+      -  ``gamma``, **감마** 회귀(**Gamma** regression)에 대한 음의 로그우도(negative log-likelihood)
 
-      -  ``gamma_deviance``, residual deviance for **Gamma** regression
+      -  ``gamma_deviance``, **감마** 회귀(**Gamma** regression)에 대한 이탈도
 
-      -  ``tweedie``, negative log-likelihood for **Tweedie** regression
+      -  ``tweedie``, **트위디** 회귀(**Tweedie** regression)에 대한 음의 로그우도(negative log-likelihood)
 
       -  ``ndcg``, `NDCG <https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG>`__, 별칭: ``lambdarank``, ``rank_xendcg``, ``xendcg``, ``xe_ndcg``, ``xe_ndcg_mart``, ``xendcg_mart``
 
@@ -1107,96 +1107,96 @@ Metric Parameters
 
       -  ``binary_logloss``, `log loss <https://en.wikipedia.org/wiki/Cross_entropy>`__, 별칭: ``binary``
 
-      -  ``binary_error``, for one sample: ``0`` for correct classification, ``1`` for error classification
+      -  ``binary_error``, 하나의 샘플에 대해: 정분류일 경우 ``0``, 오분류일 경우 ``1``
 
       -  ``auc_mu``, `AUC-mu <http://proceedings.mlr.press/v97/kleiman19a/kleiman19a.pdf>`__
 
-      -  ``multi_logloss``, log loss for multi-class classification, 별칭: ``multiclass``, ``softmax``, ``multiclassova``, ``multiclass_ova``, ``ova``, ``ovr``
+      -  ``multi_logloss``, 다중 분류에 대한 로그 손실(log loss), 별칭: ``multiclass``, ``softmax``, ``multiclassova``, ``multiclass_ova``, ``ova``, ``ovr``
 
-      -  ``multi_error``, error rate for multi-class classification
+      -  ``multi_error``, 다중 분류에 대한 오류율
 
-      -  ``cross_entropy``, cross-entropy (with optional linear weights), 별칭: ``xentropy``
+      -  ``cross_entropy``, (선형 가중치 옵션이 포함된) 교차 엔트로피, 별칭: ``xentropy``
 
       -  ``cross_entropy_lambda``, "intensity-weighted" cross-entropy, 별칭: ``xentlambda``
 
       -  ``kullback_leibler``, `Kullback-Leibler divergence <https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence>`__, 별칭: ``kldiv``
 
-   -  support multiple metrics, separated by ``,``
+   -  여러 평가지표를 지원합니다(``,`` 로 구분).
 
 -  ``metric_freq`` :raw-html:`<a id="metric_freq" title="Permalink to this parameter" href="#metric_freq">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 별칭: ``output_freq``, 제약 조건: ``metric_freq > 0``
 
-   -  frequency for metric output
+   -  평가지표(metric) 출력 빈도
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``is_provide_training_metric`` :raw-html:`<a id="is_provide_training_metric" title="Permalink to this parameter" href="#is_provide_training_metric">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울, 별칭: ``training_metric``, ``is_training_metric``, ``train_metric``
 
-   -  set this to ``true`` to output metric result over training dataset
+   -  학습 데이터에 대한 평가지표를 출력하려면 이 값을 ``true`` 로 설정하세요.
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``eval_at`` :raw-html:`<a id="eval_at" title="Permalink to this parameter" href="#eval_at">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1,2,3,4,5``, 타입 = 다중 정수형(multi-int), 별칭: ``ndcg_eval_at``, ``ndcg_at``, ``map_eval_at``, ``map_at``
 
-   -  used only with ``ndcg`` and ``map`` metrics
+   -  ``ndcg`` 와 ``map`` 평가지표(metric)에만 사용됩니다.
 
-   -  `NDCG <https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG>`__ and `MAP <https://makarandtapaswi.wordpress.com/2012/07/02/intuition-behind-average-precision-and-map/>`__ evaluation positions, separated by ``,``
+   -  ``,`` 로 구분되는 `NDCG <https://en.wikipedia.org/wiki/Discounted_cumulative_gain#Normalized_DCG>`__ 및 `MAP <https://makarandtapaswi.wordpress.com/2012/07/02/intuition-behind-average-precision-and-map/>`__ 평가 위치(evaluation positions)
 
 -  ``multi_error_top_k`` :raw-html:`<a id="multi_error_top_k" title="Permalink to this parameter" href="#multi_error_top_k">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 제약 조건: ``multi_error_top_k > 0``
 
-   -  used only with ``multi_error`` metric
+   -  ``multi_error`` 평가지표(metric)와 함께 사용됩니다.
 
-   -  threshold for top-k multi-error metric
+   -  상위 k개에 대한 다중 오류 평가지표(multi-error metric)에 대한 임계값(threshold)
 
-   -  the error on each sample is ``0`` if the true class is among the top ``multi_error_top_k`` predictions, and ``1`` otherwise
+   -  실제 클래스가 상위 ``multi_error_top_k`` 개의 예측에 속하는 경우 각 샘플의 오차는 ``0`` 이고, 그렇지 않을 경우 ``1`` 입니다.
 
-      -  more precisely, the error on a sample is ``0`` if there are at least ``num_classes - multi_error_top_k`` predictions strictly less than the prediction on the true class
+      -  더 정확하게는, 적어도 ``num_classes - multi_error_top_k`` 개의 예측이 실제 클래스에 대한 예측보다 훨씬 작을 경우에 샘플의 오차가 ``0`` 입니다.
 
-   -  when ``multi_error_top_k=1`` this is equivalent to the usual multi-error metric
+   -  ``multi_error_top_k=1`` 일 때 보통의 다중 오류 평가지표와 동일합니다.
 
--  ``auc_mu_weights`` :raw-html:`<a id="auc_mu_weights" title="Permalink to this parameter" href="#auc_mu_weights">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = multi-double
+-  ``auc_mu_weights`` :raw-html:`<a id="auc_mu_weights" title="Permalink to this parameter" href="#auc_mu_weights">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = 다중 부동 소숫점(multi-double)
 
-   -  used only with ``auc_mu`` metric
+   -  ``auc_mu`` 평가지표(metric)와 함께 사용됩니다.
 
-   -  list representing flattened matrix (in row-major order) giving loss weights for classification errors
+   -  분류 오차에 대한 손실 가중치(loss weights)를 제공하는 평활화(행 우선)된 행렬을 나타내는 리스트
 
-   -  list should have ``n * n`` elements, where ``n`` is the number of classes
+   -  리스트는 ``n * n`` 개의 요소를 가져야합니다. 여기서 ``n`` 은 클래스 개수입니다.
 
-   -  the matrix co-ordinate ``[i, j]`` should correspond to the ``i * n + j``-th element of the list
+   -  행렬 좌표 ``[i, j]`` 는 리스트의 ``i * n + j`` 번째 요소에 해당해야 합니다.
 
-   -  if not specified, will use equal weights for all classes
+   -  지정하지 않으면모든 클래스에 동일한 가중치를 사용합니다.
 
-Network Parameters
+네트워크 파라미터(Network Parameters)
 ------------------
 
 -  ``num_machines`` :raw-html:`<a id="num_machines" title="Permalink to this parameter" href="#num_machines">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 별칭: ``num_machine``, 제약 조건: ``num_machines > 0``
 
-   -  the number of machines for distributed learning application
+   -  분산 학습을 위한 머신(machines)의 수
 
-   -  this parameter is needed to be set in both **socket** and **mpi** versions
+   -  이 파라미터는 **소켓(socket)** 및 **mpi** 버전 모두에서 설정해야 합니다.
 
 -  ``local_listen_port`` :raw-html:`<a id="local_listen_port" title="Permalink to this parameter" href="#local_listen_port">&#x1F517;&#xFE0E;</a>`, 기본값 = ``12400 (random for Dask-package)``, 타입 = 정수형, 별칭: ``local_port``, ``port``, 제약 조건: ``local_listen_port > 0``
 
-   -  TCP listen port for local machines
+   -  로컬 머신(machines)용 TCP 수신 포트
 
-   -  **주의**: don't forget to allow this port in firewall settings before training
+   -  **주의**: 학습 전에 방화벽 설정에서 이 포트를 허용하는 것을 잊지 마십시오.
 
 -  ``time_out`` :raw-html:`<a id="time_out" title="Permalink to this parameter" href="#time_out">&#x1F517;&#xFE0E;</a>`, 기본값 = ``120``, 타입 = 정수형, 제약 조건: ``time_out > 0``
 
-   -  socket time-out in minutes
+   -  소켓 시간 제한(분)
 
 -  ``machine_list_filename`` :raw-html:`<a id="machine_list_filename" title="Permalink to this parameter" href="#machine_list_filename">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``machine_list_file``, ``machine_list``, ``mlist``
 
-   -  path of file that lists machines for this distributed learning application
+   -  분산 학습 머신(machines)이 나열되어있는 파일 경로
 
-   -  each line contains one IP and one port for one machine. The format is ``ip port`` (space as a separator)
+   -  각 줄은 한 머신에 대한 하나의 IP 및 하나의 포트를 나타냅니다. 형식은 ``ip port`` 입니다(공백으로 구분).
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
 -  ``machines`` :raw-html:`<a id="machines" title="Permalink to this parameter" href="#machines">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열, 별칭: ``workers``, ``nodes``
 
-   -  list of machines in the following format: ``ip1:port1,ip2:port2``
+   -  다음과 같은 형식의 머신(machines) 리스트. 형식: ``ip1:port1,ip2:port2``
 
-GPU Parameters
+GPU 파라미터(GPU Parameters)
 --------------
 
 -  ``gpu_platform_id`` :raw-html:`<a id="gpu_platform_id" title="Permalink to this parameter" href="#gpu_platform_id">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형
