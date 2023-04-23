@@ -478,7 +478,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  범주형 변수에 사용됩니다.
 
-   -  범주형 변수에 대한 분할 지점 수를 제한합니다. limit number of split points considered for categorical features. 자세한 내용은 `LightGBM이 범주형 변수에 대한 최적의 분할을 찾는 방법에 대한 문서 <./Features.rst#optimal-split-for-categorical-features>`_ 를 참조하세요.
+   -  범주형 변수에 대한 분할 지점 수를 제한합니다. 자세한 내용은 `LightGBM이 범주형 변수에 대한 최적의 분할을 찾는 방법에 대한 문서 <./Features.rst#optimal-split-for-categorical-features>`_ 를 참조하세요.
 
    -  학습 속도를 높이기 위해 사용됩니다.
 
@@ -830,7 +830,6 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  일부 또는 모든 변수에 대한 구간 상한(bin upper)을 설정하는 ``.json`` 파일의 경로입니다.
 
-   -  ``.json`` file should contain an array of objects, each containing the word ``feature`` (integer feature index) and ``bin_upper_bound`` (array of thresholds for binning)
    -  ``.json`` 파일은 각각 ``feature``(정수 변수 인덱스) 와 ``bin_upper_bound``(구간화(binning)를 위한 임계값 배열)라는 단어가 포함된 객체 배열을 포함해야 합니다.
 
    -  `이 파일 <https://github.com/microsoft/LightGBM/tree/master/examples/regression/forced_bins.json>`__ 을 예제로 참고하십시오.
@@ -864,7 +863,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``prediction`` 과 함께 사용됩니다.
 
-   -  예측에 사용할 학습 반복 횟수를 지정하는데 사용합니다. used to specify how many trained iterations will be used in prediction
+   -  예측에 사용할 학습 반복 횟수를 지정하는데 사용합니다.
 
    -  ``<= 0`` 은 무제한을 의미합니다.
 
@@ -1089,7 +1088,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  ``fair``, `공정 손실(Fair loss) <https://www.kaggle.com/c/allstate-claims-severity/discussion/24520>`__
 
-      -  ``poisson``, `포아송 회귀(Poisson regression) <https://en.wikipedia.org/wiki/Poisson_regression>`__ 에 대한 음의 로그우도
+      -  ``poisson``, `포아송 회귀(Poisson regression) <https://en.wikipedia.org/wiki/Poisson_regression>`__ 에 대한 음의 로그우도(negative log-likelihood)
 
       -  ``gamma``, **감마** 회귀(**Gamma** regression)에 대한 음의 로그우도(negative log-likelihood)
 
@@ -1275,7 +1274,7 @@ LightGBM은 가중화된(weighted) 학습을 지원합니다. 다음과 같은 �
 
 랭킹 학습을 위해서는 학습 데이터에 대한 쿼리 정보가 필요합니다.
 
-LightGBM은 다음과 같은 추가 파일을 사용하여 쿼리 데이터를 저장합니다.:
+LightGBM은 다음과 같은 추가 파일을 사용하여 쿼리 데이터를 저장합니다.
 
 ::
 
