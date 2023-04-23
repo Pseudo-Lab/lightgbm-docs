@@ -1,75 +1,75 @@
 .. role:: raw-html(raw)
     :format: html
 
-LightGBM FAQ
+LightGBM 관련 자주 묻는 질문 (FAQ)
 ############
 
-.. contents:: LightGBM Frequently Asked Questions
+.. contents:: LightGBM 관련 자주묻는 질문 (FAQ)
     :depth: 1
     :local:
     :backlinks: none
 
 ------
 
-Critical Issues
+중요한 문제
 ===============
 
-A **critical issue** could be a *crash*, *prediction error*, *nonsense output*, or something else requiring immediate attention.
+**중요한 문제**는 *충돌*, *예측 오류*, *무의미한 출력*, 또는 그 밖에 즉각적인 주의가 필요한 것일 수 있습니다.
 
-Please post such an issue in the `Microsoft/LightGBM repository <https://github.com/microsoft/LightGBM/issues>`__.
+이러한 문제는 `Microsoft/LightGBM 리포지토리 <https://github.com/microsoft/LightGBM/issues>`__ 에 게시해 주시기 바랍니다.
 
-You may also ping a member of the core team according to the relevant area of expertise by mentioning them with the arabase (@) symbol:
+또한, 관련 전문 분야에 따라 핵심 팀원을 골뱅이 기호(@)와 함께 멘션하여 메시지를 보낼 수도 있습니다. 각 분야와 팀원에 대해서는 아래를 참조해 주시기 바랍니다. 
 
--  `@guolinke <https://github.com/guolinke>`__ **Guolin Ke** (C++ code / R-package / Python-package)
--  `@chivee <https://github.com/chivee>`__ **Qiwei Ye** (C++ code / Python-package)
--  `@shiyu1994 <https://github.com/shiyu1994>`__ **Yu Shi** (C++ code / Python-package)
--  `@btrotta <https://github.com/btrotta>`__ **Belinda Trotta** (C++ code)
--  `@Laurae2 <https://github.com/Laurae2>`__ **Damien Soukhavong** (R-package)
--  `@jameslamb <https://github.com/jameslamb>`__ **James Lamb** (R-package / Dask-package)
--  `@jmoralez <https://github.com/jmoralez>`__ **José Morales** (Dask-package)
--  `@wxchan <https://github.com/wxchan>`__ **Wenxuan Chen** (Python-package)
--  `@henry0312 <https://github.com/henry0312>`__ **Tsukasa Omoto** (Python-package)
--  `@StrikerRUS <https://github.com/StrikerRUS>`__ **Nikita Titov** (Python-package)
--  `@huanzhang12 <https://github.com/huanzhang12>`__ **Huan Zhang** (GPU support)
--  `@tongwu-msft <https://github.com/tongwu-msft>`__ **Tong Wu** (C++ code / Python-package)
--  `@hzy46 <https://github.com/hzy46>`__ **Zhiyuan He** (C++ code / Python-package)
+-  `@guolinke <https://github.com/guolinke>`__ **Guolin Ke** (C++ 코드 / R 패키지 / Python 패키지)
+-  `@chivee <https://github.com/chivee>`__ **Qiwei Ye** (C++ 코드 / Python 패키지)
+-  `@shiyu1994 <https://github.com/shiyu1994>`__ **Yu Shi** (C++ 코드 / Python 패키지)
+-  `@btrotta <https://github.com/btrotta>`__ **Belinda Trotta** (C++ 코드)
+-  `@Laurae2 <https://github.com/Laurae2>`__ **Damien Soukhavong** (R 패키지)
+-  `@jameslamb <https://github.com/jameslamb>`__ **James Lamb** (R 패키지 / Dask 패키지)
+-  `@jmoralez <https://github.com/jmoralez>`__ **José Morales** (Dask 패키지)
+-  `@wxchan <https://github.com/wxchan>`__ **Wenxuan Chen** (Python 패키지)
+-  `@henry0312 <https://github.com/henry0312>`__ **Tsukasa Omoto** (Python 패키지)
+-  `@StrikerRUS <https://github.com/StrikerRUS>`__ **Nikita Titov** (Python 패키지)
+-  `@huanzhang12 <https://github.com/huanzhang12>`__ **Huan Zhang** (GPU 서포트)
+-  `@tongwu-msft <https://github.com/tongwu-msft>`__ **Tong Wu** (C++ 코드 / Python 패키지)
+-  `@hzy46 <https://github.com/hzy46>`__ **Zhiyuan He** (C++ 코드 / Python 패키지)
 
-Please include as much of the following information as possible when submitting a critical issue:
+중요한 문제를 전송할 시에는 다음과 같은 정보를 최대한 많이 기술해 주시기 바랍니다.
 
--  Is it reproducible on CLI (command line interface), R, and/or Python?
+-  CLI (명령줄 인터페이스), R 및/똔ㄴ Python에서 재현 가능한가요?
 
--  Is it specific to a wrapper? (R or Python?)
+-  래퍼 클래스와 관련된 문제인가요? (R 또는 Python?)
 
--  Is it specific to the compiler? (gcc or Clang version? MinGW or Visual Studio version?)
+-  컴파일러와 관련된 문제인가요? (gcc 또는 Clang 버전인가요? MinGW 또는 Visual Studio 버전인가요?)
 
--  Is it specific to your Operating System? (Windows? Linux? macOS?)
+-  운영체제와 관련된 문제인가요? (Windows? Linux? macOS?)
 
--  Are you able to reproduce this issue with a simple case?
+-  간단한 사례를 통해 이 문제를 재현할 수 있나요?
 
--  Does the issue persist after removing all optimization flags and compiling LightGBM in debug mode?
+-  모든 최적화 플래그를 제거하고 디버그 모드에서 LightGBM을 컴파일한 후에도 같은 문제가 지속되나요?
 
-When submitting issues, please keep in mind that this is largely a volunteer effort, and we may not be available 24/7 to provide support.
+중요한 문제에 대한 지원 작업은 대부분 자원봉사로 이루어지며 연중무휴 24시간 제공이 어려울 수도 있다는 점을 염두에 두시기 바랍니다.
 
 --------------
 
-General LightGBM Questions
+LightGBM에 관한 일반적인 질문
 ==========================
 
 .. contents::
     :local:
     :backlinks: none
 
-1. Where do I find more details about LightGBM parameters?
+1. LightGBM 파라미터에 대한 자세한 내용은 어디에서 확인할 수 있나요?
 ----------------------------------------------------------
 
-Take a look at `Parameters <./Parameters.rst>`__ and the `Laurae++/Parameters <https://sites.google.com/view/lauraepp/parameters>`__ website.
+`파라미터 <./Parameters.rst>`__ 와 `Laurae++/Parameters <https://sites.google.com/view/lauraepp/parameters>`__ 페이지를 참조하시기 바랍니다.
 
-2. On datasets with millions of features, training does not start (or starts after a very long time).
+2. 수백만 개의 기능이 있는 데이터 세트의 경우 학습이 시작되지 않거나 매우 오랜 시간이 지난 후에 학습이 시작됩니다.
 -----------------------------------------------------------------------------------------------------
 
-Use a smaller value for ``bin_construct_sample_cnt`` and a larger value for ``min_data``.
+``bin_construct_sample_cnt`` 에는 작은 값을, ``min_data`` 에는 큰 값을 사용합니다.
 
-3. When running LightGBM on a large dataset, my computer runs out of RAM.
+3. 대규모의 데이터 세트에서 LightGBM을 실행할 경우 컴퓨터의 메모리가 부족합니다.
 -------------------------------------------------------------------------
 
 **Multiple Solutions**: set the ``histogram_pool_size`` parameter to the MB you want to use for LightGBM (histogram\_pool\_size + dataset size = approximately RAM used),
@@ -213,7 +213,7 @@ You can find LightGBM's logo in different file formats and resolutions `here <ht
 
 ------
 
-R-package
+R 패키지
 =========
 
 .. contents::
@@ -240,7 +240,7 @@ If you are experiencing this error when running ``lightgbm``, you may be facing 
 
 ------
 
-Python-package
+Python 패키지
 ==============
 
 .. contents::
