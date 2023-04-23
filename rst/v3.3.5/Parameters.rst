@@ -1201,41 +1201,41 @@ GPU 파라미터(GPU Parameters)
 
 -  ``gpu_platform_id`` :raw-html:`<a id="gpu_platform_id" title="Permalink to this parameter" href="#gpu_platform_id">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형
 
-   -  OpenCL platform ID. Usually each GPU vendor exposes one OpenCL platform
+   -  OpenCL 플랫폼 ID. 일반적으로 각 GPU 공급업체는 하나의 OpenCL 플랫폼을 제공합니다.
 
-   -  ``-1`` means the system-wide default platform
+   -  ``-1`` 은 시스템 전반의 기본 플랫폼을 의미합니다.
 
-   -  **주의**: refer to `GPU Targets <./GPU-Targets.rst#query-opencl-devices-in-your-system>`__ for more details
+   -  **주의**: 자세한 내용은 `GPU Targets <./GPU-Targets.rst#query-opencl-devices-in-your-system>`__ 를 참조하세요.
 
 -  ``gpu_device_id`` :raw-html:`<a id="gpu_device_id" title="Permalink to this parameter" href="#gpu_device_id">&#x1F517;&#xFE0E;</a>`, 기본값 = ``-1``, 타입 = 정수형
 
-   -  OpenCL device ID in the specified platform. Each GPU in the selected platform has a unique device ID
+   -  지정된 플랫폼의 OpenCL 장치 ID. 선택한 플랫폼의 각 GPU에는 고유한 장치 ID가 있습니다.
 
-   -  ``-1`` means the default device in the selected platform
+   -  ``-1`` 은 선택한 플랫폼의 기본 장치를 의미합니다.
 
-   -  **주의**: refer to `GPU Targets <./GPU-Targets.rst#query-opencl-devices-in-your-system>`__ for more details
+   -  **주의**: 자세한 내용은 `GPU Targets <./GPU-Targets.rst#query-opencl-devices-in-your-system>`__ 를 참조하세요.
 
 -  ``gpu_use_dp`` :raw-html:`<a id="gpu_use_dp" title="Permalink to this parameter" href="#gpu_use_dp">&#x1F517;&#xFE0E;</a>`, 기본값 = ``false``, 타입 = 부울
 
-   -  set this to ``true`` to use double precision math on GPU (by default single precision is used)
+   -  GPU에서 배정밀도 연산을 사용하려면 이 값을 ``true`` 로 설정하세요(기본값은 단정밀도 사용).
 
-   -  **주의**: can be used only in OpenCL implementation, in CUDA implementation only double precision is currently supported
+   -  **주의**: OpenCL 구현에서만 사용할 수 있으며, CUDA 구현에서는 현재 배정밀도만 지원합니다.
 
 -  ``num_gpu`` :raw-html:`<a id="num_gpu" title="Permalink to this parameter" href="#num_gpu">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 제약 조건: ``num_gpu > 0``
 
-   -  number of GPUs
+   -  GPU 개수
 
-   -  **주의**: can be used only in CUDA implementation
+   -  **주의**: CUDA 구현에서만 사용 가능합니다.
 
 .. end params list
 
-Others
+기타 파라미터(Others)
 ------
 
-Continued Training with Input Score
+점수를 입력하여 연속 학습하기(Continued Training with Input Score)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-LightGBM supports continued training with initial scores. It uses an additional file to store these initial scores, like the following:
+LightGBM은 초기 점수를 활용한 LightGBM 연속 학습을 지원합니다. 다음과 같은 추가 파일을 사용하여 이러한 초기 점수를 저장합니다:
 
 ::
 
@@ -1244,16 +1244,16 @@ LightGBM supports continued training with initial scores. It uses an additional 
     0.9
     ...
 
-It means the initial score of the first data row is ``0.5``, second is ``-0.1``, and so on.
-The initial score file corresponds with data file line by line, and has per score per line.
+첫 번째 데이터 행의 초기 점수는 ``0.5``, 두 번째는 ``-0.1`` 등입니다.
+초기 점수 파일은 데이터 파일과 한 줄씩 대응하며, 한 줄당 점수가 있습니다.
 
-And if the name of data file is ``train.txt``, the initial score file should be named as ``train.txt.init`` and placed in the same folder as the data file.
-In this case, LightGBM will auto load initial score file if it exists.
+그리고 데이터 파일의 이름이 ``train.txt`` 인 경우, 초기 점수 파일은 ``train.txt.init`` 로 설정하고 데이터 파일과 같은 폴더에 위치해야 합니다.
+이 경우, 초기 점수 파일이 존재하면 LightGBM이 이 파일을 자동으로 불러옵니다.
 
-Weight Data
+가중치 데이터(Weight Data)
 ~~~~~~~~~~~
 
-LightGBM supports weighted training. It uses an additional file to store weight data, like the following:
+LightGBM은 가중화된(weighted) 학습을 지원합니다. 다음과 같은 추가 파일을 사용하여 가중치 데이터를 저장합니다:
 
 ::
 
@@ -1262,20 +1262,20 @@ LightGBM supports weighted training. It uses an additional file to store weight 
     0.8
     ...
 
-It means the weight of the first data row is ``1.0``, second is ``0.5``, and so on.
-The weight file corresponds with data file line by line, and has per weight per line.
+첫 번째 데이터 행의 가중치는 ``1.0``, 두 번째는 ``0.5`` 등입니다.
+가중치 파일은 데이터 파일과 한 줄씩 일치하며, 한 줄당 가중치가 있습니다.
 
-And if the name of data file is ``train.txt``, the weight file should be named as ``train.txt.weight`` and placed in the same folder as the data file.
-In this case, LightGBM will load the weight file automatically if it exists.
+그리고 데이터 파일의 이름이 ``train.txt`` 인 경우, 초기 점수 파일은 ``train.txt.weight`` 로 설정하고 데이터 파일과 같은 폴더에 위치해야 합니다. 
+이 경우, 초기 점수 파일이 존재하면 LightGBM이 이 파일을 자동으로 불러옵니다.
 
-Also, you can include weight column in your data file. Please refer to the ``weight_column`` `parameter <#weight_column>`__ in above.
+또한 데이터 파일에 가중치 열을 포함할 수도 있습니다. 위의 ``weight_column`` `parameter <#weight_column>`__ 을 참조하세요.
 
-Query Data
+쿼리 데이터(Query Data)
 ~~~~~~~~~~
 
-For learning to rank, it needs query information for training data.
+랭킹 학습을 위해서는 학습 데이터에 대한 쿼리 정보가 필요합니다.
 
-LightGBM uses an additional file to store query data, like the following:
+LightGBM은 다음과 같은 추가 파일을 사용하여 쿼리 데이터를 저장합니다.:
 
 ::
 
@@ -1284,19 +1284,19 @@ LightGBM uses an additional file to store query data, like the following:
     67
     ...
 
-For wrapper libraries like in Python and R, this information can also be provided as an array-like via the Dataset parameter ``group``.
+Python 및 R과 같은 래퍼(wrapper) 라이브러리의 경우, 이 정보는 데이터셋 파라미터 ``group`` 을 통해 배열처럼 제공될 수 있습니다.
 
 ::
 
     [27, 18, 67, ...]
 
-For example, if you have a 112-document dataset with ``group = [27, 18, 67]``, that means that you have 3 groups, where the first 27 records are in the first group, records 28-45 are in the second group, and records 46-112 are in the third group.
+예를 들어, ``group = [27, 18, 67]`` 의 112개 문서 데이터셋이 있는 경우, 3개의 그룹이 있다는 것을 의미하며, 첫 27개의 레코드가 첫 번째 그룹에, 28-45번째 레코드가 두 번째 그룹에, 46-112번째 레코드가 세 번째 그룹에 있다는 것을 의미합니다.
 
-**주의**: data should be ordered by the query.
+**주의**: 데이터는 쿼리 순서에 따라 정렬해야 합니다.
 
-If the name of data file is ``train.txt``, the query file should be named as ``train.txt.query`` and placed in the same folder as the data file.
-In this case, LightGBM will load the query file automatically if it exists.
+그리고 데이터 파일의 이름이 ``train.txt`` 인 경우, 쿼리 파일은 ``train.txt.query`` 로 설정하고 데이터 파일과 같은 폴더에 위치해야 합니다.
+이 경우, 초기 점수 파일이 존재하면 LightGBM이 이 파일을 자동으로 불러옵니다.
 
-Also, you can include query/group id column in your data file. Please refer to the ``group_column`` `parameter <#group_column>`__ in above.
+또한 데이터 파일에 쿼리/그룹 ID 열을 포함할 수도 있습니다. 위의 ``group_column`` `parameter <#group_column>`__ 를 참조하세요.
 
-.. _Laurae++ Interactive Documentation: https://sites.google.com/view/lauraepp/parameters
+.. _Laurae++ 인터랙티브 문서: https://sites.google.com/view/lauraepp/parameters
