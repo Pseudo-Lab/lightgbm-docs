@@ -1,24 +1,21 @@
-Advanced Topics
+심화 주제
 ===============
 
-Missing Value Handle
+결측치 처리
 --------------------
 
--  LightGBM enables the missing value handle by default. Disable it by setting ``use_missing=false``.
+-  LightGBM은 결측치 처리가 기본설정 (default)입니다. 비활성화 하려면 ``use_missing=false`` 설정을 해줘야 합니다.
 
--  LightGBM uses NA (NaN) to represent missing values by default. Change it to use zero by setting ``zero_as_missing=true``.
+-  LightGBM은 결측치를 NA (NaN)로 표기하는 것이 기본설정입니다. 0으로 변경하려면 ``zero_as_missing=true`` 으로 설정해 줘야 합니다.
 
--  When ``zero_as_missing=false`` (default), the unrecorded values in sparse matrices (and LightSVM) are treated as zeros.
+-  ``zero_as_missing=false`` 인 경우 (기본설정), sparse matrices (and LightSVM)의 결측값들은 0으로 처리됩니다. 
 
--  When ``zero_as_missing=true``, NA and zeros (including unrecorded values in sparse matrices (and LightSVM)) are treated as missing.
+- ``zero_as_missing=true`` 인 경우에는, NA와 0들은 (sparse matrices (and LightSVM)의 결측치 포함) 모두 결측치로 처리됩니다.
 
-Categorical Feature Support
+범주형 특성변수 지원
 ---------------------------
 
--  LightGBM offers good accuracy with integer-encoded categorical features. LightGBM applies
-   `Fisher (1958) <https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479>`_
-   to find the optimal split over categories as
-   `described here <./Features.rst#optimal-split-for-categorical-features>`_. This often performs better than one-hot encoding.
+-  LightGBM은 정수값의 범주형 특성변수에 대해 우수한 정확도를 보여줍니다. LightGBM은 `Fisher (1958) <https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479>`_ 을 적용하여 범주의 최적의 분할점을 찾습니다 (`described here <./Features.rst#optimal-split-for-categorical-features>`_ ). 이 방식은 원핫 인코딩  one-hot encoding 보다 대게 더 좋은 성능을 보입니다.
 
 -  Use ``categorical_feature`` to specify the categorical features.
    Refer to the parameter ``categorical_feature`` in `Parameters <./Parameters.rst#categorical_feature>`__.
@@ -32,7 +29,7 @@ Categorical Feature Support
    treat the feature as numeric, either by simply ignoring the categorical interpretation of the integers or
    by embedding the categories in a low-dimensional numeric space.
 
-LambdaRank
+람다랭크
 ----------
 
 -  The label should be of type ``int``, such that larger numbers correspond to higher relevance (e.g. 0:bad, 1:fair, 2:good, 3:perfect).
@@ -54,7 +51,7 @@ CEGB penalises learning in the following ways:
 Each of the penalties above is scaled by ``cegb_tradeoff``.
 Using this parameter, it is possible to change the overall strength of the CEGB penalties by changing only one parameter.
 
-Parameters Tuning
+파라미터 튜닝
 -----------------
 
 -  Refer to `Parameters Tuning <./Parameters-Tuning.rst>`__.
@@ -66,12 +63,12 @@ Distributed Learning
 
 -  Refer to `Distributed Learning Guide <./Parallel-Learning-Guide.rst>`__.
 
-GPU Support
+GPU 지원
 -----------
 
--  Refer to `GPU Tutorial <./GPU-Tutorial.rst>`__ and `GPU Targets <./GPU-Targets.rst>`__.
+-  `GPU Tutorial <./GPU-Tutorial.rst>`__ 와 `GPU Targets <./GPU-Targets.rst>`__ 을 참고해 주세요. 
 
 Recommendations for gcc Users (MinGW, \*nix)
 --------------------------------------------
 
--  Refer to `gcc Tips <./gcc-Tips.rst>`__.
+-  `gcc Tips <./gcc-Tips.rst>`__ 을 참고해 주세요.
