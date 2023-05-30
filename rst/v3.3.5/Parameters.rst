@@ -6,7 +6,7 @@
 파라미터(Parameters)
 ==========
 
-이 페이지는 LightGBM의 모든 파라미터에 대한 설명을 다룹니다.
+이 페이지는 LightGBM의 모든 파라미터에 대한 설명을 제공합니다.
 
 **기타 유용한 링크 목록**
 
@@ -28,7 +28,7 @@
 
 만약 특정 파라미터가 커맨드 라인과 설정 파일에 모두 등장할 경우, LightGBM은 커맨드 라인의 파라미터를 우선합니다.
 
-Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 ``다중 정수형(multi-int)`` 또는 ``multi-double`` 와 같은 ``multi-xxx`` 형태)을 파라미터로 받습니다.
+Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 ``다중 정수형(multi-int)`` 또는 ``다중 부동 소숫점(multi-double)`` 와 같은 ``다중-xxx(multi-xxx)`` 형태)을 파라미터로 받습니다.
 예를 들어, ``monotone_constraints`` 파라미터를 다음과 같이 설정할 수 있습니다.
 
 **Python**
@@ -103,11 +103,11 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  다중(Multi-class) 분류에서의 활용
 
-      -  ``multiclass``, 목적 함수 `softmax <https://en.wikipedia.org/wiki/Softmax_function>`__ 을 활용합니다. 별칭: ``softmax``
+      -  ``multiclass``, 목적 함수 `소프트맥스(Softmax) <https://en.wikipedia.org/wiki/Softmax_function>`__ 를 활용합니다. 별칭: ``softmax``
 
-      -  ``multiclassova``, `One-vs-All <https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest>`__ 이진(Binary) 목적 함수, 별칭: ``multiclass_ova``, ``ova``, ``ovr``
+      -  ``multiclassova``, `1-대-다(One-vs-All) <https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest>`__ 이진(Binary) 목적 함수, 별칭: ``multiclass_ova``, ``ova``, ``ovr``
 
-      -  ``num_class`` should be set as well
+      -  ``num_class`` 도 설정해야 합니다.
 
    -  교차 엔트로피(Cross Entropy)의 활용
 
@@ -119,7 +119,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  순위 예측에서의 응용
 
-      -  ``lambdarank``, `lambdarank <https://papers.nips.cc/paper/2971-learning-to-rank-with-nonsmooth-cost-functions.pdf>`__ 목적 함수. `label_gain <#label_gain>`__ 을 사용하여 ``int`` 레이블의 gain(가중치)를 설정할 수 있으며, ``label`` 의 모든 값은 ``label_gain`` 의 개수 보다 적어야합니다.
+      -  ``lambdarank``, `lambdarank <https://papers.nips.cc/paper/2971-learning-to-rank-with-nonsmooth-cost-functions.pdf>`__ 목적 함수. `label_gain <#label_gain>`__ 을 사용하여 ``int`` 레이블의 Gain(가중치)를 설정할 수 있으며, ``label`` 의 모든 값은 ``label_gain`` 의 개수 보다 적어야합니다.
 
       -  ``rank_xendcg``, `XE_NDCG_MART <https://arxiv.org/abs/1911.09798>`__ 랭킹 목적 함수, 별칭: ``xendcg``, ``xe_ndcg``, ``xe_ndcg_mart``, ``xendcg_mart``
 
@@ -179,7 +179,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``voting``, 투표 기반의 병렬 트리 학습자(Voting Parallel Tree Learner), 별칭: ``voting_parallel``
 
-   -  자세한 내용은 `Distributed Learning Guide <./Parallel-Learning-Guide.rst>`__ 을 참고하세요.
+   -  자세한 내용은 `분산 학습 가이드(Distributed Learning Guide) <./Parallel-Learning-Guide.rst>`__ 를 참고하세요.
 
 -  ``num_threads`` :raw-html:`<a id="num_threads" title="Permalink to this parameter" href="#num_threads">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형, 별칭: ``num_thread``, ``nthread``, ``nthreads``, ``n_jobs``
 
@@ -187,7 +187,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``0`` 은 OpenMP의 기본 스레드 수를 뜻합니다.
 
-   -  최상의 속도를 위해, 스레드 수가 아닌 **실제 CPU 코어 수** 로 설정하십시오. (대부분의 CPU는 `하이퍼 스레딩 <https://en.wikipedia.org/wiki/Hyper-threading>`__ 을 활용해 CPU 코어당 2개의 스레드를 만듭니다.)
+   -  최상의 속도를 위해, 스레드 수가 아닌 **실제 CPU 코어 수** 로 설정하십시오. (대부분의 CPU는 `하이퍼 스레딩(Hyper-threading) <https://en.wikipedia.org/wiki/Hyper-threading>`__ 을 활용해 CPU 코어당 2개의 스레드를 만듭니다.)
 
    -  데이터셋이 작을 경우 너무 큰 값을 설정하지 마십시오. (예를 들어, 10,000개의 행이 있는 데이터셋에 64개의 스레드를 사용하지 마십시오.)
 
@@ -199,7 +199,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``device_type`` :raw-html:`<a id="device_type" title="Permalink to this parameter" href="#device_type">&#x1F517;&#xFE0E;</a>`, 기본값 = ``cpu``, 타입 = 열거형, 옵션: ``cpu``, ``gpu``, ``cuda``, 별칭: ``device``
 
-   -  트리 학습을 위한 장치 설정, GPU를 사용하여 더 빠르게 학습할 수 있습니다.
+   -  트리 학습을 위한 장치 설정 (GPU를 사용하여 더 빠르게 학습할 수 있습니다.)
 
    -  **주의**: 속도를 높이려면 작은 ``max_bin`` (예: 63)을 사용하는 것이 좋습니다.
 
@@ -384,7 +384,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``early_stopping_round`` :raw-html:`<a id="early_stopping_round" title="Permalink to this parameter" href="#early_stopping_round">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0``, 타입 = 정수형, 별칭: ``early_stopping_rounds``, ``early_stopping``, ``n_iter_no_change``
 
-   -  만약 검증 데이터의 평가지표(metric)가 이전 ``early_stopping_round`` 라운드보다 개선되지 않으면 학습을 멈춥니다.
+   -  만약 검증 데이터의 평가지표(metric)가 이전 ``early_stopping_round`` 라운드보다 개선되지 않으면 학습을 종료합니다.
 
    -  ``<= 0`` 은 비활성화를 뜻합니다.
 
@@ -412,11 +412,11 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``linear_lambda`` :raw-html:`<a id="linear_lambda" title="Permalink to this parameter" href="#linear_lambda">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 제약 조건: ``linear_lambda >= 0.0``
 
-   -  선형 트리 정규화(linear tree regularization)는 `Gradient Boosting with Piece-Wise Linear Regression Trees <https://arxiv.org/pdf/1802.05640.pdf>`__ 의 3번 수식의 ``lambda`` 파라미터에 해당합니다.
+   -  선형 트리 정규화(linear tree regularization)는 `각 부분별 선형 회귀 트리를 이용한 경사 부스팅(Gradient Boosting with Piece-Wise Linear Regression Trees) <https://arxiv.org/pdf/1802.05640.pdf>`__ 의 3번 수식의 ``lambda`` 파라미터에 해당합니다.
 
 -  ``min_gain_to_split`` :raw-html:`<a id="min_gain_to_split" title="Permalink to this parameter" href="#min_gain_to_split">&#x1F517;&#xFE0E;</a>`, 기본값 = ``0.0``, 타입 = 부동 소숫점(double), 별칭: ``min_split_gain``, 제약 조건: ``min_gain_to_split >= 0.0``
 
-   -  분할을 수행하기 위한 최소 이득(gain)
+   -  분할을 수행하기 위한 최소 이득(Gain)
 
    -  학습 속도를 높이기 위해 사용됩니다.
 
@@ -500,7 +500,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``top_k`` :raw-html:`<a id="top_k" title="Permalink to this parameter" href="#top_k">&#x1F517;&#xFE0E;</a>`, 기본값 = ``20``, 타입 = 정수형, 별칭: ``topk``, 제약 조건: ``top_k > 0``
 
-   -  ``voting`` 학습자에서만 사용됩니다. `Voting parallel <./Parallel-Learning-Guide.rst#choose-appropriate-parallel-algorithm>`__ 을 참조하세요.
+   -  ``voting`` 학습자에서만 사용됩니다. `병렬 투표(Voting parallel) <./Parallel-Learning-Guide.rst#choose-appropriate-parallel-algorithm>`__ 를 참조하세요.
 
    -  이 값을 크게 설정하여 더 정확한 결과를 얻을 수 있으나, 학습 속도가 느려질 것입니다.
 
@@ -528,13 +528,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``monotone_constraints`` 이 설정된 경우에만 사용됩니다.
 
-   -  `단조성 패널티(monotone penalty) <https://hal.archives-ouvertes.fr/hal-02862802/document>`__: 패널티 파라미터 X는 첫 X (실수일 때 정수로 반내림) 레벨에서 단조적 분할을 금지합니다. 이 패널티는 주어진 깊이(depth)의 단조 분할에 사용되고, 연속이며 증가하는 함수입니다.
+   -  `단조성 패널티(monotone penalty) <https://hal.archives-ouvertes.fr/hal-02862802/document>`__: 패널티 파라미터 X는 첫 X(실수일 때 정수로 반내림) 레벨에서 단조적 분할을 금지합니다. 이 패널티는 주어진 깊이(depth)의 단조 분할에 사용되고, 연속이며 증가하는 함수입니다.
 
    -  ``0.0``(기본값)인 경우, 어떠한 제약도 적용되지 않습니다. 
 
--  ``feature_contri`` :raw-html:`<a id="feature_contri" title="Permalink to this parameter" href="#feature_contri">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = multi-double, 별칭: ``feature_contrib``, ``fc``, ``fp``, ``feature_penalty``
+-  ``feature_contri`` :raw-html:`<a id="feature_contri" title="Permalink to this parameter" href="#feature_contri">&#x1F517;&#xFE0E;</a>`, 기본값 = ``None``, 타입 = 다중 부동 소숫점(multi-double), 별칭: ``feature_contrib``, ``fc``, ``fp``, ``feature_penalty``
 
-   -  변수의 분할 이득(gain)을 제어하는 데 사용되며, i번째 변수의 분할 이득을 ``gain[i] = max(0, feature_contri[i]) * gain[i]``로 대체합니다.
+   -  변수의 분할 이득(Gain)을 제어하는 데 사용되며, i번째 변수의 분할 이득을 ``gain[i] = max(0, feature_contri[i]) * gain[i]``로 대체합니다.
 
    -  모든 변수를 순서대로 지정해야 합니다.
 
@@ -590,13 +590,13 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
       -  각 노드의 가중치(weights)는 ``(n / path_smooth) * w + w_p / (n / path_smooth + 1)`` 이며, 여기서 ``n`` 은 노드의 샘플 수, ``w`` 는 손실(loss)를 최소화하기 위한 최적의 노드 가중치(대략 ``-sum_gradients / sum_hessians``), ``w_p`` 는 부모 노드의 가중치입니다.
 
-      -  루트 노드가 아닌 경우 부모 노드의 값(output) ``w_p`` 자체에 평활화(smoothing)가 적용되어 트리의 깊이에 따라 평활화 효과가 누적된다는 점에 유의하십시오.
+      -  루트 노드가 아닌 경우 부모 노드의 값(output) ``w_p`` 자체에 평활화가 적용되어 트리의 깊이에 따라 평활화 효과가 누적된다는 점에 유의하십시오.
 
 -  ``interaction_constraints`` :raw-html:`<a id="interaction_constraints" title="Permalink to this parameter" href="#interaction_constraints">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 문자열
 
    -  같은 분기(branch)에 표현되는 변수를 제어합니다.
 
-   -  기본적으로 상호 작용 제약(interaction constraints)은 비활성화되어 있으며, 이를 활성화하려면 다음과 같이 지정하세요.
+   -  기본적으로 상호작용 제약(interaction constraints)은 비활성화되어 있으며, 이를 활성화하려면 다음과 같이 지정하세요.
 
       -  CLI의 경우 쉼표로 구분된 리스트(예: ``[0,1,2],[2,3]``) 
 
@@ -632,7 +632,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  저장된 모델 파일에서 변수 중요도의 타입
 
-   -  ``0``: 횟수 기반 변수 중요도(분할 횟수 계산); ``1``: 이득(gain) 기반 변수 중요도(이득 값 계산)
+   -  ``0``: 횟수 기반 변수 중요도(분할 횟수 계산); ``1``: 이득(Gain) 기반 변수 중요도(이득 값 계산)
 
    -  **주의**: CLI 버전에만 사용됩니다.
 
@@ -696,11 +696,11 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  변수의 이산적 구간(dicrete bins)을 구성하기 위해 샘플링한 데이터의 개수
 
-   -  이 값을 크게 설정하여 더 나은 학습 결과를 얻을 수 있지만 데이터 로딩 시간이 늘어날 것입니다.
+   -  이 값을 크게 설정하여 더 나은 학습 결과를 얻을 수 있지만, 데이터 로딩 시간이 늘어날 것입니다.
 
    -  데이터가 희소(sparse)할 경우 이 값을 더 크게 설정하십시오.
 
-   -  **주의**: 작은 값으로 설정하지 마십시오. 예상치 못한 오류과 정확도 저하가 발생할 수 있습니다.
+   -  **주의**: 작은 값으로 설정하지 마십시오. 예상치 못한 오류 및 정확도 저하가 발생할 수 있습니다.
 
 -  ``data_random_seed`` :raw-html:`<a id="data_random_seed" title="Permalink to this parameter" href="#data_random_seed">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1``, 타입 = 정수형, 별칭: ``data_seed``
 
@@ -782,7 +782,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  쿼리/그룹 아이디 열을 지정하는 데 사용합니다.
 
-   -  인덱스 숫자를 사용하세요(예: ``query=0`` 은 열\_0이 쿼리 아이디임을 뜻합니다).
+   -  인덱스 숫자를 사용하세요(예: ``query=0`` 은 열\_0가 쿼리 아이디임을 뜻합니다).
 
    -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``query=name:query_id``).
 
@@ -792,11 +792,11 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  **주의**: 인덱스는 ``0`` 부터 시작하며 전달하는 타입이 ``int`` 일 경우 레이블 열을 포함하지 않습니다(예: 레이블이 열\_0이고 쿼리\_아이디가 열\_1인 경우, ``query=0`` 이 올바른 파라미터입니다).
 
--  ``ignore_column`` :raw-html:`<a id="ignore_column" title="Permalink to this parameter" href="#ignore_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 정수형(multi-int) or string, 별칭: ``ignore_feature``, ``blacklist``
+-  ``ignore_column`` :raw-html:`<a id="ignore_column" title="Permalink to this parameter" href="#ignore_column">&#x1F517;&#xFE0E;</a>`, 기본값 = ``""``, 타입 = 다중 정수형(multi-int) 또는 문자열, 별칭: ``ignore_feature``, ``blacklist``
 
    -  학습할 때 제외할 열을 지정하는 데 사용합니다.
 
-   -  인덱스 숫자를 사용하세요(예: ``ignore_column=0,1,2`` 는 열\_0, 열\_1, 열\_2 가 제외됨을 뜻합니다).
+   -  인덱스 숫자를 사용하세요(예: ``ignore_column=0,1,2`` 는 열\_0, 열\_1, 열\_2가 제외됨을 뜻합니다).
 
    -  열 이름에 접두사 ``name:`` 을 추가합니다(예: ``ignore_column=name:c1,c2,c3`` 은 c1, c2, c3이 제외됨을 뜻합니다).
 
@@ -911,7 +911,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``prediction`` 과 함께 사용됩니다.
 
-   -  ``classification`` 와 ``ranking`` 에서만 사용됩니다.
+   -  ``classification`` 과 ``ranking`` 에서만 사용됩니다.
 
    -  ``true`` 로 설정하면 조기 종료(early-stopping)를 사용해 예측 속도를 높입니다. 정확도에 영향을 줄 수 있습니다.
 
@@ -1015,7 +1015,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``huber`` ``regression`` 과 ``quantile`` ``regression`` 문제에서 사용됩니다.
 
-   -  `후버 손실(Huber Loss) <https://en.wikipedia.org/wiki/Huber_loss>`__ 와 `Quantile regression <https://en.wikipedia.org/wiki/Quantile_regression>`__ 에 대한 파라미터입니다.
+   -  `후버 손실(Huber Loss) <https://en.wikipedia.org/wiki/Huber_loss>`__ 와 `분위수 회귀(Quantile regression) <https://en.wikipedia.org/wiki/Quantile_regression>`__ 에 대한 파라미터입니다.
 
 -  ``fair_c`` :raw-html:`<a id="fair_c" title="Permalink to this parameter" href="#fair_c">&#x1F517;&#xFE0E;</a>`, 기본값 = ``1.0``, 타입 = 부동 소숫점(double), 제약 조건: ``fair_c > 0.0``
 
@@ -1059,7 +1059,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
    -  ``lambdarank`` 문제에서 활용됩니다.
 
-   -  레이블에 관련된 이득(gain). 예를 들어, 기본 레이블 이득의 경우 레이블 ``2`` 의 이득은 ``3`` 입니다.
+   -  레이블에 관련된 이득(Gain). 예를 들어, 기본 레이블 이득의 경우 레이블 ``2`` 의 이득은 ``3`` 입니다.
 
    -  ``,`` 로 구분됩니다.
 
@@ -1231,7 +1231,7 @@ GPU 파라미터(GPU Parameters)
 기타 파라미터(Others)
 ------
 
-점수를 입력하여 연속 학습하기(Continued Training with Input Score)
+점수를 입력하여 계속 학습하기(Continued Training with Input Score)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 LightGBM은 초기 점수를 활용한 LightGBM 연속 학습을 지원합니다. 다음과 같은 추가 파일을 사용하여 이러한 초기 점수를 저장합니다:
@@ -1293,9 +1293,9 @@ Python 및 R과 같은 래퍼(wrapper) 라이브러리의 경우, 이 정보는 
 
 **주의**: 데이터는 쿼리 순서에 따라 정렬해야 합니다.
 
-그리고 데이터 파일의 이름이 ``train.txt`` 인 경우, 쿼리 파일은 ``train.txt.query`` 로 설정하고 데이터 파일과 같은 폴더에 위치해야 합니다.
+그리고 데이터 파일의 이름이 ``train.txt`` 인 경우, 쿼리 파일의 이름은 ``train.txt.query`` 로 설정해야 하며, 데이터 파일과 같은 폴더에 위치해야 합니다.
 이 경우, 초기 점수 파일이 존재하면 LightGBM이 이 파일을 자동으로 불러옵니다.
 
-또한 데이터 파일에 쿼리/그룹 ID 열을 포함할 수도 있습니다. 위의 ``group_column`` `parameter <#group_column>`__ 를 참조하세요.
+또한 데이터 파일에 쿼리/그룹 ID 열을 포함할 수도 있습니다. 위의 ``group_column`` `파라미터(parameter) <#group_column>`__ 를 참조하세요.
 
 .. _Laurae++ 인터랙티브 문서: https://sites.google.com/view/lauraepp/parameters
