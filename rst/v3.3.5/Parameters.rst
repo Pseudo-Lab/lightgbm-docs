@@ -75,7 +75,7 @@ Python 및 R 패키지의 경우, 해당 언어의 기본 배열 타입(대개 `
 
 -  ``objective`` :raw-html:`<a id="objective" title="Permalink to this parameter" href="#objective">&#x1F517;&#xFE0E;</a>`, 기본값 = ``regression``, 타입 = 열거형, 옵션: ``regression``, ``regression_l1``, ``huber``, ``fair``, ``poisson``, ``quantile``, ``mape``, ``gamma``, ``tweedie``, ``binary``, ``multiclass``, ``multiclassova``, ``cross_entropy``, ``cross_entropy_lambda``, ``lambdarank``, ``rank_xendcg``, 별칭: ``objective_type``, ``app``, ``application``, ``loss``
 
-   -  회귀에서의 활용
+   -  회귀(Regression)에서의 활용
 
       -  ``regression``, L2 손실(loss), 별칭: ``regression_l2``, ``l2``, ``mean_squared_error``, ``mse``, ``l2_root``, ``root_mean_squared_error``, ``rmse``
 
