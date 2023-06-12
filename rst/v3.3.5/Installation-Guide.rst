@@ -37,7 +37,7 @@
     :local:
     :backlinks: none
 
-Windows 버전
+Windows
 ~~~~~~~~~~
 
 Windows에서 LightGBM은 다음과 같은 방법으로 빌드할 수 있습니다.
@@ -54,22 +54,22 @@ Visual Studio (또는 VS Build Tools)
 GUI 활용
 ********
 
-1. `Visual Studio`_ (2015 버전 이상)를 설치합니다.
+1. `Visual Studio`_(2015 버전 이상)를 설치합니다.
 
 2. `zip archive`_ 파일을 다운로드하고 압축을 풉니다.
 
 3. ``LightGBM-master/windows`` 폴더로 이동합니다.
 
-4. **Visual Studio** 로 ``LightGBM.sln`` 파일을 열고 ``Release`` 설정을 선택한 후 ``BUILD`` 를 클릭합니다. -> ``솔루션 빌드(Ctrl+Shift+B)``
+4. **Visual Studio** 로 ``LightGBM.sln`` 파일을 열고 ``Release`` 설정을 선택한 후 ``BUILD`` 클릭 -> ``솔루션 빌드(Ctrl+Shift+B)``
 
    **플랫폼 툴셋(Platform Toolset)** 에 오류가 있는 경우 ``PROJECT`` -> ``Properties`` -> ``Configuration Properties`` -> ``General`` 로 이동하여 사용 중인 머신에 설치된 툴셋을 선택합니다.
 
-``.exe`` 파일은 ``LightGBM-master/windows/x64/Release`` 폴더에 있습니다.
+``.exe`` 파일이 ``LightGBM-master/windows/x64/Release`` 폴더에 저장됩니다.
 
 명령줄(Command Line) 활용
 *****************
 
-1. Windows용 Git(`Git for Windows`_), `CMake`_ (3.8 버전 이상), `VS Build Tools`_ 를 설치합니다(**Visual Studio** (2015 버전 이상)가 이미 설치되어 있는 경우 **VS Build Tools**는 설치할 필요 없음).
+1. Windows용 Git(`Git for Windows`_), `CMake`_(3.8 버전 이상), `VS Build Tools`_ 를 설치합니다(**Visual Studio**(2015 버전 이상)가 이미 설치되어 있는 경우 **VS Build Tools** 는 설치할 필요 없음).
 
 2. 다음 명령을 실행합니다:
 
@@ -82,7 +82,7 @@ GUI 활용
      cmake -A x64 ..
      cmake --build . --target ALL_BUILD --config Release
 
-``.exe`` 및 ``.dll`` 파일이 ``LightGBM/`` 폴더에 생성될 것입니다.
+``.exe`` 및 ``.dll`` 파일이 ``LightGBM/`` 폴더에 저장됩니다.
 
 MinGW-w64
 ^^^^^^^^^
@@ -100,21 +100,21 @@ MinGW-w64
      cmake -G "MinGW Makefiles" ..
      mingw32-make.exe -j4
 
-``.exe`` 및 ``.dll`` 파일이 ``LightGBM/`` 폴더에 생성될 것입니다.
+``.exe`` 및 ``.dll`` 파일이 ``LightGBM/`` 폴더에 저장됩니다.
 
-**참고**: ``sh.exe was found in your PATH`` 오류가 발생하면 ``cmake -G "MinGW Makefiles" ..`` 를 한 번 더 실행해야 할 수 있습니다.
+**주의**: ``sh.exe was found in your PATH`` 오류가 발생하면 ``cmake -G "MinGW Makefiles" ..`` 를 한 번 더 실행해야 할 수 있습니다.
 
 멀티코어 시스템에서는 **Windows**의 멀티스레딩 효율이 더 좋으므로 **Visual Studio**를 사용하는 것이 좋습니다
 (`Question 4 <./FAQ.rst#i-am-using-windows-should-i-use-visual-studio-or-mingw-for-compiling-lightgbm>`__ 및 `Question 8 <./FAQ.rst#cpu-usage-is-low-like-10-in-windows-when-using-lightgbm-on-very-large-datasets-with-many-core-systems>`__ 참조).
 
 또한 `gcc Tips <./gcc-Tips.rst>`__ 를 읽어보시기 바랍니다.
 
-Linux 버전
+Linux
 ~~~~~~~~
 
-On Linux LightGBM can be built using **CMake** and **gcc** or **Clang**.
+Linux에서 LightGBM은 **CMake**, 그리고 **gcc** 또는 **Clang** 를 사용하여 빌드할 수 있습니다.
 
-1. Install `CMake`_.
+1. `CMake`_ 를 설치합니다.
 
 2. 다음 명령을 실행합니다:
 
@@ -127,39 +127,39 @@ On Linux LightGBM can be built using **CMake** and **gcc** or **Clang**.
      cmake ..
      make -j4
 
-**Note**: glibc >= 2.14 is required.
+**주의**: glibc(2.14 버전 이상)가 필요합니다.
 
-**Note**: In some rare cases you may need to install OpenMP runtime library separately (use your package manager and search for ``lib[g|i]omp`` for doing this).
+**주의**: 드물지만 OpenMP 런타임 라이브러리를 별도로 설치해야 하는 경우도 있습니다(패키지 관리자를 이용해 ``lib[g|i]omp`` 를 검색하여 이 작업을 수행할 수 있습니다).
 
-Also, you may want to read `gcc Tips <./gcc-Tips.rst>`__.
+또한 `gcc Tips <./gcc-Tips.rst>`__ 를 읽어보십시오.
 
 macOS
 ~~~~~
 
-On macOS LightGBM can be installed using **Homebrew**, or can be built using **CMake** and **Apple Clang** or **gcc**.
+macOS에서 LightGBM은 **Homebrew**를 사용하여 설치하거나, **CMake**, 그리고 **Apple Clang** 또는 **gcc**를 사용하여 빌드할 수 있습니다.
 
 Apple Clang
 ^^^^^^^^^^^
 
-Only **Apple Clang** version 8.1 or higher is supported.
+**Apple Clang**(8.1 버전 이상)만 지원됩니다.
 
-Install Using ``Homebrew``
+``Homebrew`` 를 사용하여 설치하기
 **************************
 
 .. code::
 
   brew install lightgbm
 
-Build from GitHub
+GitHub에서 빌드
 *****************
 
-1. Install `CMake`_ (3.16 or higher):
+1. `CMake`_(3.16 버전 이상)을 설치합니다:
 
    .. code::
 
      brew install cmake
 
-2. Install **OpenMP**:
+2. **OpenMP** 를 설치합니다:
 
    .. code::
 
@@ -179,13 +179,13 @@ Build from GitHub
 gcc
 ^^^
 
-1. Install `CMake`_ (3.2 or higher):
+1. `CMake`_(3.2 버전 이상)을 설치합니다:
 
    .. code::
 
      brew install cmake
 
-2. Install **gcc**:
+2. **gcc** 를 설치합니다:
 
    .. code::
 
@@ -203,56 +203,56 @@ gcc
      cmake ..
      make -j4
 
-Also, you may want to read `gcc Tips <./gcc-Tips.rst>`__.
+또한 `gcc Tips <./gcc-Tips.rst>`__ 를 읽어보십시오.
 
 Docker
 ~~~~~~
 
-Refer to `Docker folder <https://github.com/microsoft/LightGBM/tree/master/docker>`__.
+`Docker folder <https://github.com/microsoft/LightGBM/tree/master/docker>`__ 를 확인하십시오.
 
-Build Threadless Version (not Recommended)
+쓰레드 지원이 없는 버전 빌드하기(권장되지 않음)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The default build version of LightGBM is based on OpenMP.
-You can build LightGBM without OpenMP support but it is **strongly not recommended**.
+LightGBM의 기본 빌드 버전은 OpenMP를 기반으로 합니다.
+OpenMP를 지원하지 않고도 LightGBM을 빌드할 수 있지만 **강력히 권장하지 않습니다**.
 
 Windows
 ^^^^^^^
 
-On Windows a version of LightGBM without OpenMP support can be built using
+Windows에서 OpenMP를 지원하지 않는 LightGBM 버전은 다음을 사용하여 빌드할 수 있습니다.
 
 - **Visual Studio**;
 
-- **CMake** and **VS Build Tools**;
+- **CMake** 및 **VS Build Tools**;
 
-- **CMake** and **MinGW**.
+- **CMake** 및 **MinGW**.
 
-Visual Studio (or VS Build Tools)
+Visual Studio (또는 VS Build Tools)
 *********************************
 
-With GUI
+GUI 활용
 --------
 
-1. Install `Visual Studio`_ (2015 or newer).
+1. `Visual Studio`_(2015 버전 이상)를 설치합니다.
 
-2. Download `zip archive`_ and unzip it.
+2. `zip archive`_ 파일을 다운로드하고 압축을 풉니다.
 
-3. Go to ``LightGBM-master/windows`` folder.
+3. ``LightGBM-master/windows`` 폴더로 이동합니다.
 
-4. Open ``LightGBM.sln`` file with **Visual Studio**.
+4. **Visual Studio** 로 ``LightGBM.sln`` 파일을 엽니다.
 
-5. Go to ``PROJECT`` -> ``Properties`` -> ``Configuration Properties`` -> ``C/C++`` -> ``Language`` and change the ``OpenMP Support`` property to ``No (/openmp-)``.
+5. ``PROJECT`` -> ``Properties`` -> ``Configuration Properties`` -> ``C/C++`` -> ``Language`` 로 이동 후, ``OpenMP Support`` 속성을 ``No (/openmp-)`` 로 변경하십시오.
 
-6. Get back to the project's main screen, then choose ``Release`` configuration and click ``BUILD`` -> ``Build Solution (Ctrl+Shift+B)``.
+6. 프로젝트의 메인 화면으로 돌아와 ``Release`` 구성을 선택한 다음 ``BUILD`` -> ``Build Solution (Ctrl+Shift+B)`` 를 클릭합니다.
 
-   If you have errors about **Platform Toolset**, go to ``PROJECT`` -> ``Properties`` -> ``Configuration Properties`` -> ``General`` and select the toolset installed on your machine.
+   **플랫폼 툴셋(Platform Toolset)** 에 오류가 있는 경우 ``PROJECT`` -> ``Properties`` -> ``Configuration Properties`` -> ``General`` 로 이동하여 사용 중인 머신에 설치된 툴셋을 선택합니다.
 
-The ``.exe`` file will be in ``LightGBM-master/windows/x64/Release`` folder.
+``.exe`` 파일이 ``LightGBM-master/windows/x64/Release`` 폴더에 저장됩니다.
 
-From Command Line
+명령줄(Command Line) 활용
 -----------------
 
-1. Install `Git for Windows`_, `CMake`_ (3.8 or higher) and `VS Build Tools`_ (**VS Build Tools** is not needed if **Visual Studio** (2015 or newer) is already installed).
+1. Windows용 Git(`Git for Windows`_), `CMake`_(3.8 버전 이상), `VS Build Tools`_ 를 설치합니다(**Visual Studio**(2015 버전 이상)가 이미 설치되어 있는 경우 **VS Build Tools** 는 설치할 필요 없음).
 
 2. 다음 명령을 실행합니다:
 
@@ -265,12 +265,12 @@ From Command Line
      cmake -A x64 -DUSE_OPENMP=OFF ..
      cmake --build . --target ALL_BUILD --config Release
 
-The ``.exe`` and ``.dll`` files will be in ``LightGBM/Release`` folder.
+``.exe`` 및 ``.dll`` 파일이 ``LightGBM/`` 폴더에 저장됩니다.
 
 MinGW-w64
 *********
 
-1. Install `Git for Windows`_, `CMake`_ and `MinGW-w64`_.
+1. Windows용 Git(`Git for Windows`_), `CMake`_, `MinGW-w64`_ 를 설치합니다.
 
 2. 다음 명령을 실행합니다:
 
@@ -283,16 +283,16 @@ MinGW-w64
      cmake -G "MinGW Makefiles" -DUSE_OPENMP=OFF ..
      mingw32-make.exe -j4
 
-The ``.exe`` and ``.dll`` files will be in ``LightGBM/`` folder.
+``.exe`` 및 ``.dll`` 파일이 ``LightGBM/`` 폴더에 저장됩니다.
 
-**Note**: You may need to run the ``cmake -G "MinGW Makefiles" -DUSE_OPENMP=OFF ..`` one more time if you encounter the ``sh.exe was found in your PATH`` error.
+**주의**: ``sh.exe was found in your PATH`` 오류가 발생하면 ``cmake -G "MinGW Makefiles" ..`` 를 한 번 더 실행해야 할 수 있습니다.
 
 Linux
 ^^^^^
 
-On Linux a version of LightGBM without OpenMP support can be built using **CMake** and **gcc** or **Clang**.
+Linux에서 OpenMP를 지원하지 않는 LightGBM 버전은 **CMake**, 그리고 **gcc** 또는 **Clang** 를 사용하여 빌드할 수 있습니다.
 
-1. Install `CMake`_.
+1. `CMake`_ 를 설치합니다.
 
 2. 다음 명령을 실행합니다:
 
@@ -305,19 +305,19 @@ On Linux a version of LightGBM without OpenMP support can be built using **CMake
      cmake -DUSE_OPENMP=OFF ..
      make -j4
 
-**Note**: glibc >= 2.14 is required.
+**주의**: glibc(2.14 버전 이상)가 필요합니다.
 
 macOS
 ^^^^^
 
-On macOS a version of LightGBM without OpenMP support can be built using **CMake** and **Apple Clang** or **gcc**.
+macOS에서 OpenMP를 지원하지 않는 LightGBM 버전은 **CMake**, 그리고 **Apple Clang** 또는 **gcc** 를 사용하여 빌드할 수 있습니다.
 
 Apple Clang
 ***********
 
-Only **Apple Clang** version 8.1 or higher is supported.
+**Apple Clang**(8.1 버전 이상)만 지원됩니다.
 
-1. Install `CMake`_ (3.16 or higher):
+1. `CMake`_(3.16 버전 이상)을 설치합니다:
 
    .. code::
 
@@ -337,13 +337,13 @@ Only **Apple Clang** version 8.1 or higher is supported.
 gcc
 ***
 
-1. Install `CMake`_ (3.2 or higher):
+1. `CMake`_(3.2 버전 이상)을 설치합니다:
 
    .. code::
 
      brew install cmake
 
-2. Install **gcc**:
+2. **gcc** 를 설치합니다:
 
    .. code::
 
@@ -361,46 +361,46 @@ gcc
      cmake -DUSE_OPENMP=OFF ..
      make -j4
 
-Build MPI Version
+MPI 버전 빌드하기
 ~~~~~~~~~~~~~~~~~
 
-The default build version of LightGBM is based on socket. LightGBM also supports MPI.
-`MPI`_ is a high performance communication approach with `RDMA`_ support.
+LightGBM의 기본 빌드 버전은 소켓(socket)을 기반으로 합니다. LightGBM은 MPI도 지원합니다.
+`MPI`_ 는 `RDMA`_ 를 지원하는 고성능 통신 방식입니다.
 
-If you need to run a distributed learning application with high performance communication, you can build the LightGBM with MPI support.
+고성능 통신으로 분산 학습 애플리케이션을 구동해야 하는 경우, LightGBM의 MPI 버전을 빌드할 수 있습니다.
 
 Windows
 ^^^^^^^
 
-On Windows an MPI version of LightGBM can be built using
+Windows에서 LightGBM의 MPI 버전은 다음을 사용하여 빌드할 수 있습니다.
 
-- **MS MPI** and **Visual Studio**;
+- **MS MPI** 및 **Visual Studio**;
 
-- **MS MPI**, **CMake** and **VS Build Tools**.
+- **MS MPI**, **CMake** 및 **VS Build Tools**.
 
-With GUI
+GUI 활용
 ********
 
-1. You need to install `MS MPI`_ first. Both ``msmpisdk.msi`` and ``msmpisetup.exe`` are needed.
+1. 1. 먼저 `MS MPI`_ 를 설치해야 합니다. ``msmpisdk.msi`` 와 ``msmpisetup.exe`` 둘 다 필요합니다.
 
-2. Install `Visual Studio`_ (2015 or newer).
+2. `Visual Studio`_(2015 버전 이상)를 설치합니다.
 
-3. Download `zip archive`_ and unzip it.
+3. `zip archive`_ 파일을 다운로드하고 압축을 풉니다.
 
-4. Go to ``LightGBM-master/windows`` folder.
+4. ``LightGBM-master/windows`` 폴더로 이동합니다.
 
-5. Open ``LightGBM.sln`` file with **Visual Studio**, choose ``Release_mpi`` configuration and click ``BUILD`` -> ``Build Solution (Ctrl+Shift+B)``.
+5. **Visual Studio** 로 ``LightGBM.sln`` 파일을 열고 ``Release`` 설정을 선택한 후 ``BUILD`` 클릭 -> ``솔루션 빌드(Ctrl+Shift+B)``
 
-   If you have errors about **Platform Toolset**, go to ``PROJECT`` -> ``Properties`` -> ``Configuration Properties`` -> ``General`` and select the toolset installed on your machine.
+   **플랫폼 툴셋(Platform Toolset)** 에 오류가 있는 경우 ``PROJECT`` -> ``Properties`` -> ``Configuration Properties`` -> ``General`` 로 이동하여 사용 중인 머신에 설치된 툴셋을 선택합니다.
 
-The ``.exe`` file will be in ``LightGBM-master/windows/x64/Release_mpi`` folder.
+``.exe`` 파일이 ``LightGBM-master/windows/x64/Release_mpi`` 폴더에 저장됩니다.
 
-From Command Line
+명령줄(Command Line) 활용
 *****************
 
-1. You need to install `MS MPI`_ first. Both ``msmpisdk.msi`` and ``msmpisetup.exe`` are needed.
+1. 1. 먼저 `MS MPI`_ 를 설치해야 합니다. ``msmpisdk.msi`` 와 ``msmpisetup.exe`` 둘 다 필요합니다.
 
-2. Install `Git for Windows`_, `CMake`_ (3.8 or higher) and `VS Build Tools`_ (**VS Build Tools** is not needed if **Visual Studio** (2015 or newer) is already installed).
+2. Windows용 Git(`Git for Windows`_), `CMake`_(3.8 버전 이상), `VS Build Tools`_ 를 설치합니다(**Visual Studio**(2015 버전 이상)가 이미 설치되어 있는 경우 **VS Build Tools** 는 설치할 필요 없음).
 
 3. 다음 명령을 실행합니다:
 
@@ -413,18 +413,18 @@ From Command Line
      cmake -A x64 -DUSE_MPI=ON ..
      cmake --build . --target ALL_BUILD --config Release
 
-The ``.exe`` and ``.dll`` files will be in ``LightGBM/Release`` folder.
+``.exe`` 및 ``.dll`` 파일이 ``LightGBM/Release`` 폴더에 저장됩니다.
 
-**Note**: Building MPI version by **MinGW** is not supported due to the miss of MPI library in it.
+**MinGW** 의 MPI 버전을 빌드하는 것은 MPI 라이브러리의 부재로 지원되지 않습니다.
 
 Linux
 ^^^^^
 
-On Linux an MPI version of LightGBM can be built using **Open MPI**, **CMake** and **gcc** or **Clang**.
+Linux에서 LightGBM의 MPI 버전은 **Open MPI**, **CMake**, 그리고 **gcc** 또는 **Clang** 를 사용하여 빌드할 수 있습니다.
 
-1. Install `Open MPI`_.
+1. `Open MPI`_ 를 설치합니다.
 
-2. Install `CMake`_.
+2. `CMake`_ 를 설치합니다.
 
 3. 다음 명령을 실행합니다:
 
@@ -437,33 +437,33 @@ On Linux an MPI version of LightGBM can be built using **Open MPI**, **CMake** a
      cmake -DUSE_MPI=ON ..
      make -j4
 
-**Note**: glibc >= 2.14 is required.
+**주의**: glibc(2.14 버전 이상)가 필요합니다.
 
-**Note**: In some rare cases you may need to install OpenMP runtime library separately (use your package manager and search for ``lib[g|i]omp`` for doing this).
+**주의**: 드물지만 OpenMP 런타임 라이브러리를 별도로 설치해야 하는 경우도 있습니다(패키지 관리자를 이용해 ``lib[g|i]omp`` 를 검색하여 이 작업을 수행할 수 있습니다).
 
 macOS
 ^^^^^
 
-On macOS an MPI version of LightGBM can be built using **Open MPI**, **CMake** and **Apple Clang** or **gcc**.
+macOS에서 LightGBM의 MPI 버전은 **Open MPI**, **CMake**, 그리고 **Apple Clang** 또는 **gcc**를 사용하여 빌드할 수 있습니다.
 
 Apple Clang
 ***********
 
-Only **Apple Clang** version 8.1 or higher is supported.
+**Apple Clang**(8.1 버전 이상)만 지원됩니다.
 
-1. Install `CMake`_ (3.16 or higher):
+1. `CMake`_(3.16 버전 이상)을 설치합니다:
 
    .. code::
 
      brew install cmake
 
-2. Install **OpenMP**:
+2. **OpenMP** 를 설치합니다:
 
    .. code::
 
      brew install libomp
 
-3. Install **Open MPI**:
+3. **Open MPI** 를 설치합니다:
 
    .. code::
 
@@ -483,19 +483,19 @@ Only **Apple Clang** version 8.1 or higher is supported.
 gcc
 ***
 
-1. Install `CMake`_ (3.2 or higher):
+1. `CMake`_(3.2 버전 이상)을 설치합니다:
 
    .. code::
 
      brew install cmake
 
-2. Install **gcc**:
+2. **gcc** 를 설치합니다:
 
    .. code::
 
      brew install gcc
 
-3. Install **Open MPI**:
+3. **Open MPI** 를 설치합니다:
 
    .. code::
 
@@ -513,29 +513,29 @@ gcc
      cmake -DUSE_MPI=ON ..
      make -j4
 
-Build GPU Version
+GPU 버전 빌드하기
 ~~~~~~~~~~~~~~~~~
 
 Linux
 ^^^^^
 
-On Linux a GPU version of LightGBM (``device_type=gpu``) can be built using **OpenCL**, **Boost**, **CMake** and **gcc** or **Clang**.
+Linux에서 LightGBM의 GPU 버전(``device_type=gpu``)은 **OpenCL**, **Boost**, **CMake**, 그리고 **gcc** 또는 **Clang** 을 사용하여 빌드할 수 있습니다.
 
-The following dependencies should be installed before compilation:
+컴파일하기 전에 다음 종속 요소들(dependencies)을 설치해야 합니다:
 
--  **OpenCL** 1.2 headers and libraries, which is usually provided by GPU manufacture.
+-  **OpenCL** 1.2 헤더 및 라이브러리(대개 GPU 제조사에서 제공).
 
-   The generic OpenCL ICD packages (for example, Debian package ``ocl-icd-libopencl1`` and ``ocl-icd-opencl-dev``) can also be used.
+   일반적인 OpenCL ICD 패키지(예를 들어, 데비안 패키지 ``ocl-icd-libopencl1`` 및 ``ocl-icd-opencl-dev``)도 사용할 수 있습니다.
 
--  **libboost** 1.56 or later (1.61 or later is recommended).
+-  **libboost** 1.56 버전 이상(1.61 버전 이상 권장).
 
-   We use Boost.Compute as the interface to GPU, which is part of the Boost library since version 1.61. However, since we include the source code of Boost.Compute as a submodule, we only require the host has Boost 1.56 or later installed. We also use Boost.Align for memory allocation. Boost.Compute requires Boost.System and Boost.Filesystem to store offline kernel cache.
+   1.61 버전부터 Boost 라이브러리의 일부인 Boost.Compute를 GPU 인터페이스로 사용하고 있습니다. 하지만 Boost.Compute의 소스 코드를 하위모듈로 포함하기 때문에 호스트에 1.56 버전 이상만 설치되어 있으면 됩니다. 또한 메모리 할당을 위해 Boost.Align을 사용합니다. Boost.Compute는 오프라인 커널 캐시를 저장하기 위해 Boost.System 및 Boost.Filesystem이 필요합니다.
 
-   The following Debian packages should provide necessary Boost libraries: ``libboost-dev``, ``libboost-system-dev``, ``libboost-filesystem-dev``.
+   다음의 데비안 패키지는 필요한 Boost 라이브러리를 제공해야 합니다: ``libboost-dev``, ``libboost-system-dev``, ``libboost-filesystem-dev``.
 
--  **CMake** 3.2 or later.
+-  **CMake**(3.2 버전 이상).
 
-To build LightGBM GPU version, 다음 명령을 실행합니다:
+LightGBM의 GPU 버전을 빌드하기 위해 다음 명령을 실행합니다:
 
 .. code::
 
@@ -548,34 +548,34 @@ To build LightGBM GPU version, 다음 명령을 실행합니다:
   # cmake -DUSE_GPU=1 -DOpenCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so -DOpenCL_INCLUDE_DIR=/usr/local/cuda/include/ ..
   make -j4
 
-**Note**: glibc >= 2.14 is required.
+**주의**: glibc(2.14 버전 이상)가 필요합니다.
 
-**Note**: In some rare cases you may need to install OpenMP runtime library separately (use your package manager and search for ``lib[g|i]omp`` for doing this).
+**주의**: 드물지만 OpenMP 런타임 라이브러리를 별도로 설치해야 하는 경우도 있습니다(패키지 관리자를 이용해 ``lib[g|i]omp`` 를 검색하여 이 작업을 수행할 수 있습니다).
 
 Windows
 ^^^^^^^
 
-On Windows a GPU version of LightGBM (``device_type=gpu``) can be built using **OpenCL**, **Boost**, **CMake** and **VS Build Tools** or **MinGW**.
+Windows에서 LightGBM의 GPU 버전(``device_type=gpu``)은 **OpenCL**, **Boost**, **CMake**, 그리고 **VS Build Tools** 또는 **MinGW** 를 사용하여 빌드할 수 있습니다.
 
-If you use **MinGW**, the build procedure is similar to the build on Linux. Refer to `GPU Windows Compilation <./GPU-Windows.rst>`__ to get more details.
+**MinGW** 를 사용하는 경우, 빌드 절차는 Linux의 빌드와 유사합니다. 자세한 내용은 `GPU Windows Compilation <./GPU-Windows.rst>`__ 를 참조하십시오.
 
-Following procedure is for the **MSVC** (Microsoft Visual C++) build.
+다음은 **MSVC**(Microsoft Visual C++) 빌드에 대한 절차입니다.
 
-1. Install `Git for Windows`_, `CMake`_ (3.8 or higher) and `VS Build Tools`_ (**VS Build Tools** is not needed if **Visual Studio** (2015 or newer) is installed).
+1. Windows용 Git(`Git for Windows`_), `CMake`_(3.8 버전 이상), `VS Build Tools`_ 를 설치합니다(**Visual Studio**(2015 버전 이상)가 이미 설치되어 있는 경우 **VS Build Tools** 는 설치할 필요 없음).
 
-2. Install **OpenCL** for Windows. The installation depends on the brand (NVIDIA, AMD, Intel) of your GPU card.
+2. Windows용 **OpenCL** 을 설치합니다. 설치 방법은 GPU 카드의 브랜드(NVIDIA, AMD, Intel)에 따라 다릅니다.
 
-   - For running on Intel, get `Intel SDK for OpenCL`_.
+   - Intel의 경우, `Intel SDK for OpenCL`_ 를 다운로드하세요.
 
-   - For running on AMD, get AMD APP SDK.
+   - AMD의 경우, AMD APP SDK를 다운로드하세요.
 
-   - For running on NVIDIA, get `CUDA Toolkit`_.
+   - NVIDIA의 경우, `CUDA Toolkit`_ 을 다운로드하세요.
 
-   Further reading and correspondence table: `GPU SDK Correspondence and Device Targeting Table <./GPU-Targets.rst>`__.
+   추가 내용 및 대응 표: `GPU SDK Correspondence and Device Targeting Table <./GPU-Targets.rst>`__.
 
-3. Install `Boost Binaries`_.
+3. `Boost Binaries`_ 를 설치합니다.
 
-   **Note**: Match your Visual C++ version:
+   **주의**: 사용중인 Visual C++ 버전에 맞춰 설치하십시오:
    
    Visual Studio 2015 -> ``msvc-14.0-64.exe``,
 
@@ -596,34 +596,34 @@ Following procedure is for the **MSVC** (Microsoft Visual C++) build.
      # cmake -A x64 -DUSE_GPU=1 -DBOOST_ROOT=C:/local/boost_1_63_0 -DBOOST_LIBRARYDIR=C:/local/boost_1_63_0/lib64-msvc-14.0 -DOpenCL_LIBRARY="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/OpenCL.lib" -DOpenCL_INCLUDE_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include" ..
      cmake --build . --target ALL_BUILD --config Release
 
-   **Note**: ``C:/local/boost_1_63_0`` and ``C:/local/boost_1_63_0/lib64-msvc-14.0`` are locations of your **Boost** binaries (assuming you've downloaded 1.63.0 version for Visual Studio 2015).
+   **주의**: ``C:/local/boost_1_63_0`` 및 ``C:/local/boost_1_63_0/lib64-msvc-14.0`` 은 **Boost** 바이너리의 위치입니다(Visual Studio 2015용 1.63.0 버전을 다운로드 했을 때를 가정).
 
 Docker
 ^^^^^^
 
-Refer to `GPU Docker folder <https://github.com/microsoft/LightGBM/tree/master/docker/gpu>`__.
+`GPU Docker folder <https://github.com/microsoft/LightGBM/tree/master/docker/gpu>`__ 를 참조하세요.
 
-Build CUDA Version (Experimental)
+CUDA 버전 빌드하기 (실험단계)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The `original GPU build <#build-gpu-version>`__ of LightGBM (``device_type=gpu``) is based on OpenCL.
+LightGBM(``device_type=gpu``)의 원래 빌드(`original GPU build <#build-gpu-version>`__)는 OpenCL을 기반으로 합니다.
 
-The CUDA-based build (``device_type=cuda``) is a separate implementation and requires an NVIDIA graphics card with compute capability 6.0 and higher. It should be considered experimental, and we suggest using it only when it is impossible to use OpenCL version (for example, on IBM POWER microprocessors).
+CUDA 기반 빌드(``device_type=cuda``)는 별개의 실행 방식이며, capability 6.0 이상의 NVIDIA 그래픽 카드를 필요로 합니다. 이 빌드는 실험단계로 간주해야하며, OpenCL 버전을 사용할 수 없는 경우(예: IBM POWER 마이크로프로세서)에만 사용하는 것이 좋습니다.
 
-**Note**: only Linux is supported, other operating systems are not supported yet.
+**주의**: Linux만 지원되며, 다른 운영체제는 아직 지원하지 않습니다.
 
 Linux
 ^^^^^
 
-On Linux a CUDA version of LightGBM can be built using **CUDA**, **CMake** and **gcc** or **Clang**.
+Linux에서 LightGBM의 CUDA 버전은 **CUDA**, **CMake**, 그리고 **gcc** 또는 **Clang** 를 사용하여 빌드할 수 있습니다.
 
-The following dependencies should be installed before compilation:
+컴파일하기 전에 다음 종속 요소들(dependencies)을 설치해야 합니다:
 
--  **CUDA** 9.0 or later libraries. Please refer to `this detailed guide`_. Pay great attention to the minimum required versions of host compilers listed in the table from that guide and use only recommended versions of compilers.
+-  **CUDA** 9.0 버전 이상의 라이브러리. `this detailed guide`_ 를 참조하십시오. 해당 가이드의 표에 나열된 호스트 컴파일러의 최소 요구 버전에 주의를 기울이고 권장 버전의 컴파일러만 사용하십시오.
 
--  **CMake** 3.16 or later.
+-  **CMake**(3.16 버전 이상).
 
-To build LightGBM CUDA version, 다음 명령을 실행합니다:
+LightGBM의 CUDA 버전을 빌드하기 위해 다음 명령을 실행합니다:
 
 .. code::
 
@@ -634,21 +634,21 @@ To build LightGBM CUDA version, 다음 명령을 실행합니다:
   cmake -DUSE_CUDA=1 ..
   make -j4
 
-**Note**: glibc >= 2.14 is required.
+**주의**: glibc(2.14 버전 이상)가 필요합니다.
 
-**Note**: In some rare cases you may need to install OpenMP runtime library separately (use your package manager and search for ``lib[g|i]omp`` for doing this).
+**주의**: 드물지만 OpenMP 런타임 라이브러리를 별도로 설치해야 하는 경우도 있습니다(패키지 관리자를 이용해 ``lib[g|i]omp`` 를 검색하여 이 작업을 수행할 수 있습니다).
 
-Build HDFS Version
+HDFS 버전 빌드하기
 ~~~~~~~~~~~~~~~~~~
 
-The HDFS version of LightGBM was tested on CDH-5.14.4 cluster.
+LightGBM의 HDFS 버전은 CDH-5.14.4 클러스터에서 테스트되었습니다.
 
 Linux
 ^^^^^
 
-On Linux a HDFS version of LightGBM can be built using **CMake** and **gcc**.
+Linux에서 LightGBM의 HDFS 버전은 **CMake** 및 **gcc** 를 사용하여 빌드할 수 있습니다.
 
-1. Install `CMake`_.
+1. `CMake`_ 를 설치합니다.
 
 2. 다음 명령을 실행합니다:
 
@@ -667,26 +667,26 @@ On Linux a HDFS version of LightGBM can be built using **CMake** and **gcc**.
      #   ..
      make -j4
 
-**Note**: glibc >= 2.14 is required.
+**주의**: glibc(2.14 버전 이상)가 필요합니다.
 
-**Note**: In some rare cases you may need to install OpenMP runtime library separately (use your package manager and search for ``lib[g|i]omp`` for doing this).
+**주의**: 드물지만 OpenMP 런타임 라이브러리를 별도로 설치해야 하는 경우도 있습니다(패키지 관리자를 이용해 ``lib[g|i]omp`` 를 검색하여 이 작업을 수행할 수 있습니다).
 
-Build Java Wrapper
+Java 래퍼(Wrapper) 빌드
 ~~~~~~~~~~~~~~~~~~
 
-Using the following instructions you can generate a JAR file containing the LightGBM `C API <./Development-Guide.rst#c-api>`__ wrapped by **SWIG**.
+다음 지침에 따라 **SWIG** 로 래핑된 LightGBM `C API <./Development-Guide.rst#c-api>`__ 가 포함된 JAR 파일을 생성할 수 있습니다.
 
 Windows
 ^^^^^^^
 
-On Windows a Java wrapper of LightGBM can be built using **Java**, **SWIG**, **CMake** and **VS Build Tools** or **MinGW**.
+Windows에서 LightGBM의 Java 래퍼(Wrapper)는 **Java**, **SWIG**, **CMake**, 그리고 **VS Build Tools** 또는 **MinGW** 를 사용하여 빌드할 수 있습니다.
 
 VS Build Tools
 **************
 
-1. Install `Git for Windows`_, `CMake`_ (3.8 or higher) and `VS Build Tools`_ (**VS Build Tools** is not needed if **Visual Studio** (2015 or newer) is already installed).
+1. Windows용 Git(`Git for Windows`_), `CMake`_(3.8 버전 이상), `VS Build Tools`_ 를 설치합니다(**Visual Studio**(2015 버전 이상)가 이미 설치되어 있는 경우 **VS Build Tools** 는 설치할 필요 없음).
 
-2. Install `SWIG`_ and **Java** (also make sure that ``JAVA_HOME`` is set properly).
+2. `SWIG`_ 및 **Java** 를 설치합니다(또한 ``JAVA_HOME`` 이 올바르게 설정되었는지 확인합니다).
 
 3. 다음 명령을 실행합니다:
 
@@ -699,14 +699,14 @@ VS Build Tools
      cmake -A x64 -DUSE_SWIG=ON ..
      cmake --build . --target ALL_BUILD --config Release
 
-The ``.jar`` file will be in ``LightGBM/build`` folder and the ``.dll`` files will be in ``LightGBM/Release`` folder.
+``.jar`` 파일은 ``LightGBM/build`` 폴더에, ``.dll`` 파일은 ``LightGBM/Release`` 폴더에 저장됩니다.
 
 MinGW-w64
 *********
 
-1. Install `Git for Windows`_, `CMake`_ and `MinGW-w64`_.
+1. Windows용 Git(`Git for Windows`_), `CMake`_, `MinGW-w64`_ 를 설치합니다.
 
-2. Install `SWIG`_ and **Java** (also make sure that ``JAVA_HOME`` is set properly).
+2. `SWIG`_ 및 **Java** 를 설치합니다(또한 ``JAVA_HOME`` 이 올바르게 설정되었는지 확인합니다).
 
 3. 다음 명령을 실행합니다:
 
@@ -719,21 +719,20 @@ MinGW-w64
      cmake -G "MinGW Makefiles" -DUSE_SWIG=ON ..
      mingw32-make.exe -j4
 
-The ``.jar`` file will be in ``LightGBM/build`` folder and the ``.dll`` files will be in ``LightGBM/`` folder.
+``.jar`` 파일은 ``LightGBM/build`` 폴더에, ``.dll`` 파일은 ``LightGBM/`` 폴더에 저장됩니다.
 
-**Note**: You may need to run the ``cmake -G "MinGW Makefiles" -DUSE_SWIG=ON ..`` one more time if you encounter the ``sh.exe was found in your PATH`` error.
+**주의**: ``sh.exe was found in your PATH`` 오류가 발생하면 ``cmake -G "MinGW Makefiles" -DUSE_SWIG=ON ..`` 를 한 번 더 실행해야 할 수 있습니다.
 
-It is recommended to use **VS Build Tools (Visual Studio)** since it has better multithreading efficiency in **Windows** for many-core systems
-(see `Question 4 <./FAQ.rst#i-am-using-windows-should-i-use-visual-studio-or-mingw-for-compiling-lightgbm>`__ and `Question 8 <./FAQ.rst#cpu-usage-is-low-like-10-in-windows-when-using-lightgbm-on-very-large-datasets-with-many-core-systems>`__).
+멀티 코어 시스템의 경우 **Windows** 에서 멀티 스레딩 효율이 더 좋으므로 **VS Build Tools (Visual Studio)** 를 사용하는 것이 좋습니다(`Question 4 <./FAQ.rst#i-am-using-windows-should-i-use-visual-studio-or-mingw-for-compiling-lightgbm>`__ and `Question 8 <./FAQ.rst#cpu-usage-is-low-like-10-in-windows-when-using-lightgbm-on-very-large-datasets-with-many-core-systems>`__ 를 확인하십시오).
 
-Also, you may want to read `gcc Tips <./gcc-Tips.rst>`__.
+또한 `gcc Tips <./gcc-Tips.rst>`__ 를 읽어보십시오.
 
 Linux
 ^^^^^
 
-On Linux a Java wrapper of LightGBM can be built using **Java**, **SWIG**, **CMake** and **gcc** or **Clang**.
+Linux에서 LightGBM의 Java 래퍼(Wrapper)는 **Java**, **SWIG**, **CMake**, 그리고 **gcc** 또는 **Clang** 를 사용하여 빌드할 수 있습니다.
 
-1. Install `CMake`_, `SWIG`_ and **Java** (also make sure that ``JAVA_HOME`` is set properly).
+1. `CMake`_, `SWIG`_ 및 **Java** 를 설치합니다(또한 ``JAVA_HOME`` 이 올바르게 설정되었는지 확인합니다).
 
 2. 다음 명령을 실행합니다:
 
@@ -746,30 +745,30 @@ On Linux a Java wrapper of LightGBM can be built using **Java**, **SWIG**, **CMa
      cmake -DUSE_SWIG=ON ..
      make -j4
 
-**Note**: glibc >= 2.14 is required.
+**주의**: glibc(2.14 버전 이상)가 필요합니다.
 
-**Note**: In some rare cases you may need to install OpenMP runtime library separately (use your package manager and search for ``lib[g|i]omp`` for doing this).
+**주의**: 드물지만 OpenMP 런타임 라이브러리를 별도로 설치해야 하는 경우도 있습니다(패키지 관리자를 이용해 ``lib[g|i]omp`` 를 검색하여 이 작업을 수행할 수 있습니다).
 
 macOS
 ^^^^^
 
-On macOS a Java wrapper of LightGBM can be built using **Java**, **SWIG**, **CMake** and **Apple Clang** or **gcc**.
+macOS에서 LightGBM의 Java 래퍼(Wrapper)는 **Java**, **SWIG**, **CMake**, 그리고 **Apple Clang** 또는 **gcc** 를 사용하여 빌드할 수 있습니다.
 
-First, install `SWIG`_ and **Java** (also make sure that ``JAVA_HOME`` is set properly).
-Then, either follow the **Apple Clang** or **gcc** installation instructions below.
+먼저 `SWIG`_ 및 **Java** 를 설치합니다(또한 ``JAVA_HOME`` 이 올바르게 설정되었는지 확인합니다).
+그 후, 아래의 **Apple Clang** 또는 **gcc** 설치 지침을 따르세요.
 
 Apple Clang
 ***********
 
-Only **Apple Clang** version 8.1 or higher is supported.
+**Apple Clang**(8.1 버전 이상)만 지원됩니다.
 
-1. Install `CMake`_ (3.16 or higher):
+1. `CMake`_(3.16 버전 이상)을 설치합니다:
 
    .. code::
 
      brew install cmake
 
-2. Install **OpenMP**:
+2. **OpenMP** 를 설치합니다:
 
    .. code::
 
@@ -789,13 +788,13 @@ Only **Apple Clang** version 8.1 or higher is supported.
 gcc
 ***
 
-1. Install `CMake`_ (3.2 or higher):
+1. `CMake`_(3.2 버전 이상)을 설치합니다:
 
    .. code::
 
      brew install cmake
 
-2. Install **gcc**:
+2. **gcc** 를 설치합니다:
 
    .. code::
 
@@ -813,17 +812,17 @@ gcc
      cmake -DUSE_SWIG=ON -DAPPLE_OUTPUT_DYLIB=ON ..
      make -j4
 
-Also, you may want to read `gcc Tips <./gcc-Tips.rst>`__.
+또한 `gcc Tips <./gcc-Tips.rst>`__ 를 읽어보십시오.
 
-Build C++ Unit Tests
+C++ 유닛 테스트 빌드하기
 ~~~~~~~~~~~~~~~~~~~~
 
 Windows
 ^^^^^^^
 
-On Windows, C++ unit tests of LightGBM can be built using **CMake** and **VS Build Tools**.
+Windows에서 LightGBM의 C++ 유닛 테스트는 **CMake** 및 **VS Build Tools** 를 사용하여 빌드할 수 있습니다.
 
-1. Install `Git for Windows`_, `CMake`_ (3.8 or higher) and `VS Build Tools`_ (**VS Build Tools** is not needed if **Visual Studio** (2015 or newer) is already installed).
+1. Windows용 Git(`Git for Windows`_), `CMake`_(3.8 버전 이상), `VS Build Tools`_ 를 설치합니다(**Visual Studio**(2015 버전 이상)가 이미 설치되어 있는 경우 **VS Build Tools** 는 설치할 필요 없음).
 
 2. 다음 명령을 실행합니다:
 
@@ -836,14 +835,14 @@ On Windows, C++ unit tests of LightGBM can be built using **CMake** and **VS Bui
      cmake -A x64 -DBUILD_CPP_TEST=ON -DUSE_OPENMP=OFF ..
      cmake --build . --target testlightgbm --config Debug
 
-The ``.exe`` file will be in ``LightGBM/Debug`` folder.
+``.exe`` 파일이 ``LightGBM/Debug`` 폴더에 저장됩니다.
 
 Linux
 ^^^^^
 
-On Linux a C++ unit tests of LightGBM can be built using **CMake** and **gcc** or **Clang**.
+Linux에서 LightGBM의 C++ 유닛 테스트는 **CMake**, 그리고 **gcc** 또는 **Clang**.
 
-1. Install `CMake`_.
+1. `CMake`_ 를 설치합니다.
 
 2. 다음 명령을 실행합니다:
 
@@ -856,19 +855,19 @@ On Linux a C++ unit tests of LightGBM can be built using **CMake** and **gcc** o
      cmake -DBUILD_CPP_TEST=ON -DUSE_OPENMP=OFF ..
      make testlightgbm -j4
 
-**Note**: glibc >= 2.14 is required.
+**주의**: glibc(2.14 버전 이상)가 필요합니다.
 
 macOS
 ^^^^^
 
-On macOS a C++ unit tests of LightGBM can be built using **CMake** and **Apple Clang** or **gcc**.
+macOS에서 LightGBM의 C++ 유닛 테스트는 **CMake**, 그리고 **Apple Clang** 또는 **gcc**.
 
 Apple Clang
 ***********
 
-Only **Apple Clang** version 8.1 or higher is supported.
+**Apple Clang**(8.1 버전 이상)만 지원됩니다.
 
-1. Install `CMake`_ (3.16 or higher):
+1. `CMake`_(3.16 버전 이상)을 설치합니다:
 
    .. code::
 
@@ -888,13 +887,13 @@ Only **Apple Clang** version 8.1 or higher is supported.
 gcc
 ***
 
-1. Install `CMake`_ (3.2 or higher):
+1. `CMake`_(3.2 버전 이상)을 설치합니다:
 
    .. code::
 
      brew install cmake
 
-2. Install **gcc**:
+2. **gcc** 를 설치합니다:
 
    .. code::
 
