@@ -277,7 +277,7 @@ Python 패키지
 
 -  데이터 세트를 구성하기 전에 label(또는 weight/init\_score/group/data)을 가져올 경우, 방법은 ``self.label`` 을 가져오는 방법과 동일합니다.
 
--  데이터 세트를 구성하기 전에 label(또는 weight/init\_score/group)을 설정할 경우, 방법은``self.label=some_label_array`` 와 동일합니다.
+-  데이터 세트를 구성하기 전에 label(또는 weight/init\_score/group)을 설정할 경우, 방법은 ``self.label=some_label_array`` 와 동일합니다.
 
 -  데이터 세트를 구성하기 전에 num\_data(또는 num\_feature)을 가져올 경우, ``self.data`` 를 통해 데이터를 얻을 수 있습니다.
    그리고 만약 데이터가 ``numpy.ndarray`` 인 경우, ``self.data.shape`` 와 같은 코드를 사용합니다. 단, 데이터 세트를 서브 세트로 설정한 후 이를 실행하게 되면 계속해서 ``None`` 을 결과 값으로 얻게 되니 주의하세요.
