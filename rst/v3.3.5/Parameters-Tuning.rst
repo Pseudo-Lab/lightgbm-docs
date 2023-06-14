@@ -1,219 +1,219 @@
-Parameters Tuning
+파라미터 튜닝
 =================
 
-This page contains parameters tuning guides for different scenarios.
+이 페이지에는 다양한 시나리오에 대한 파라미터 튜닝 가이드가 포함되어 있습니다.
 
-**List of other helpful links**
+**도움이 될만한 다른 링크**
 
--  `Parameters <./Parameters.rst>`__
--  `Python API <./Python-API.rst>`__
--  `FLAML`_ for automated hyperparameter tuning
--  `Optuna`_ for automated hyperparameter tuning
+-  `파라미터 <./Parameters.rst>`__
+-  `파이썬 API <./Python-API.rst>`__
+-  `FLAML`_ 자동화된 하이퍼파라미터 튜닝을 위한
+-  `Optuna`_ 자동화된 하이퍼파라미터 튜닝을 위한
 
-Tune Parameters for the Leaf-wise (Best-first) Tree
+리프별(최적 우선) 트리에 대한 파라미터 조정
 ---------------------------------------------------
 
-LightGBM uses the `leaf-wise <./Features.rst#leaf-wise-best-first-tree-growth>`__ tree growth algorithm, while many other popular tools use depth-wise tree growth.
-Compared with depth-wise growth, the leaf-wise algorithm can converge much faster.
-However, the leaf-wise growth may be over-fitting if not used with the appropriate parameters.
+다른 많은 인기 툴은 깊이별 트리 성장 알고리즘을 사용하는 반면, LightGBM은 '리프 방식 <./Features.rst#leaf-wise-best-first-tree-growth>' 트리 성장 알고리즘을 사용합니다.
+깊이별 성장에 비해 리프 방식 알고리즘은 훨씬 빠르게 수렴할 수 있습니다.
+그러나 적절한 파라미터와 함께 사용하지 않으면 리프가 과적합할 수 있습니다.
 
-To get good results using a leaf-wise tree, these are some important parameters:
+리프 방식 트리를 사용하여 좋은 결과를 얻으려면 다음과 같은 몇 가지 중요한 파라미터가 필요합니다:
 
-1. ``num_leaves``. This is the main parameter to control the complexity of the tree model.
-   Theoretically, we can set ``num_leaves = 2^(max_depth)`` to obtain the same number of leaves as depth-wise tree.
-   However, this simple conversion is not good in practice.
-   The reason is that a leaf-wise tree is typically much deeper than a depth-wise tree for a fixed number of leaves. Unconstrained depth can induce over-fitting.
-   Thus, when trying to tune the ``num_leaves``, we should let it be smaller than ``2^(max_depth)``.
-   For example, when the ``max_depth=7`` the depth-wise tree can get good accuracy,
-   but setting ``num_leaves`` to ``127`` may cause over-fitting, and setting it to ``70`` or ``80`` may get better accuracy than depth-wise.
+1. ``num_leaves``. 이것은 트리 모델의 복잡도를 제어하는 주요 파라미터입니다.
+   이론적으로는 ``num_leaves = 2^(max_depth)`` 로 설정하여 깊이별 트리와 동일한 수의 리프를 얻을 수 있습니다.
+   그러나 이 간단한 변환은 실제로는 좋지 않습니다.
+   그 이유는 리프 방식 트리는 일반적으로 고정된 리프 수에 대한 깊이별 트리보다 훨씬 더 깊기 때문입니다. 깊이를 제한하지 않으면 과적합을 유발할 수 있습니다.
+   따라서 ``num_leaves`` 를 조정할 때, ``2^(max_depth)`` 보다 작게 설정해야 합니다.
+   예를 들어, ``max_depth=7`` 일 때 깊이별 트리는 좋은 정확도를 얻을 수 있지만,
+   그러나 ``num_leaves`` 를 ``127`` 로 설정하면 과적합이 발생할 수 있으며, ``70`` 또는 ``80`` 으로 설정하면 깊이별 트리보다 더 나은 정확도를 얻을 수 있습니다.
 
-2. ``min_data_in_leaf``. This is a very important parameter to prevent over-fitting in a leaf-wise tree.
-   Its optimal value depends on the number of training samples and ``num_leaves``.
-   Setting it to a large value can avoid growing too deep a tree, but may cause under-fitting.
-   In practice, setting it to hundreds or thousands is enough for a large dataset.
+2. ``min_data_in_leaf``. 이것은 리프로 구성된 트리에서 과적합을 방지하는 매우 중요한 파라미터입니다.
+   최적의 값은 훈련 샘플의 수와 ``num_leaves`` 에 달려있습니다.
+   큰 값으로 설정하면 트리가 너무 깊게 성장하는 것을 방지할 수 있지만 과적합이 발생할 수 있습니다.
+   실제로는 대규모 데이터 세트의 경우 수백 또는 수천으로 설정하면 충분합니다.
 
-3. ``max_depth``. You also can use ``max_depth`` to limit the tree depth explicitly.
+3. ``max_depth``. ``max_depth`` 를 사용하여 트리 깊이를 명시적으로 제한할 수도 있습니다.
 
-For Faster Speed
+더 빠른 속도를 위해
 ----------------
 
-Add More Computational Resources
+더 많은 컴퓨팅 리소스 추가
 ''''''''''''''''''''''''''''''''
 
-On systems where it is available, LightGBM uses OpenMP to parallelize many operations. The maximum number of threads used by LightGBM is controlled by the parameter ``num_threads``. By default, this will defer to the default behavior of OpenMP (one thread per real CPU core or the value in environment variable ``OMP_NUM_THREADS``, if it is set). For best performance, set this to the number of **real** CPU cores available.
+이 기능을 사용할 수 있는 시스템에서, LightGBM은 OpenMP를 사용하여 많은 작업을 병렬화합니다. LightGBM이 사용하는 최대 스레드 수는 파라미터 ``num_threads`` 에 의해 제어됩니다. 기본적으로, 이 값은 OpenMP의 기본 동작(실제 CPU 코어당 하나의 스레드 또는 환경 변수 ``OMP_NUM_THREADS`` 의 값, 설정된 경우)을 따릅니다. 최상의 성능을 위해, 이 값을 사용 가능한 **real** CPU 코어 수로 설정하세요.
 
-You might be able to achieve faster training by moving to a machine with more available CPU cores.
+사용 가능한 CPU 코어가 더 많은 머신으로 이동하면 더 빠른 학습을 달성할 수 있습니다.
 
-Using distributed (multi-machine) training might also reduce training time. See the `Distributed Learning Guide <./Parallel-Learning-Guide.rst>`_ for details.
+분산 (다중-머신) 학습을 사용하면 학습 시간을 줄일 수도 있습니다. 자세한 내용은 `분산 학습 가이드 <./Parallel-Learning-Guide.rst>`_ 를 참조하세요.
 
-Use a GPU-enabled version of LightGBM
+GPU 지원 버전의 LightGBM 사용
 '''''''''''''''''''''''''''''''''''''
 
-You might find that training is faster using a GPU-enabled build of LightGBM. See the `GPU Tutorial <./GPU-Tutorial.rst>`__ for details.
+GPU 지원 LightGBM 빌드를 사용하면 훈련 속도가 더 빠를 수 있습니다. 자세한 내용은 `GPU 튜토리얼 <./GPU-Tutorial.rst>`__ 를 참조하세요.
 
-Grow Shallower Trees
+키 작은 나무 키우기
 ''''''''''''''''''''
 
-The total training time for LightGBM increases with the total number of tree nodes added. LightGBM comes with several parameters that can be used to control the number of nodes per tree.
+추가되는 트리 노드의 총 개수에 따라 LightGBM의 총 훈련 시간이 증가합니다. LightGBM에는 트리당 노드 수를 제어하는 데 사용할 수 있는 몇 가지 파라미터가 있습니다.
 
-The suggestions below will speed up training, but might hurt training accuracy.
+아래 제안 사항을 사용하면 학습 속도가 빨라지지만 학습 정확도가 떨어질 수 있습니다.
 
-Decrease ``max_depth``
+``max_depth`` 감소
 **********************
 
-This parameter is an integer that controls the maximum distance between the root node of each tree and a leaf node. Decrease ``max_depth`` to reduce training time.
+이 파라미터는 각 트리의 루트 노드와 리프 노드 사이의 최대 거리를 제어하는 정수입니다. 훈련 시간을 줄이려면 ``max_depth`` 를 줄이십시오.
 
-Decrease ``num_leaves``
+``num_leaves`` 감소
 ***********************
 
-LightGBM adds nodes to trees based on the gain from adding that node, regardless of depth. This figure from `the feature documentation <./Features.rst#leaf-wise-best-first-tree-growth>`__ illustrates the process.
+LightGBM은 깊이에 관계없이, 해당 노드를 추가할 때의 이득을 기준으로 트리에 노드를 추가합니다. `변수 문서 <./Features.rst#leaf-wise-best-first-tree-growth>`__ 의 이 그림은 이 과정을 설명합니다.
 
 .. image:: ./_static/images/leaf-wise.png
    :align: center
    :alt: Three consecutive images of decision trees, where each shows the tree with an additional two leaf nodes added. Shows that leaf-wise growth can result in trees that have some branches which are longer than others.
 
-Because of this growth strategy, it isn't straightforward to use ``max_depth`` alone to limit the complexity of trees. The ``num_leaves`` parameter sets the maximum number of nodes per tree. Decrease ``num_leaves`` to reduce training time.
+이러한 성장 전략 때문에, 트리의 복잡성을 제한하기 위해 ``max_depth`` 만 사용하는 것은 간단하지 않습니다. ``num_leaves`` 파라미터는 트리당 최대 노드 수를 설정합니다. 훈련 시간을 줄이려면 ``num_leaves`` 를 줄이세요.
 
-Increase ``min_gain_to_split``
+``min_gain_to_split`` 증가
 ******************************
 
-When adding a new tree node, LightGBM chooses the split point that has the largest gain. Gain is basically the reduction in training loss that results from adding a split point. By default, LightGBM sets ``min_gain_to_split`` to 0.0, which means "there is no improvement that is too small". However, in practice you might find that very small improvements in the training loss don't have a meaningful impact on the generalization error of the model. Increase ``min_gain_to_split`` to reduce training time.
+새 트리 노드를 추가할 때, LightGBM은 이득이 가장 큰 분할 지점을 선택합니다. 이 이득은 기본적으로 분할점을 추가할 때 발생하는 훈련 손실의 감소를 의미합니다. 기본적으로, LightGBM은 "너무 작은 개선은 없다"는 의미로 ``min_gain_to_split`` 을 0.0으로 설정합니다. 그러나 실제로는 훈련 손실의 아주 작은 개선이 모델의 일반화 오류에 의미 있는 영향을 미치지 않을 수 있습니다. 훈련 시간을 줄이려면 ``min_gain_to_split`` 을 늘리세요.
 
-Increase ``min_data_in_leaf`` and ``min_sum_hessian_in_leaf``
+``min_data_in_leaf`` 및 ``min_sum_hessian_in_leaf`` 를 늘립니다.
 *************************************************************
 
-Depending on the size of the training data and the distribution of features, it's possible for LightGBM to add tree nodes that only describe a small number of observations. In the most extreme case, consider the addition of a tree node that only a single observation from the training data falls into. This is very unlikely to generalize well, and probably is a sign of overfitting.
+학습 데이터의 크기와 변수의 분포에 따라, LightGBM은 소수의 관측값만 설명하는 트리 노드를 추가할 수 있습니다. 가장 극단적인 경우, 학습 데이터에서 단 하나의 관측값만 속하는 트리 노드를 추가하는 경우를 생각해 보십시오. 이는 일반화가 잘 되지 않을 가능성이 매우 높으며 과적합의 징후일 수 있습니다.
 
-This can be prevented indirectly with parameters like ``max_depth`` and ``num_leaves``, but LightGBM also offers parameters to help you directly avoid adding these overly-specific tree nodes.
+이는 ``max_depth`` 및 ``num_leaves`` 와 같은 파라미터를 사용하여 간접적으로 방지할 수 있지만, LightGBM은 이러한 지나치게 특정한 트리 노드를 직접 추가하지 않도록 도와주는 파라미터도 제공합니다.
 
-- ``min_data_in_leaf``: Minimum number of observations that must fall into a tree node for it to be added.
-- ``min_sum_hessian_in_leaf``: Minimum sum of the Hessian (second derivative of the objective function evaluated for each observation) for observations in a leaf. For some regression objectives, this is just the minimum number of records that have to fall into each node. For classification objectives, it represents a sum over a distribution of probabilities. See `this Stack Overflow answer <https://stats.stackexchange.com/questions/317073/explanation-of-min-child-weight-in-xgboost-algorithm>`_ for a good description of how to reason about values of this parameter.
+- ``min_data_in_leaf``: 트리 노드에 추가되기 위해 트리 노드에 속해야 하는 최소 관찰 개수.
+- ``min_sum_hessian_in_leaf``: 리프의 관측값에 대한 헤시안 (각 관측값에 대해 평가된 목적 함수의 두 번째 도함수) 의 최소 합입니다. 일부 회귀 목표의 경우, 확률 분포에 대한 합계를 나타냅니다. 분류 목표의 경우, 확률 분포에 대한 합계를 나타냅니다. 이 파라미터의 값을 추론하는 방법에 대한 좋은 설명은 `이 Stack Overflow 답변 <https://stats.stackexchange.com/questions/317073/explanation-of-min-child-weight-in-xgboost-algorithm>`_ 을 참조하세요.
 
-Grow Less Trees
+나무 덜 키우기
 '''''''''''''''
 
-Decrease ``num_iterations``
+``num_iterations`` 감소
 ***************************
 
-The ``num_iterations`` parameter controls the number of boosting rounds that will be performed. Since LightGBM uses decision trees as the learners, this can also be thought of as "number of trees".
+``num_iterations`` 파라미터는 수행될 부스팅 라운드의 수를 제어합니다. LightGBM은 의사 결정 트리를 학습자로 사용하기 때문에, 이 값을 "트리의 수"로 생각할 수도 있습니다.
 
-If you try changing ``num_iterations``, change the ``learning_rate`` as well. ``learning_rate`` will not have any impact on training time, but it will impact the training accuracy. As a general rule, if you reduce ``num_iterations``, you should increase ``learning_rate``.
+``num_iterations`` 를 변경하는 경우, ``learning_rate`` 도 함깨 변경합니다. ``learning_rate`` 는 학습 시간에는 영향을 미치지는 않지만, 학습 정확도에는 영향을 미칩니다. 일반적으로, ``num_iterations`` 를 줄이면, ``learning_rate`` 를 늘려야 합니다.
 
-Choosing the right value of ``num_iterations`` and ``learning_rate`` is highly dependent on the data and objective, so these parameters are often chosen from a set of possible values through hyperparameter tuning.
+``num_iterations`` 와 ``learning_rate`` 의 올바른 값을 선택하는 것은 데이터와 목적에 따라 크게 달라지므로, 하이퍼파라미터 튜닝을 통해 가능한 값의 집합에서 선택하는 경우가 많습니다.
 
-Decrease ``num_iterations`` to reduce training time.
+훈련 시간을 줄이려면 ``num_iterations`` 를 줄입니다.
 
-Use Early Stopping
+조기 학습 종료 사용
 ******************
 
-If early stopping is enabled, after each boosting round the model's training accuracy is evaluated against a validation set that contains data not available to the training process. That accuracy is then compared to the accuracy as of the previous boosting round. If the model's accuracy fails to improve for some number of consecutive rounds, LightGBM stops the training process.
+조기 학습 종료가 활성화된 경우, 각 부스팅 라운드가 끝나면 학습 프로세스에 사용할 수 없는 데이터가 포함된 유효성 검사 세트에 대해 모델의 학습 정확도를 평가합니다. 그런 다음 해당 정확도를 부스팅 라운드의 정확도와 비교합니다. 모델의 정확도가 일정 횟수 동안 연속적으로 개선되지 않으면 LightGBM은 학습 프로세스를 중지합니다.
 
-That "number of consecutive rounds" is controlled by the parameter ``early_stopping_rounds``. For example, ``early_stopping_rounds=1`` says "the first time accuracy on the validation set does not improve, stop training".
+이 "연속 라운드 수"는 파라미터 ``early_stopping_rounds`` 에 의해 제어됩니다. 예를 들어, ``early_stopping_rounds=1`` 은 "검증 세트의 정확도가 처음으로 개선되지 않으면 훈련을 중지합니다"라고 말합니다.
 
-Set ``early_stopping_rounds`` and provide a validation set to possibly reduce training time.
+``early_stopping_rounds`` 를 설정하고 훈련 시간을 줄일 수 있는 유효성 검사 세트를 제공합니다.
 
-Consider Fewer Splits
+더 적은 분할 고려
 '''''''''''''''''''''
 
-The parameters described in previous sections control how many trees are constructed and how many nodes are constructed per tree. Training time can be further reduced by reducing the amount of time needed to add a tree node to the model.
+이전 세션에서 설명한 파라미터는 구성되는 트리 수와 트리당 구성되는 노드 수를 제어합니다. 모델에 트리 노드를 추가하는 데 필요한 시간을 줄임으로써 학습 시간을 더욱 단축할 수 있습니다.
 
-The suggestions below will speed up training, but might hurt training accuracy.
+아래 제안 사항은 훈련 속도를 높일 수 있지만 훈련 정확도를 떨어뜨릴 수 있습니다.
 
-Enable Feature Pre-Filtering When Creating Dataset
+데이터 집합 생성 시 특징 사전 필터링 활성화
 **************************************************
 
-By default, when a LightGBM ``Dataset`` object is constructed, some features will be filtered out based on the value of ``min_data_in_leaf``.
+기본적으로, LightGBM ``Dataset`` 객체가 생성될 때, ``min_data_in_leaf`` 값에 따라 일부 특징이 필터링됩니다.
 
-For a simple example, consider a 1000-observation dataset with a feature called ``feature_1``. ``feature_1`` takes on only two values: 25.0 (995 observations) and 50.0 (5 observations). If ``min_data_in_leaf = 10``, there is no split for this feature which will result in a valid split at least one of the leaf nodes will only have 5 observations.
+간단한 예로, ``feature_1`` 라는 특징이 있는 1000개의 관측 데이터 집합을 생각해 보겠습니다. ``feature_1`` 은 25.0 (995 관측)과 50.0 (5 관측)의 두 가지 값만 취합니다. ``min_data_in_leaf = 10`` 인 경우, 이 특징에 대한 분할이 없으므로 리프 노드 중 하나 이상의 관측치가 5개만 있는 유효한 분할이 됩니다.
 
-Instead of reconsidering this feature and then ignoring it every iteration, LightGBM filters this feature out at before training, when the ``Dataset`` is constructed.
+이 특징을 다시 고려한 다음 매 반복마다 무시하는 대신, LightGBM은 ``Dataset`` 가 구성될 때 훈련 전 단계에서 이 기능을 필터링합니다.
 
-If this default behavior has been overridden by setting ``feature_pre_filter=False``, set ``feature_pre_filter=True`` to reduce training time.
+이 기본 동작을 ``feature_pre_filter=False`` 로 설정하여 재정의한 경우, ``feature_pre_filter=True`` 로 설정하면 훈련 시간을 줄일 수 있습니다.
 
-Decrease ``max_bin`` or ``max_bin_by_feature`` When Creating Dataset
+데이터 세트 생성 시 ``max_bin`` 또는 ``max_bin_by_feature`` 줄이기
 ********************************************************************
 
-LightGBM training `buckets continuous features into discrete bins <./Features.rst#optimization-in-speed-and-memory-usage>`_ to improve training speed and reduce memory requirements for training. This binning is done one time during ``Dataset`` construction. The number of splits considered when adding a node is ``O(#feature * #bin)``, so reducing the number of bins per feature can reduce the number of splits that need to be evaluated.
+LightGBM 훈련은 `연속적인 특징을 개별 총 구간 <./Features.rst#optimization-in-speed-and-memory-usage>`_ 으로 버킷화하여 훈련 속도를 개선하고 훈련에 필요한 메모리 요구량을 줄입니다. 이 비닝은 ``Dataset`` 을 구성하는 동안 한 번 수행됩니다. 노드 추가 시 고려되는 분할 개수는 ``O(#feature * #bin)`` 이므로, 특징당 총 구간 개수를 줄이면 평가해야 하는 분할 개수를 줄일 수 있습니다.
 
-``max_bin`` is controls the maximum number of bins that features will bucketed into. It is also possible to set this maximum feature-by-feature, by passing ``max_bin_by_feature``.
+``max_bin`` 은 특징이 버킷화될 최대 총 구간 개수를 제어합니다. ``max_bin_by_feature`` 를 전달하여 특징별로 이 최대 특징 수를 설정할 수도 있습니다.
 
-Reduce ``max_bin`` or ``max_bin_by_feature`` to reduce training time.
+훈련 시간을 줄이려면 ``max_bin`` 또는 ``max_bin_by_feature`` 를 줄이세요.
 
-Increase ``min_data_in_bin`` When Creating Dataset
+데이터 세트 생성 시 ``min_data_in_bin`` 증가
 **************************************************
 
-Some bins might contain a small number of observations, which might mean that the effort of evaluating that bin's boundaries as possible split points isn't likely to change the final model very much. You can control the granularity of the bins by setting ``min_data_in_bin``.
+일부 총 구간에는 관측값 수가 적을 수 있으므로, 해당 총 구간 차원의 경계를 가능한 분할 지점으로 평가해도 최종 모델에 큰 변화가 없을 수 있습니다. ``min_data_in_bin`` 을 설정하여 구간차원의 세분성을 제어할 수 있습니다.
 
-Increase ``min_data_in_bin`` to reduce training time.
+훈련 시간을 줄이려면 ``min_data_in_bin`` 을 늘리세요.
 
-Decrease ``feature_fraction``
+``feature_fraction`` 줄이기
 *****************************
 
-By default, LightGBM considers all features in a ``Dataset`` during the training process. This behavior can be changed by setting ``feature_fraction`` to a value ``> 0`` and ``<= 1.0``. Setting ``feature_fraction`` to ``0.5``, for example, tells LightGBM to randomly select ``50%`` of features at the beginning of constructing each tree. This reduces the total number of splits that have to be evaluated to add each tree node.
+기본적으로, LightGBM은 훈련 과정에서 ``Dataset`` 의 모든 특징을 고려합니다. 이 동작은 ``feature_fraction`` 을 ``> 0`` 및 ``<= 1.0`` 값으로 설정하여 변경할 수 있습니다. 예를 들어 ``feature_fraction`` 을 ``0.5`` 로 설정하면 각 트리를 구성할 때 LightGBM이 ``50%`` 의 특징을 무작위로 선택하도록 지시합니다. 이렇게 하면 각 트리 노드를 추가하기 위해 평가해야 하는 총 분할 수가 줄어듭니다.
 
-Decrease ``feature_fraction`` to reduce training time.
+훈련 시간을 줄이려면 ``feature_fraction`` 을 줄입니다.
 
-Decrease ``max_cat_threshold``
+``max_cat_threshold`` 줄이기
 ******************************
 
-LightGBM uses a `custom approach for finding optimal splits for categorical features <./Advanced-Topics.html#categorical-feature-support>`_. In this process, LightGBM explores splits that break a categorical feature into two groups. These are sometimes called "k-vs.-rest" splits. Higher ``max_cat_threshold`` values correspond to more split points and larger possible group sizes to search.
+LightGBM은 범주형 특징에 대한 최적의 분할을 찾기 위해 `사용자 지정 접근 방식 <./Advanced-Topics.html#categorical-feature-support>`_ 을 사용합니다. 이 과정에서, LightGBM은 범주형 특징을 두 그룹으로 나누는 분할을 탐색합니다. 이러한 분할을 "k-vs.-rest" 분할이라고도 합니다. ``max_cat_threshold`` 값이 높을수록 더 많은 분할 포인트와 검색 가능한 그룹 크기가 커집니다.
 
-Decrease ``max_cat_threshold`` to reduce training time.
+훈련 시간을 줄이려면 ``max_cat_threshold`` 를 낮추세요.
 
-Use Less Data
+데이터 사용량 줄이기
 '''''''''''''
 
-Use Bagging
+배깅 사용
 ***********
 
-By default, LightGBM uses all observations in the training data for each iteration. It is possible to instead tell LightGBM to randomly sample the training data. This process of training over multiple random samples without replacement is called "bagging".
+기본적으로, LightGBM은 각 반복에 대해 학습 데이터의 모든 관측치를 사용합니다. 대신 LightGBM에 훈련 데이터를 무작위로 샘플링하도록 지시할 수 있습니다. 교체 없이 여러 개의 무작위 샘플을 통해 훈련하는 이 과정을 "bagging" 이라고 합니다.
 
-Set ``bagging_freq`` to an integer greater than 0 to control how often a new sample is drawn. Set ``bagging_fraction`` to a value ``> 0.0`` and ``< 1.0`` to control the size of the sample. For example, ``{"bagging_freq": 5, "bagging_fraction": 0.75}`` tells LightGBM "re-sample without replacement every 5 iterations, and draw samples of 75% of the training data".
+``bagging_freq`` 를 0보다 큰 정수로 설정하여 새 샘플을 추출하는 빈도를 제어합니다. ``bagging_fraction`` 을 ``> 0.0`` 및 ``< 1.0`` 값으로 설정하여 샘플의 크기를 제어합니다. 예를 들어, ``{"bagging_freq": 5, "bagging_fraction": 0.75}`` 는 "5회 반복마다 교체 없이 샘플을 다시 샘플링하고, 훈련 데이터의 75% 샘플을 추출" 하라고 LightGBM에 지시합니다.
 
-Decrease ``bagging_fraction`` to reduce training time.
+훈련 시간을 줄이려면 ``bagging_fraction`` 을 줄이세요.
 
 
-Save Constructed Datasets with ``save_binary``
+생성된 데이터 셋을 ``save_binary`` 로 저장하기
 ''''''''''''''''''''''''''''''''''''''''''''''
 
-This only applies to the LightGBM CLI. If you pass parameter ``save_binary``, the training dataset and all validations sets will be saved in a binary format understood by LightGBM. This can speed up training next time, because binning and other work done when constructing a ``Dataset`` does not have to be re-done.
+이는 LightGBM CLI에만 적용됩니다. 파라미터 ``save_binary`` 를 전달하면 학습 데이터 세트와 모든 검증 세트가 LightGBM을 이해하는 바이너리 형식으로 저장됩니다. 이렇게 하면 ``Dataset``를 구성할 때 수행한 총 구간 및 기타 작업을 다시 수행할 필요가 없으므로 다음 번 학습 속도를 높일 수 있습니다.
 
 
-For Better Accuracy
+정확도 향상
 -------------------
 
--  Use large ``max_bin`` (may be slower)
+-  큰 ``max_bin`` 사용 (느릴 수 있음)
 
--  Use small ``learning_rate`` with large ``num_iterations``
+-  작은 ``learning_rate`` 와 큰 ``num_iterations`` 사용
 
--  Use large ``num_leaves`` (may cause over-fitting)
+-  큰 ``num_leaves`` 사용 (과적합을 유발할 수 있음)
 
--  Use bigger training data
+-  더 큰 훈련 데이터 사용
 
--  Try ``dart``
+-  ``dart`` 사용
 
-Deal with Over-fitting
+과적합 처리
 ----------------------
 
--  Use small ``max_bin``
+-  작은 ``max_bin`` 사용
 
--  Use small ``num_leaves``
+-  작은 ``num_leaves`` 사용
 
--  Use ``min_data_in_leaf`` and ``min_sum_hessian_in_leaf``
+-  ``min_data_in_leaf`` 및 ``min_sum_hessian_in_leaf`` 사용
 
--  Use bagging by set ``bagging_fraction`` and ``bagging_freq``
+-  배깅을 ``bagging_fraction`` 및 ``bagging_freq`` 로 설정하여 사용
 
--  Use feature sub-sampling by set ``feature_fraction``
+-  특징 하위 샘플링을 ``feature_fraction`` 으로 설정하여 사용
 
--  Use bigger training data
+-  더 큰 훈련 데이터 사용
 
--  Try ``lambda_l1``, ``lambda_l2`` and ``min_gain_to_split`` for regularization
+-  정규화를 위해 ``lambda_l1``, ``lambda_l2`` 및 ``min_gain_to_split`` 을 시도
 
--  Try ``max_depth`` to avoid growing deep tree
+-  깊은 트리가 자라지 않도록 ``max_depth`` 를 시도
 
--  Try ``extra_trees``
+-  ``extra_trees`` 를 시도
 
--  Try increasing ``path_smooth``
+-  ``path_smooth`` 증가 시도
 
 .. _Optuna: https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258
 
