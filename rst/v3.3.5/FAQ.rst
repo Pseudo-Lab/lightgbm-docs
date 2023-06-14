@@ -194,7 +194,7 @@ LightGBM은 제로 기반 LibSVM 형식 파일에서 데이터를 직접 로드�
 
 이것은 CMake의 알려진 문제로 MinGW 사용 시 발생합니다. 가장 쉬운 해결책은 ``cmake`` 명령을 다시 실행하여 CMake의 일회성 스토퍼를 우회하는 것입니다. 또는 CMake 버전을 최소 버전 3.17.0으로 업그레이드하는 방법이 있습니다.
 
-자세한 내용은 'Microsoft/LightGBM#3060 <https://github.com/microsoft/LightGBM/issues/3060#issuecomment-626338538>`__' 를 참조하세요.
+자세한 내용은 '`Microsoft/LightGBM#3060 <https://github.com/microsoft/LightGBM/issues/3060#issuecomment-626338538>`__' 를 참조하세요.
 
 15. 프레젠테이션에 사용할 LightGBM의 로고는 어디에서 찾을 수 있나요?
 ------------------------------------------------------------------
@@ -290,7 +290,7 @@ Python 패키지
 저희는 빠른 실행 속도와 동시에 모든 하드웨어, OS, 컴파일러 등과 호환되는 범용 휠을 제공하기 위해 최선을 다하고 있습니다.
 그러나 특정 환경에서의 사용 가능성을 보장할 수 없는 경우도 있습니다(`Microsoft/LightGBM#1743 <https://github.com/microsoft/LightGBM/issues/1743>`__ 참조).
 
-따라서, 세그폴트 발생 시 가장 먼저 시도해야 할 것은 ``pip install --no-binary :all: lightgbm`` 을 사용하여 **소스로부터 컴파일**하는 것입니다.
+따라서, 세그폴트 발생 시 가장 먼저 시도해야 할 것은 ``pip install --no-binary :all: lightgbm`` 을 사용하여 **소스로부터 컴파일** 하는 것입니다.
 OS별 전제 조건에 대해서는 다음 `가이드 <https://github.com/microsoft/LightGBM/blob/master/python-package/README.rst#user-content-build-from-sources>`__ 를 참조하세요.
 
 또한 새로운 문제가 있다면 GitHub 리포지토리에 자유롭게 게시해 주세요. 저희는 항상 각각의 사례를 개별적으로 살펴보고 근본적인 원인을 찾으려고 노력합니다.
