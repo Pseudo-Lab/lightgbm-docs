@@ -14,7 +14,7 @@ LightGBM 관련 자주 묻는 질문 (FAQ)
 중요한 문제
 ===============
 
-**중요한 문제**는 *충돌*, *예측 오류*, *무의미한 출력*, 또는 그 밖에 즉각적인 주의가 필요한 것일 수 있습니다.
+**중요한 문제** 는 *충돌*, *예측 오류*, *무의미한 출력*, 또는 그 밖에 즉각적인 주의가 필요한 것일 수 있습니다.
 
 이러한 문제는 `Microsoft/LightGBM 리포지토리 <https://github.com/microsoft/LightGBM/issues>`__ 에 게시해 주시기 바랍니다.
 
@@ -194,7 +194,7 @@ LightGBM은 제로 기반 LibSVM 형식 파일에서 데이터를 직접 로드�
 
 이것은 CMake의 알려진 문제로 MinGW 사용 시 발생합니다. 가장 쉬운 해결책은 ``cmake`` 명령을 다시 실행하여 CMake의 일회성 스토퍼를 우회하는 것입니다. 또는 CMake 버전을 최소 버전 3.17.0으로 업그레이드하는 방법이 있습니다.
 
-자세한 내용은 '`Microsoft/LightGBM#3060 <https://github.com/microsoft/LightGBM/issues/3060#issuecomment-626338538>`__' 를 참조하세요.
+자세한 내용은 '`Microsoft/LightGBM#3060 <https://github.com/microsoft/LightGBM/issues/3060#issuecomment-626338538>`__' 을 참조하세요.
 
 15. 프레젠테이션에 사용할 LightGBM의 로고는 어디에서 찾을 수 있나요?
 ------------------------------------------------------------------
