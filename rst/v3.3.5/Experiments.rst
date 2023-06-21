@@ -157,9 +157,6 @@ LightGBM이 모든 실험 데이터셋에서 더 빠르게 돌았습니다.
 메모리 소모
 ''''''''''''''''''
 
-We monitored RES while running training task. And we set ``two_round=true`` (this will increase data-loading time and
-reduce peak memory usage but not affect training speed or accuracy) in LightGBM to reduce peak memory usage.
-
 본 실험은 학습이 실행되는 동안 RES를 모니터링했습니다. 이때 피크 메모리 사용량을 줄이기 위해 LightGBM의 ``two_round=true`` (이는 데이터 로딩 시간을 증가시키는 대신 피크 메모리 사용량을 감소시킬 것이나, 학습 속도나 정확도에 영향을 주지는 않을 것입니다) 로 설정했습니다.
 
 +-----------+---------+---------------+--------------------+--------------------+
