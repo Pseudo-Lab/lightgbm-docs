@@ -1,41 +1,41 @@
-Experiments
+실험
 ===========
 
-Comparison Experiment
+비교 실험
 ---------------------
 
-For the detailed experiment scripts and output logs, please refer to this `repo`_.
+자세한 실험정보와 결과 기록은 `repo`_ 을 참고해 주세요. 
 
-History
+이력
 ^^^^^^^
 
-08 Mar, 2020: update according to the latest master branch (`1b97eaf <https://github.com/dmlc/xgboost/commit/1b97eaf7a74315bfa2c132d59f937a35408bcfd1>`__ for XGBoost, `bcad692 <https://github.com/microsoft/LightGBM/commit/bcad692e263e0317cab11032dd017c78f9e58e5f>`__ for LightGBM). (``xgboost_exact`` is not updated for it is too slow.)
+가장 최근 마스터 브랜치 (XGBoost `1b97eaf <https://github.com/dmlc/xgboost/commit/1b97eaf7a74315bfa2c132d59f937a35408bcfd1>`__ , LightGBM `bcad692 <https://github.com/microsoft/LightGBM/commit/bcad692e263e0317cab11032dd017c78f9e58e5f>`__)에 기반하여 업데이트 했습니다. (단, ``xgboost_exact`` 는 너무 느린 관계로 업데이트 하지 않았습니다.)
 
-27 Feb, 2017: first version.
+2017-02-27: 첫번째 버전.
 
-Data
+데이터
 ^^^^
 
-We used 5 datasets to conduct our comparison experiments. Details of data are listed in the following table:
+비교 실험을 위해 5개의 데이터셋을 사용했습니다. 데이터에 대한 자세한 정보는 아래 테이블에 정리되어 있습니다:
 
-+-----------+-----------------------+------------------------------------------------------------------------+-------------+----------+----------------------------------------------+
-| Data      | Task                  | Link                                                                   | #Train\_Set | #Feature | Comments                                     |
-+===========+=======================+========================================================================+=============+==========+==============================================+
-| Higgs     | Binary classification | `link <https://archive.ics.uci.edu/ml/datasets/HIGGS>`__               | 10,500,000  | 28       | last 500,000 samples were used as test set   |
-+-----------+-----------------------+------------------------------------------------------------------------+-------------+----------+----------------------------------------------+
-| Yahoo LTR | Learning to rank      | `link <https://webscope.sandbox.yahoo.com/catalog.php?datatype=c>`__   | 473,134     | 700      | set1.train as train, set1.test as test       |
-+-----------+-----------------------+------------------------------------------------------------------------+-------------+----------+----------------------------------------------+
-| MS LTR    | Learning to rank      | `link <http://research.microsoft.com/en-us/projects/mslr/>`__          | 2,270,296   | 137      | {S1,S2,S3} as train set, {S5} as test set    |
-+-----------+-----------------------+------------------------------------------------------------------------+-------------+----------+----------------------------------------------+
-| Expo      | Binary classification | `link <http://stat-computing.org/dataexpo/2009/>`__                    | 11,000,000  | 700      | last 1,000,000 samples were used as test set |
-+-----------+-----------------------+------------------------------------------------------------------------+-------------+----------+----------------------------------------------+
-| Allstate  | Binary classification | `link <https://www.kaggle.com/c/ClaimPredictionChallenge>`__           | 13,184,290  | 4228     | last 1,000,000 samples were used as test set |
-+-----------+-----------------------+------------------------------------------------------------------------+-------------+----------+----------------------------------------------+
++------------+--------------+----------------------------------------------------------------------+-------------+------------------------+------------------------------------------------+
+| **데이터** | **수행과제** |                               **링크**                               | **#학습셋** | **#특성변수(Feature)** |                    **비고**                    |
++------------+--------------+----------------------------------------------------------------------+-------------+------------------------+------------------------------------------------+
+| Higgs      | 이진 분류    | `link <https://archive.ics.uci.edu/ml/datasets/HIGGS>`__             | 10,500,000  | 28                     | 마지막 샘플 50만개는 테스트셋으로 사용됨       |
++------------+--------------+----------------------------------------------------------------------+-------------+------------------------+------------------------------------------------+
+| Yahoo LTR  | 랭킹 학습    | `link <https://webscope.sandbox.yahoo.com/catalog.php?datatype=c>`__ | 473,134     | 700                    | set1.train은 학습, set1.test은 테스트에 사용됨 |
++------------+--------------+----------------------------------------------------------------------+-------------+------------------------+------------------------------------------------+
+| MS LTR     | 랭킹 학습    | `link <http://research.microsoft.com/en-us/projects/mslr/>`__        | 2,270,296   | 137                    | {S1,S2,S3}은 학습, {S5}은 테스트에 사용됨      |
++------------+--------------+----------------------------------------------------------------------+-------------+------------------------+------------------------------------------------+
+| Expo       | 이진 분류    | `link <http://stat-computing.org/dataexpo/2009/>`__                  | 11,000,000  | 700                    | 마지막 샘플 100만개는 테스트셋으로 사용됨      |
++------------+--------------+----------------------------------------------------------------------+-------------+------------------------+------------------------------------------------+
+| Allstate   | 이진 분류    | `link <https://www.kaggle.com/c/ClaimPredictionChallenge>`__         | 13,184,290  | 4228                   | 마지막 샘플 100만개는 테스트셋으로 사용됨      |
++------------+--------------+----------------------------------------------------------------------+-------------+------------------------+------------------------------------------------+
 
-Environment
+환경
 ^^^^^^^^^^^
 
-We ran all experiments on a single Linux server (Azure ND24s) with the following specifications:
+모든 실험들은 아래와 같은 사양의 리눅스 서버 (Azure ND24s) 한 개에서 진행되었습니다:
 
 +------------------+-----------------+---------------------+
 | OS               | CPU             | Memory              |
@@ -43,17 +43,17 @@ We ran all experiments on a single Linux server (Azure ND24s) with the following
 | Ubuntu 16.04 LTS | 2 \* E5-2690 v4 | 448GB               |
 +------------------+-----------------+---------------------+
 
-Baseline
+베이스라인
 ^^^^^^^^
 
-We used `xgboost`_ as a baseline.
+`xgboost`_ 을 베이스라인으로 정했습니다.
 
-Both xgboost and LightGBM were built with OpenMP support.
+xgboost와 LightGBM 모두 OpenMP (오픈MP; 공유 메모리 다중 처리 프로그래밍 API) 상에서 생성되었습니다.
 
-Settings
+실험설정
 ^^^^^^^^
 
-We set up total 3 settings for experiments. The parameters of these settings are:
+총 3개의 실험설정을 계획하고 진행했습니다. 이 설정들의 파라미터는 아래와 같습니다:
 
 1. xgboost:
 
@@ -66,7 +66,7 @@ We set up total 3 settings for experiments. The parameters of these settings are
        tree_method = exact
        min_child_weight = 100
 
-2. xgboost\_hist (using histogram based algorithm):
+2. xgboost\_hist (히스토그램 기반 알고리즘 사용):
 
    .. code::
 
@@ -90,22 +90,22 @@ We set up total 3 settings for experiments. The parameters of these settings are
        min_data_in_leaf = 0
        min_sum_hessian_in_leaf = 100
 
-xgboost grows trees depth-wise and controls model complexity by ``max_depth``.
-LightGBM uses a leaf-wise algorithm instead and controls model complexity by ``num_leaves``.
-So we cannot compare them in the exact same model setting. For the tradeoff, we use xgboost with ``max_depth=8``, which will have max number leaves to 255, to compare with LightGBM with ``num_leaves=255``.
+xgboost는 깊이 단위 (depth-wise)로 나무를 성장시켜 나가며 ``max_depth`` 를 사용하여 모델 복잡도를 조절합니다.
+반면, LightGBM은 잎사귀 단위 (leaf-wise)로 성장하는 알고리즘이며 ``num_leaves`` 를 통해 모델 복잡도를 조절합니다.
+따라서, 이 두 모델을 정확히 같은 설정 하에 비교할 수는 없습니다. 이에 대한 균형을 맞추기 위해, 본 실험은 xgboost에서 ``max_depth=8`` 로 설정하여 나무가 최대 255개의 잎사귀를 갖게끔 설정한 후, 이를 LightGBM ``num_leaves=255`` 으로 설정한 모형과 비교하였습니다.
 
-Other parameters are default values.
+그 외의 파라미터들은 기본설정값입니다.
 
-Result
+결과
 ^^^^^^
 
-Speed
+속도
 '''''
 
-We compared speed using only the training task without any test or metric output. We didn't count the time for IO. 
-For the ranking tasks, since XGBoost and LightGBM implement different ranking objective functions, we used ``regression`` objective for speed benchmark, for the fair comparison.
+본 실험에서는 그 어떠한 테스트 혹은 평가 결과 없이 오직 학습 과제를 이용하여 속도를 비교했습니다. IO에 소요되는 시간은 측정하지 않았습니다. 
+랭킹 과제들에 대해서는, XGBoost와 LightGBM이 다른 랭킹 목적함수를 사용하기 때문에 공정한 비교를 위해 속도 기준점으로 ``regression`` 을 사용했습니다.  
 
-The following table is the comparison of time cost:
+소요시간 비교에 대한 결과표입니다:
 
 +-----------+-----------+---------------+---------------+
 | Data      | xgboost   | xgboost\_hist | LightGBM      |
@@ -121,12 +121,12 @@ The following table is the comparison of time cost:
 | Allstate  | 2867.22 s | 315.256 s     | **148.231 s** |
 +-----------+-----------+---------------+---------------+
 
-LightGBM ran faster than xgboost on all experiment data sets.
+LightGBM이 모든 실험 데이터셋에서 더 빠르게 돌았습니다.
 
-Accuracy
+정확도
 ''''''''
 
-We computed all accuracy metrics only on the test data set.
+본 실험에서는 오직 테스트 데이터셋만 사용하여 모든 정확도 평가지표를 산출했습니다.
 
 +-----------+-----------------+----------+-------------------+--------------+
 | Data      | Metric          | xgboost  | xgboost\_hist     | LightGBM     |
@@ -154,11 +154,13 @@ We computed all accuracy metrics only on the test data set.
 | Allstate  | AUC             | 0.607201 | **0.609465**      |  0.609072    |
 +-----------+-----------------+----------+-------------------+--------------+
 
-Memory Consumption
+메모리 소모
 ''''''''''''''''''
 
 We monitored RES while running training task. And we set ``two_round=true`` (this will increase data-loading time and
 reduce peak memory usage but not affect training speed or accuracy) in LightGBM to reduce peak memory usage.
+
+본 실험은 학습이 실행되는 동안 RES를 모니터링했습니다. 이때 피크 메모리 사용량을 줄이기 위해 LightGBM의 ``two_round=true`` (이는 데이터 로딩 시간을 증가시키는 대신 피크 메모리 사용량을 감소시킬 것이나, 학습 속도나 정확도에 영향을 주지는 않을 것입니다) 로 설정했습니다.
 
 +-----------+---------+---------------+--------------------+--------------------+
 | Data      | xgboost | xgboost\_hist | LightGBM (col-wise)|LightGBM (row-wise) |
@@ -174,34 +176,34 @@ reduce peak memory usage but not affect training speed or accuracy) in LightGBM 
 | Allstate  | 6.237GB | 12.090GB      | **1.116GB**        |     1.755GB        |
 +-----------+---------+---------------+--------------------+--------------------+
 
-Parallel Experiment
+병렬 실험
 -------------------
 
-History
+이력
 ^^^^^^^
 
-27 Feb, 2017: first version.
+2017-02-27: 첫번째 버전.
 
-Data
+데이터
 ^^^^
 
-We used a terabyte click log dataset to conduct parallel experiments. Details are listed in following table:
+본 실험은 병렬 실험을 수행하기 위해 1테라바이트의 클릭 로그 데이터셋을 사용하였습니다. 자세한 것은 아래와 같습니다:
 
-+--------+-----------------------+---------+---------------+----------+
-| Data   | Task                  | Link    | #Data         | #Feature |
-+========+=======================+=========+===============+==========+
-| Criteo | Binary classification | `link`_ | 1,700,000,000 | 67       |
-+--------+-----------------------+---------+---------------+----------+
++------------+--------------+----------+---------------+------------------------+
+| **데이터** | **수행과제** | **링크** |  **#데이터**  | **#특성변수(Feature)** |
++------------+--------------+----------+---------------+------------------------+
+| Criteo     | 이진 분류    | `link`_  | 1,700,000,000 | 67                     |
++------------+--------------+----------+---------------+------------------------+
 
-This data contains 13 integer features and 26 categorical features for 24 days of click logs.
-We statisticized the click-through rate (CTR) and count for these 26 categorical features from the first ten days.
-Then we used next ten days' data, after replacing the categorical features by the corresponding CTR and count, as training data.
-The processed training data have a total of 1.7 billions records and 67 features.
+이 데이터는 24일치의 클릭 로그에 대한 13개의 정수(integer)값을 갖는 특성변수와 26개의 범주형 특성변수로 이뤄져 있습니다.
+여기서, 첫 10일치 데이터를 사용하여 26개의 범주형 변수에 대해 클릭률 (click-through rate; CTR)과 개수를 계산했습니다.
+다음으로, 그 다음 10일치 데이터를 가져온 후 각 범주형 변수에 대응되는 CTR과 개수 통계치를 대체한 후 학습용 데이터로 사용했습니다. 
+가공된 학습 데이터는 총 17억개의 행과 67개의 특성변수를 갖습니다.
 
-Environment
+환경
 ^^^^^^^^^^^
 
-We ran our experiments on 16 Windows servers with the following specifications:
+본 실험은 아래와 같은 사양을 가진 16개의 윈도우 서버 상에서 진행되었습니다.
 
 +---------------------+-----------------+---------------------+-------------------------------------------+
 | OS                  | CPU             | Memory              | Network Adapter                           |
@@ -209,7 +211,7 @@ We ran our experiments on 16 Windows servers with the following specifications:
 | Windows Server 2012 | 2 \* E5-2670 v2 | DDR3 1600Mhz, 256GB | Mellanox ConnectX-3, 54Gbps, RDMA support |
 +---------------------+-----------------+---------------------+-------------------------------------------+
 
-Settings
+실험설정
 ^^^^^^^^
 
 .. code::
@@ -220,9 +222,9 @@ Settings
     num_thread = 16
     tree_learner = data
 
-We used data parallel here because this data is large in ``#data`` but small in ``#feature``. Other parameters were default values.
+위 실험에서는 ``#data`` 는 큰 반면 ``#feature`` 이 작으므로 데이터 병렬을 사용했습니다. 그 외의 파라미터들은 기본설정값입니다.
 
-Results
+결과
 ^^^^^^^
 
 +----------+---------------+---------------------------+
@@ -239,12 +241,12 @@ Results
 | 16       | 42 s          | 11GB                      |
 +----------+---------------+---------------------------+
 
-The results show that LightGBM achieves a linear speedup with distributed learning.
+위 결과는 LightGBM의 병렬학습을 통한 선형적 속도향상을 보여줍니다.
 
-GPU Experiments
+GPU 실험
 ---------------
 
-Refer to `GPU Performance <./GPU-Performance.rst>`__.
+`GPU Performance <./GPU-Performance.rst>`__ 을 참고해 주세요.
 
 .. _repo: https://github.com/guolinke/boosting_tree_benchmarks
 
