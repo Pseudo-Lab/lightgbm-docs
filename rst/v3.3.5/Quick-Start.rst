@@ -1,75 +1,75 @@
-Quick Start
+퀵 스타트
 ===========
 
-This is a quick start guide for LightGBM CLI version.
+이 문서는 LightGBM CLI 버전을 위한 퀵 스타트 가이드입니다.
 
-Follow the `Installation Guide <./Installation-Guide.rst>`__ to install LightGBM first.
+먼저 `Installation Guide <./Installation-Guide.rst>`__ 를 따라 LightGBM을 설치해 주세요.
 
-**List of other helpful links**
+**도움이 될만한 다른 링크**
 
--  `Parameters <./Parameters.rst>`__
+-  `파라미터 <./Parameters.rst>`__
 
--  `Parameters Tuning <./Parameters-Tuning.rst>`__
+-  `파라미터 튜닝 <./Parameters-Tuning.rst>`__
 
--  `Python-package Quick Start <./Python-Intro.rst>`__
+-  `파이썬 패키지 퀵 스타트 <./Python-Intro.rst>`__
 
--  `Python API <./Python-API.rst>`__
+-  `파이썬 API <./Python-API.rst>`__
 
-Training Data Format
---------------------
+훈련 데이터 포맷
+----------------------------
 
-LightGBM supports input data files with `CSV`_, `TSV`_ and `LibSVM`_ (zero-based) formats.
+LightGBM은 `CSV`_, `TSV`_ 및 `LibSVM`_ (0 기반) 포맷의 입력 데이터 파일을 지원합니다.
 
-Files could be both with and without `headers <./Parameters.rst#header>`__.
+파일은 `헤더 <./Parameters.rst#header>`__ 를 포함하거나 포함하지 않을 수 있습니다.
 
-`Label column <./Parameters.rst#label_column>`__ could be specified both by index and by name.
+`레이블 열 <./Parameters.rst#label_column>`__ 은 인덱스나 이름으로 지정할 수 있습니다.
 
-Some columns could be `ignored <./Parameters.rst#ignore_column>`__.
+일부 열은 `무시할 <./Parameters.rst#ignore_column>`__ 수 있습니다.
 
-Categorical Feature Support
+범주형 변수 지원
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-LightGBM can use categorical features directly (without one-hot encoding).
-The experiment on `Expo data`_ shows about 8x speed-up compared with one-hot encoding.
+LightGBM은 (원핫 인코딩) 없이 범주형 변수를 직접 사용할 수 있습니다.
+`Expo data`_ 를 대상으로 실험한 결과, 원핫 인코딩 대비 약 8배의 속도 향상을 보였습니다.
 
-For the setting details, please refer to the ``categorical_feature`` `parameter <./Parameters.rst#categorical_feature>`__.
+자세한 설정은 ``categorical_feature`` `파라미터 <./Parameters.rst#categorical_feature>`__ 을 참고하세요.
 
-Weight and Query/Group Data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+가중치 및 쿼리/그룹 데이터
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-LightGBM also supports weighted training, it needs an additional `weight data <./Parameters.rst#weight-data>`__.
-And it needs an additional `query data <./Parameters.rst#query-data>`_ for ranking task.
+LightGBM은 가중치 훈련도 지원하므로 추가적인 `weight data <./Parameters.rst#weight-data>`__ 가 필요합니다.
+그리고 랭킹 작업을 위해 `쿼리 데이터가 <./Parameters.rst#query-data>`_ 추가로 필요합니다.
 
-Also, `weight <./Parameters.rst#weight_column>`__ and `query <./Parameters.rst#group_column>`__ data could be specified as columns in training data in the same manner as label.
+또한, `가중치 <./Parameters.rst#weight_column>`__ 및 `쿼리 <./Parameters.rst#group_column>`__ 데이터는 레이블과 같은 방식으로 훈련 데이터에 있는 열로 지정할 수 있습니다.
 
-Parameters Quick Look
----------------------
+파라미터 둘러보기
+---------------------------
 
-The parameters format is ``key1=value1 key2=value2 ...``.
+파라미터 포맷은 ``key1=value1 key2=value2 ...`` 입니다.
 
-Parameters can be set both in config file and command line.
-If one parameter appears in both command line and config file, LightGBM will use the parameter from the command line.
+파라미터는 설정 파일과 명령줄 모두에서 설정할 수 있습니다.
+하나의 파라미터가 명령줄과 설정 파일에 모두 나타나면, LightGBM은 명령줄의 파라미터를 사용합니다.
 
-The most important parameters which new users should take a look to are located into `Core Parameters <./Parameters.rst#core-parameters>`__
-and the top of `Learning Control Parameters <./Parameters.rst#learning-control-parameters>`__
-sections of the full detailed list of `LightGBM's parameters <./Parameters.rst>`__.
+새로운 사용자가 살펴봐야 할 가장 중요한 파라미터는 `핵심 파라미터 <./Parameters.rst#core-parameters>`__ 와
+`학습 제어 파라미터 <./Parameters.rst#learning-control-parameters>`__ 맨 위에 있습니다.
+`LightGBM 파라미터 <./Parameters.rst>`__ 문서에서 전체 목록을 확인할 수 있습니다.
 
-Run LightGBM
-------------
+LightGBM 실행하기
+------------------------
 
 ::
 
     "./lightgbm" config=your_config_file other_args ...
 
-Parameters can be set both in the config file and command line, and the parameters in command line have higher priority than in the config file.
-For example, the following command line will keep ``num_trees=10`` and ignore the same parameter in the config file.
+파라미터는 설정 파일과 명령줄 모두에서 설정할 수 있으며, 명령줄의 파라미터는 설정 파일보다 우선순위가 높습니다.
+예를 들어, 다음 명령줄은 ``num_trees=10``을 사용하고 설정 파일에 있는 동일한 파라미터를 무시합니다.
 
 ::
 
     "./lightgbm" config=train.conf num_trees=10
 
-Examples
---------
+예제
+------------
 
 -  `Binary Classification <https://github.com/microsoft/LightGBM/tree/master/examples/binary_classification>`__
 
