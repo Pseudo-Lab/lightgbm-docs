@@ -1,47 +1,47 @@
-GPU Windows Compilation
+GPU Windows 컴파일
 =======================
 
-This guide is for the MinGW build.
+이 가이드는 MinGW 빌드용입니다.
 
-For the MSVC (Visual Studio) build with GPU, please refer to `Installation Guide <./Installation-Guide.rst#build-gpu-version>`__.
-(We recommend you to use this since it is much easier).
+GPU가 포함된 MSVC(Visual Studio) 빌드는 `설치 가이드 <./Installation-Guide.rst#build-gpu-version>`__ 를 참조하세요.
+(훨씬 쉽기 때문에 이 방법을 사용하는 것을 권장합니다).
 
-Install LightGBM GPU version in Windows (CLI / R / Python), using MinGW/gcc
+MinGW/gcc를 사용하여 Windows(CLI/R/Python)에 LightGBM GPU 버전을 설치합니다.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is for a vanilla installation of Boost, including full compilation steps from source without precompiled libraries.
+이것은 사전 컴파일된 라이브러리 없이 소스에서 컴파일하는 전체 단계와 Boost 설치 가이드입니다.
 
-Installation steps (depends on what you are going to do):
+설치 단계 (수행하려는 작업에 따라 다름):
 
--  Install the appropriate OpenCL SDK
+-  적절한 OpenCL SDK 설치
 
--  Install MinGW
+-  MinGW 설치
 
--  Install Boost
+-  Boost 설치
 
--  Install Git
+-  Git 설치
 
--  Install CMake
+-  CMake 설치 
 
--  Create LightGBM binaries
+-  LightGBM 바이너리 생성하기
 
--  Debugging LightGBM in CLI (if GPU is crashing or any other crash reason)
+-  CLI에서 LightGBM 디버깅(GPU가 충돌하거나 기타 다른 충돌이 있는 경우)
 
-If you wish to use another compiler like Visual Studio C++ compiler, you need to adapt the steps to your needs.
+Visual Studio C++ 컴파일러와 같은 다른 컴파일러를 사용하려는 경우 필요에 따라 단계를 조정해야 합니다.
 
-For this compilation tutorial, we are using AMD SDK for our OpenCL steps.
-However, you are free to use any OpenCL SDK you want, you just need to adjust the PATH correctly.
+이 컴파일 튜토리얼에서는 OpenCL 단계에 AMD SDK를 사용합니다.
+그러나 원하는 OpenCL SDK를 자유롭게 사용할 수 있으며, PATH를 올바르게 조정하기만 하면 됩니다.
 
-You will also need administrator rights. This will not work without them.
+또한 관리자 권한이 필요합니다. 관리자 권한이 없으면 설치할 수 없습니다.
 
-At the end, you can restore your original PATH.
+마지막에 원래 PATH로 복원할 수 있습니다.
 
 --------------
 
-Modifying PATH (for newbies)
+PATH 수정하기(초보자)
 ----------------------------
 
-To modify PATH, just follow the pictures after going to the ``Control Panel``:
+PATH를 수정하려면 ``제어판``으로 이동한 후 다음 그림과 같이 따라하세요:
 
 .. image:: ./_static/images/screenshot-system.png
    :align: center
