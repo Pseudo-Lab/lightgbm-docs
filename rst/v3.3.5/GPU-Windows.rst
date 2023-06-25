@@ -41,21 +41,21 @@ Visual Studio C++ 컴파일러와 같은 다른 컴파일러를 사용하려는 
 PATH 수정하기(초보자)
 ----------------------------
 
-PATH를 수정하려면 ``제어판``으로 이동한 후 다음 그림과 같이 따라하세요:
+PATH를 수정하려면 ``제어판`` 으로 이동한 후 다음 그림과 같이 따라하세요:
 
 .. image:: ./_static/images/screenshot-system.png
    :align: center
    :target: ./_static/images/screenshot-system.png
    :alt: A screenshot of the System option under System and Security of the Control Panel.
 
-Then, go to ``Advanced`` > ``Environment Variables...``:
+그다음 ``Advanced`` > ``Environment Variables...`` 으로 이동하세요:
 
 .. image:: ./_static/images/screenshot-advanced-system-settings.png
    :align: center
    :target: ./_static/images/screenshot-advanced-system-settings.png
    :alt: A screenshot of the System Properties window.
 
-Under ``System variables``, the variable ``Path``:
+``System variables`` 아래 ``Path`` 변수:
 
 .. image:: ./_static/images/screenshot-environment-variables.png
    :align: center
@@ -64,23 +64,23 @@ Under ``System variables``, the variable ``Path``:
 
 --------------
 
-Antivirus Performance Impact
+안티바이러스 성능 영향
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Does not apply to you if you do not use a third-party antivirus nor the default preinstalled antivirus on Windows.
+타사 바이러스 백신이나 Windows에 사전 설치된 기본 바이러스 백신을 사용하지 않는 경우에는 적용되지 않습니다.
 
-**Windows Defender or any other antivirus will have a significant impact on the speed you will be able to perform the steps.**
-It is recommended to **turn them off temporarily** until you finished with building and setting up everything, then turn them back on, if you are using them.
+**Windows Defender 또는 기타 바이러스 백신은 설치 단계를 수행하는 속도에 상당한 영향을 미칩니다**.
+사용 중이라면 빌드 및 설정을 모두 마칠 때까지 **일시적으로 꺼두었다가** 다시 켜는 것이 좋습니다.
 
 --------------
 
-OpenCL SDK Installation
+OpenCL SDK 설치
 -----------------------
 
-Installing the appropriate OpenCL SDK requires you to download the correct vendor source SDK.
-You need to know what you are going to use LightGBM!
+적절한 OpenCL SDK를 설치하려면 올바른 벤더의 SDK 소스를 다운로드해야 합니다.
+LightGBM의 용도를 알아야 합니다!
 
--  For running on Intel, get `Intel SDK for OpenCL`_ (**NOT RECOMMENDED**).
+-  인텔에서 실행하는 경우 `Intel SDK for OpenCL`_ 을 다운받습니다(**추천하지 않음**).
 
 -  For running on AMD, get AMD APP SDK (downloads `for Linux`_ and `for Windows`_). You may want to replace the ``OpenCL.dll`` from the GPU driver package with the one from the SDK, if the one shipped with the driver lacks some functions.
 
