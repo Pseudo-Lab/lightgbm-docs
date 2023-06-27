@@ -1,95 +1,79 @@
-GPU Tuning Guide and Performance Comparison
+GPU 튜닝 가이드 및 성능 비교
 ===========================================
 
-How It Works?
+작동 원리
 -------------
 
-In LightGBM, the main computation cost during training is building the feature histograms. We use an efficient algorithm on GPU to accelerate this process.
-The implementation is highly modular, and works for all learning tasks (classification, ranking, regression, etc). GPU acceleration also works in distributed learning settings.
-GPU algorithm implementation is based on OpenCL and can work with a wide range of GPUs.
+LightGBM에서 학습 동안의 주요 계산비용은 특성변수 히스토그램들을 형성하는 데 발생합니다. 본 실험은 효율적인 알고리즘을 사용하여 이 과정을 가속화 합니다. 
+적용방법은 매우 규격화 되어있으며, 모든 학습 과제들 (분류, 랭킹, 회귀 등)에서 작동합니다. 또한, GPU 가속화는 병렬학습 환경에서도 작동합니다. 
+GPU 알고리즘 적용은 OpenCL (개방형 범용 병렬 컴퓨팅 프레임워크)에 기반하고 있으며 다양한 범주의 GPU들과 동작할 수 있습니다. 
 
-Supported Hardware
+지원되는 하드웨어
 ------------------
 
-We target AMD Graphics Core Next (GCN) architecture and NVIDIA Maxwell and Pascal architectures.
-Most AMD GPUs released after 2012 and NVIDIA GPUs released after 2014 should be supported. We have tested the GPU implementation on the following GPUs:
+AMD Graphics Core Next (GCN) 아키텍처와 NVIDIA Maxwell 및 Pascal 아키텍처를 대상으로 합니다.
+2012년 이후에 출시된 대부분의 AMD GPU와 2014년 이후에 출시된 NVIDIA GPU는 지원될 것입니다. 다음 GPU에서 GPU구현을 테스트했습니다:
 
--  AMD RX 480 with AMDGPU-pro driver 16.60 on Ubuntu 16.10
+- Ubuntu 16.10에서 AMDGPU-pro 드라이버 16.60을 사용한 AMD RX 480
 
--  AMD R9 280X (aka Radeon HD 7970) with fglrx driver 15.302.2301 on Ubuntu 16.10
+- Ubuntu 16.10에서 fglrx 드라이버 15.302.2301을 사용한 AMD R9 280X (Radeon HD 7970으로도 알려짐)
 
--  NVIDIA GTX 1080 with driver 375.39 and CUDA 8.0 on Ubuntu 16.10
+- Ubuntu 16.10에서 드라이버 375.39와 CUDA 8.0을 사용한 NVIDIA GTX 1080
 
--  NVIDIA Titan X (Pascal) with driver 367.48 and CUDA 8.0 on Ubuntu 16.04
+- Ubuntu 16.04에서 드라이버 367.48과 CUDA 8.0을 사용한 NVIDIA Titan X (Pascal)
 
--  NVIDIA Tesla M40 with driver 375.39 and CUDA 7.5 on Ubuntu 16.04
+- Ubuntu 16.04에서 드라이버 375.39와 CUDA 7.5을 사용한 NVIDIA Tesla M40
 
-Using the following hardware is discouraged:
+다음 하드웨어 사용은 권장되지 않습니다:
 
--  NVIDIA Kepler (K80, K40, K20, most GeForce GTX 700 series GPUs) or earlier NVIDIA GPUs. They don't support hardware atomic operations in local memory space and thus histogram construction will be slow.
+- NVIDIA Kepler (K80, K40, K20, 대부분의 GeForce GTX 700 시리즈 GPU) 이전의 NVIDIA GPU. 이들은 로컬 메모리 공간에서 하드웨어 원자 연산을 지원하지 않으므로 히스토그램 구성이 느릴 것입니다.
 
--  AMD VLIW4-based GPUs, including Radeon HD 6xxx series and earlier GPUs. These GPUs have been discontinued for years and are rarely seen nowadays.
+- Radeon HD 6xxx 시리즈 및 이전 GPU를 포함한 AMD VLIW4 기반 GPU. 이러한 GPU는 여러 해 동안 단종되었으며 현재는 거의 사용되지 않습니다.
 
-How to Achieve Good Speedup on GPU
+
+GPU에서 좋은 속도 향상을 얻는 방법
 ----------------------------------
 
-#.  You want to run a few datasets that we have verified with good speedup (including Higgs, epsilon, Bosch, etc) to ensure your setup is correct.
-    If you have multiple GPUs, make sure to set ``gpu_platform_id`` and ``gpu_device_id`` to use the desired GPU.
-    Also make sure your system is idle (especially when using a shared computer) to get accuracy performance measurements.
+#.  설정이 올바른지 확인하기 위해 우리가 좋은 속도 향상을 검증한 몇 가지 데이터 세트를 실행하고자 합니다 (Higgs, epsilon, Bosch 등 포함).
+    여러 개의 GPU를 가지고 있다면, 원하는 GPU를 사용하도록 ``gpu_platform_id`` 와 ``gpu_device_id`` 를 설정해야 합니다.
+    또한 (특히 공용 컴퓨터를 사용할 때) 시스템이 비활성 상태인지 확인하세요. 그러면 정확한 성능 측정을 얻을 수 있습니다.
 
-#.  GPU works best on large scale and dense datasets. If dataset is too small, computing it on GPU is inefficient as the data transfer overhead can be significant.
-    If you have categorical features, use the ``categorical_column`` option and input them into LightGBM directly; do not convert them into one-hot variables.
+#.  GPU는 대규모의 밀집 데이터셋에서 가장 잘 작동합니다. 데이터셋이 너무 작으면 GPU에서 계산하는 데 비효율적일 수 있으며, 데이터 전송 비용(오버헤드)이 상당할 수 있습니다.
+    범주형 특성변수가 있는 경우, ``categorical_column`` 옵션을 사용하여 이를 직접 LightGBM에 입력하십시오. 이를 원-핫 인코딩 방식으로 변환하지 마세요.
 
-#.  To get good speedup with GPU, it is suggested to use a smaller number of bins.
-    Setting ``max_bin=63`` is recommended, as it usually does not noticeably affect training accuracy on large datasets, but GPU training can be significantly faster than using the default bin size of 255.
-    For some dataset, even using 15 bins is enough (``max_bin=15``); using 15 bins will maximize GPU performance. Make sure to check the run log and verify that the desired number of bins is used.
+#.  GPU를 효과적으로 사용하기 위해 더 작은 바이너리(bin) 수를 사용하는 것이 좋습니다. 
+    ``max_bin=63`` 설정을 권장하며, 이는 대규모 데이터셋에서 학습 정확도에 미치는 영향이 거의 없을 뿐만 아니라, 빈 크기 (bin size)를 기본설정값인 255로 할 때보다 GPU 학습이 훨씬 빠를 수 있습니다.
+    일부 데이터셋의 경우, 15개의 빈을 사용하는 것도 충분할 수 있습니다 (``max_bin=15``); 15개의 빈을 사용하면 GPU 성능이 최대화됩니다. 실행 로그를 확인하고 원하는 바이너리 수가 사용되었는지 확인하십시오.
 
-#.  Try to use single precision training (``gpu_use_dp=false``) when possible, because most GPUs (especially NVIDIA consumer GPUs) have poor double-precision performance.
+#.   가능한 경우, 싱글 프리시전 학습 (``gpu_use_dp=false``)을 사용하십시오. 왜냐하면 대부분의 GPU (특히 NVIDIA의 일반 소비자용 GPU)는 더블 프리시전 성능이 좋지 않기 때문입니다.
 
-Performance Comparison
+
+성능 비교
 ----------------------
 
-We evaluate the training performance of GPU acceleration on the following datasets:
+아래 데이터셋을 사용하여 GPU 속도향상에 따른 학습 성능을 평가하였습니다.
 
-+-----------+----------------+----------+------------+-----------+------------+
-| Data      | Task           | Link     | #Examples  | #Features | Comments   |
-+===========+================+==========+============+===========+============+
-| Higgs     | Binary         | `link1`_ | 10,500,000 | 28        | use last   |
-|           | classification |          |            |           | 500,000    |
-|           |                |          |            |           | samples    |
-|           |                |          |            |           | as test    |
-|           |                |          |            |           | set        |
-+-----------+----------------+----------+------------+-----------+------------+
-| Epsilon   | Binary         | `link2`_ | 400,000    | 2,000     | use the    |
-|           | classification |          |            |           | provided   |
-|           |                |          |            |           | test set   |
-+-----------+----------------+----------+------------+-----------+------------+
-| Bosch     | Binary         | `link3`_ | 1,000,000  | 968       | use the    |
-|           | classification |          |            |           | provided   |
-|           |                |          |            |           | test set   |
-+-----------+----------------+----------+------------+-----------+------------+
-| Yahoo LTR | Learning to    | `link4`_ | 473,134    | 700       | set1.train |
-|           | rank           |          |            |           | as train,  |
-|           |                |          |            |           | set1.test  |
-|           |                |          |            |           | as test    |
-+-----------+----------------+----------+------------+-----------+------------+
-| MS LTR    | Learning to    | `link5`_ | 2,270,296  | 137       | {S1,S2,S3} |
-|           | rank           |          |            |           | as train   |
-|           |                |          |            |           | set, {S5}  |
-|           |                |          |            |           | as test    |
-|           |                |          |            |           | set        |
-+-----------+----------------+----------+------------+-----------+------------+
-| Expo      | Binary         | `link6`_ | 11,000,000 | 700       | use last   |
-|           | classification |          |            |           | 1,000,000  |
-|           | (Categorical)  |          |            |           | as test    |
-|           |                |          |            |           | set        |
-+-----------+----------------+----------+------------+-----------+------------+
++------------+--------------------+----------+---------------+------------------------+------------------------------------------------+
+| **데이터** |    **수행과제**    | **링크** | **#Examples** | **#특성변수(Feature)** | **비고**                                       |
++------------+--------------------+----------+---------------+------------------------+------------------------------------------------+
+| Higgs      | 이진 분류          | `link1`_ | 10,500,000    | 28                     | 마지막 샘플 50만개는 테스트셋으로 사용됨       |
++------------+--------------------+----------+---------------+------------------------+------------------------------------------------+
+| Epsilon    | 이진 분류          | `link2`_ | 400,000       | 2,000                  | 제공되는 테스트셋을 사용함                     |
++------------+--------------------+----------+---------------+------------------------+------------------------------------------------+
+| Bosch      | 이진 분류          | `link3`_ | 1,000,000     | 968                    | 제공되는 테스트셋을 사용함                     |
++------------+--------------------+----------+---------------+------------------------+------------------------------------------------+
+| Yahoo LTR  | 랭킹 학습          | `link4`_ | 473,134       | 700                    | set1.train은 학습, set1.test은 테스트에 사용됨 |
++------------+--------------------+----------+---------------+------------------------+------------------------------------------------+
+| MS LTR     | 랭킹 학습          | `link5`_ | 2,270,296     | 137                    | {S1,S2,S3}은 학습, {S5}은 테스트에 사용됨      |
++------------+--------------------+----------+---------------+------------------------+------------------------------------------------+
+| Expo       | 이진 분류 (범주형) | `link6`_ | 11,000,000    | 700                    | 마지막 샘플 100만개는 테스트셋으로 사용됨      |
++------------+--------------------+----------+---------------+------------------------+------------------------------------------------+
 
-We used the following hardware to evaluate the performance of LightGBM GPU training.
-Our CPU reference is **a high-end dual socket Haswell-EP Xeon server with 28 cores**;
-GPUs include a budget GPU (RX 480) and a mainstream (GTX 1080) GPU installed on the same server.
-It is worth mentioning that **the GPUs used are not the best GPUs in the market**;
-if you are using a better GPU (like AMD RX 580, NVIDIA GTX 1080 Ti, Titan X Pascal, Titan Xp, Tesla P100, etc), you are likely to get a better speedup.
+LightGBM GPU 학습의 성능을 평가하기 위해 아래와 같은 하드웨어를 사용했습니다.
+CPU 기준은 **28코어의 하이엔드 듀얼 소켓 Haswell-EP Xeon (high-end dual socket Haswell-EP Xeon) 서버**입니다.
+GPU로는 동일한 서버에 설치된 예산형 GPU (RX 480)와 주류형 GPU (GTX 1080)를 사용했습니다.
+**사용한 GPU는 시장에서 가장 우수한 GPU는 아니라는 점**을 감안해야 합니다.
+더 좋은 GPU (AMD RX 580, NVIDIA GTX 1080 Ti, Titan X Pascal, Titan Xp, Tesla P100 등)를 사용하면 더 높은 속도 향상을 얻을 수 있습니다.
 
 +--------------------------------+----------------+------------------+---------------+
 | Hardware                       | Peak FLOPS     | Peak Memory BW   | Cost (MSRP)   |
@@ -101,9 +85,9 @@ if you are using a better GPU (like AMD RX 580, NVIDIA GTX 1080 Ti, Titan X Pasc
 | 2x Xeon E5-2683v3 (28 cores)   | 1,792 GFLOPS   | 133 GB/s         | $3,692        |
 +--------------------------------+----------------+------------------+---------------+
 
-During benchmarking on CPU we used only 28 physical cores of the CPU, and did not use hyper-threading cores,
-because we found that using too many threads actually makes performance worse.
-The following shows the training configuration we used:
+CPU 벤치마킹 중에는 CPU의 28개 물리적인 코어만 사용하고, 하이퍼스레딩 코어는 사용하지 않았습니다.
+너무 많은 스레드를 사용하는 것이 실제로 성능을 떨어뜨린다는 것을 발견했기 때문입니다.
+본 실험에서 설정한 학습 구성은 아래와 같습니다:
 
 ::
 
@@ -122,13 +106,13 @@ The following shows the training configuration we used:
     gpu_device_id = 0
     num_thread = 28
 
-We use the configuration shown above, except for the Bosch dataset, we use a smaller ``learning_rate=0.015`` and set ``min_sum_hessian_in_leaf=5``.
-For all GPU training we vary the max number of bins (255, 63 and 15).
+``min_sum_hessian_in_leaf=5``. 본 실험은 Bosch 데이터셋을 제외하고는 위와 같은 구성으로 진행되었습니다. Bosch 데이터로는 더 작은 ``learning_rate=0.015`` 그리고 ``min_sum_hessian_in_leaf=5``로 설정하였습니다. 
+모든 GPU 학습에서 빈 (#bin)의 최대개수를 다양화 하며 실험했습니다 (255, 63 and 15).
 The GPU implementation is from commit `0bb4a82`_ of LightGBM, when the GPU support was just merged in.
+GPU 구현은 GPU 지원이 막 병합된 시점인 LightGBM의 커밋 `0bb4a82`_ 을 기반으로 합니다. 
 
-The following table lists the accuracy on test set that CPU and GPU learner can achieve after 500 iterations.
-GPU with the same number of bins can achieve a similar level of accuracy as on the CPU, despite using single precision arithmetic.
-For most datasets, using 63 bins is sufficient.
+아래 표는 CPU와 GPU 러너 (GPU learner)가 500번의 이터레이션 후 도달한 테스트셋 상에서의 정확도입니다. 
+같은 개수의 빈(bin)을 가졌다는 조건 하에서의 GPU는, 싱글 프리시전 계산임에도 불구하고 CPU에서 비슷한 수준의 정확도를 보입니다. 
 
 +---------------------------+----------------+---------------+---------------+----------------+---------------+---------------+
 |                           | CPU 255 bins   | CPU 63 bins   | CPU 15 bins   | GPU 255 bins   | GPU 63 bins   | GPU 15 bins   |
@@ -158,27 +142,24 @@ For most datasets, using 63 bins is sufficient.
 | Bosch AUC                 | 0.718115       | 0.721791      | 0.716677      | 0.717184       | 0.724761      | 0.717005      |
 +---------------------------+----------------+---------------+---------------+----------------+---------------+---------------+
 
-We record the wall clock time after 500 iterations, as shown in the figure below:
+아래 차트는 500번 이터레이션 소요시간 (wall clock time)을 기록한 결과를 나타냅니다:
 
 .. image:: ./_static/images/gpu-performance-comparison.png
    :align: center
    :target: ./_static/images/gpu-performance-comparison.png
    :alt: A performance chart which is a record of the wall clock time after 500 iterations on G P U for Higgs, epsilon, Bosch, Microsoft L T R, Expo and Yahoo L T R and bin size of 63 performs comparatively better.
 
-When using a GPU, it is advisable to use a bin size of 63 rather than 255, because it can speed up training significantly without noticeably affecting accuracy.
-On CPU, using a smaller bin size only marginally improves performance, sometimes even slows down training,
-like in Higgs (we can reproduce the same slowdown on two different machines, with different GCC versions).
-We found that GPU can achieve impressive acceleration on large and dense datasets like Higgs and Epsilon.
-Even on smaller and sparse datasets, a *budget* GPU can still compete and be faster than a 28-core Haswell server.
+GPU를 사용하는 경우, 빈 크기 (bin size)는 255 보다는 63을 권장합니다. 왜냐하면 이는 정확도에 거의 영향을 주지 않으면서도 상당한 학습 속도 향상을 가져오기 때문입니다. 
+CPU에서는, Higgs 케이스에서 알 수 있듯이 더 작은 빈 크기를 사용하는 것으로는 아주 작은 성능 향상 정도만 가능하며, 가끔은 학습속도를 저해합니다 (같은 속도저하를 GCC 버전이 다른 두 개의 기계에서 재현할 수 있습니다).   
+위 실험에서, GPU는 대규모의 밀집된 데이터셋에서 엄청난 속도향상을 가져옴을 확인했습니다. 
+심지어 더 작고 희소(sparse)행렬 형태의 데이터셋에서도,  *예산형 (budget)* GPU가 여전히 28코어 Haswell 서버와 비기거나 더 빠를 수 있습니다. 
 
-Memory Usage
+메모리 사용량
 ------------
 
-The next table shows GPU memory usage reported by ``nvidia-smi`` during training with 63 bins.
-We can see that even the largest dataset just uses about 1 GB of GPU memory,
-indicating that our GPU implementation can scale to huge datasets over 10x larger than Bosch or Epsilon.
-Also, we can observe that generally a larger dataset (using more GPU memory, like Epsilon or Bosch) has better speedup,
-because the overhead of invoking GPU functions becomes significant when the dataset is small.
+다음 표는 ``nvidia-smi`` 에 의해 보고된 63개의 빈으로 학습하는 동안의 GPU 메모리 사용량입니다. 
+가장 큰 데이터셋도 약 1GB의 GPU 메모리만 사용하므로, GPU 구현이 Bosch나 Epsilon보다 10배 이상 큰 대규모 데이터셋에 확장될 수 있다는 것을 나타냅니다.
+또한, 일반적으로 더 큰 데이터셋 (Epsilon이나 Bosch와 같이 더 많은 GPU 메모리를 사용하는 경우)이 더 나은 속도향상을 보인다는 것을 확인할 수 있으며, 이는 데이터셋이 작을 때 GPU 함수를 호출하는 오버헤드가 상당하기 때문입니다.
 
 +-------------------------+---------+-----------+---------+----------+--------+-------------+
 | Datasets                | Higgs   | Epsilon   | Bosch   | MS-LTR   | Expo   | Yahoo-LTR   |
@@ -186,11 +167,10 @@ because the overhead of invoking GPU functions becomes significant when the data
 | GPU Memory Usage (MB)   | 611     | 901       | 1067    | 413      | 405    | 291         |
 +-------------------------+---------+-----------+---------+----------+--------+-------------+
 
-Further Reading
+추가 참고자료
 ---------------
 
-You can find more details about the GPU algorithm and benchmarks in the
-following article:
+다음 자료들에서 GPU 알고리즘과 벤치마크에 대한 더 상세한 정보를 얻으실 수 있습니다:
 
 Huan Zhang, Si Si and Cho-Jui Hsieh. `GPU Acceleration for Large-scale Tree Boosting`_. SysML Conference, 2018.
 
