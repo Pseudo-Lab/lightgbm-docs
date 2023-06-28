@@ -82,54 +82,53 @@ LightGBM의 용도를 알아야 합니다!
 
 -  인텔에서 실행하는 경우 `Intel SDK for OpenCL`_ 을 다운받습니다(**추천하지 않음**).
 
--  For running on AMD, get AMD APP SDK (downloads `for Linux`_ and `for Windows`_). You may want to replace the ``OpenCL.dll`` from the GPU driver package with the one from the SDK, if the one shipped with the driver lacks some functions.
+-  AMD에서 실행하려면 AMD APP SDK를 다운로드하십시오(``Linux용``_ 및 ``Windows용``_ 다운로드). 드라이버와 함께 제공된 라이브러리에 일부 기능이 없는 경우 GPU 드라이버 패키지의 ``OpenCL.dll``을 SDK의 드라이버로 교체할 수 있습니다.
 
--  For running on NVIDIA, get `CUDA Toolkit`_.
+-  NVIDIA에서 실행하려면 `CUDA 툴킷`_ 을 다운로드합니다.
 
--  Or you can try to use `Khronos official OpenCL headers`_, the CMake module would automatically find the OpenCL library used in your system, though the result may be not portable.
+-  또는 `Khronos 공식 OpenCL 헤더`_ 를 사용하면 CMake 모듈이 시스템에서 사용되는 OpenCL 라이브러리를 자동으로 찾을 수 있지만 결과는 이식성이 없을 수 있습니다.
 
-Further reading and correspondence table (especially if you intend to use cross-platform devices,
-like Intel CPU with AMD APP SDK): `GPU SDK Correspondence and Device Targeting Table <./GPU-Targets.rst>`__.
+추가 읽기 및 대응 표(특히 AMD APP SDK를 사용하는 인텔 CPU와 같은 크로스 플랫폼 장치를 사용하려는 경우): `GPU SDK 대응 및 디바이스 타겟팅 표 <./GPU-Targets.rst>`__.
 
-**Warning**: using Intel OpenCL is not recommended and may crash your machine due to being non compliant to OpenCL standards.
-If your objective is to use LightGBM + OpenCL on CPU, please use AMD APP SDK instead (it can run also on Intel CPUs without any issues).
+**경고**: 인텔 OpenCL을 사용하는 것은 권장되지 않으며, OpenCL 표준을 준수하지 않아 컴퓨터가 충돌할 수 있습니다.
+CPU에서 LightGBM + OpenCL을 사용하는 것이 목적이라면 대신 AMD APP SDK를 사용하세요(인텔 CPU에서도 문제 없이 실행 가능).
 
 --------------
 
-MinGW Correct Compiler Selection
+MinGW 올바른 컴파일러 선택
 --------------------------------
 
-If you are expecting to use LightGBM without R, you need to install MinGW.
-Installing MinGW is straightforward, download `this`_.
+R 없이 LightGBM을 사용하려면 MinGW를 설치해야 합니다.
+MinGW 설치는 간단합니다. `이것`_ 을 다운로드하세요.
 
-Make sure you are using the x86\_64 architecture, and do not modify anything else.
-You may choose a version other than the most recent one if you need a previous MinGW version.
+x86\_64 아키텍처를 사용하고 있는지 확인하고 다른 것을 수정하지 마세요.
+이전 MinGW 버전이 필요한 경우 최신 버전이 아닌 다른 버전을 선택할 수 있습니다.
 
 .. image:: ./_static/images/screenshot-mingw-installation.png
    :align: center
    :target: ./_static/images/screenshot-mingw-installation.png
    :alt: A screenshot of the Min G W installation setup settings window.
 
-Then, add to your PATH the following (to adjust to your MinGW version):
+그런 다음 PATH에 다음을 추가하여 MinGW 버전에 맞게 조정합니다:
 
 ::
 
     C:\Program Files\mingw-w64\x86_64-5.3.0-posix-seh-rt_v4-rev0\mingw64\bin
 
-**Warning**: R users (even if you do not want LightGBM for R)
+**경고**: R 사용자(R용 LightGBM을 원하지 않는 경우에도)
 
-If you have RTools and MinGW installed, and wish to use LightGBM in R,
-get rid of MinGW from PATH (to keep: ``c:\Rtools\bin;c:\Rtools\mingw_32\bin`` for 32-bit R installation,
-``c:\Rtools\bin;c:\Rtools\mingw_64\bin`` for 64-bit R installation).
+RTools와 MinGW가 설치되어 있고 R에서 LightGBM을 사용하려면,
+PATH에서 MinGW을 삭제합니다 (유지할 경로: 32비트 R 설치의 경우 ``c:\Rtools\bin;c:\Rtools\mingw_32\bin``,
+64비트 R 설치의 경우 ``c:\Rtools\bin;c:\Rtools\mingw_64\bin``).
 
-You can check which MinGW version you are using by running the following in a command prompt: ``gcc -v``:
+명령 프롬프트에서 다음을 실행하여 사용 중인 MinGW 버전을 확인할 수 있습니다: ``gcc -v``:
 
 .. image:: ./_static/images/screenshot-r-mingw-used.png
    :align: center
    :target: ./_static/images/screenshot-r-mingw-used.png
    :alt: A screenshot of the administrator command prompt where G C C version is being checked.
 
-To check whether you need 32-bit or 64-bit MinGW for R, install LightGBM as usual and check for the following:
+R에 32비트 또는 64비트 MinGW가 필요한지 확인하려면 평소와 같이 LightGBM을 설치하고 다음을 확인합니다:
 
 .. code:: r
 
@@ -137,37 +136,37 @@ To check whether you need 32-bit or 64-bit MinGW for R, install LightGBM as usua
     ** libs
     c:/Rtools/mingw_64/bin/g++
 
-If it says ``mingw_64`` then you need the 64-bit version (PATH with ``c:\Rtools\bin;c:\Rtools\mingw_64\bin``),
-otherwise you need the 32-bit version (``c:\Rtools\bin;c:\Rtools\mingw_32\bin``), the latter being a very rare and untested case.
+``mingw_64``라고 나오면 64비트 버전이 필요하고(``c:\Rtools\bin;c:\Rtools\mingw_64\bin``),
+그렇지 않으면 32비트 버전이 필요합니다(``c:\Rtools\bin;c:\Rtools\mingw_32\bin``). 후자는 매우 드물고 검증되지 않은 사례입니다.
 
-NOTE: If you are using `Rtools` 4.0 or later, the path will have `mingw64` instead of `mingw_64` (PATH with `C:\rtools40\mingw64\bin`), and `mingw32` instead of `mingw_32` (`C:\rtools40\mingw32\bin`). The 32-bit version remains an unsupported solution under Rtools 4.0.
+노트: If you are using `Rtools` 4.0 또는 그 이후 버전을 사용한다면 경로에 `mingw_64` 대신 `mingw64`를 사용하고 (`C:\rtools40\mingw64\bin`), `mingw_32` 대신 `mingw32`를 사용합니다(`C:\rtools40\mingw32\bin`). 32비트 버전은 Rtools 4.0에서 지원되지 않는 솔루션으로 남아 있습니다.
 
-Download the prebuilt Boost
+사전 빌드한 Boost 다운로드하기
 ---------------------------
 
-Download  `Prebuilt Boost x86_64`_ or `Prebuilt Boost i686`_ and unpack them with `7zip`_, alternatively you can build Boost from source.
+Download  `Prebuilt Boost x86_64`_ 나 `Prebuilt Boost i686`_ 를 다운로드하고 `7zip`_ 으로 압축을 풉니다. 또는 소스에서 Boost를 빌드할 수 있습니다.
 
 --------------
 
-Boost Compilation
+Boost 컴파일
 -----------------
 
-Installing Boost requires to download Boost and to install it.
-It takes about 10 minutes to several hours depending on your CPU speed and network speed.
+부스트를 설치하려면 부스트를 다운로드하고 설치해야 합니다.
+CPU 속도와 네트워크 속도에 따라 약 10분에서 몇 시간까지 소요됩니다.
 
-We will assume an installation in ``C:\boost`` and a general installation (like in Unix variants: without versioning and without type tags).
+``C:\boost`` 에 설치와 일반 설치를 가정합니다 (유닉스 변형: 버전 관리와 타입 태그가 없음).
 
-There is one mandatory step to check the compiler:
+컴파일러를 확인하기 위한 필수 단계가 하나 있습니다:
 
--  **Warning**: if you want the R installation:
-   If you have already MinGW in your PATH variable, get rid of it (you will link to the wrong compiler otherwise).
+-  **경고**: R 설치를 원하는 경우:
+   PATH 변수에 이미 MinGW가 있는 경우, 이를 제거하세요(그렇지 않으면 잘못된 컴파일러로 연결됩니다).
 
--  **Warning**: if you want the CLI installation:
-   If you have already Rtools in your PATH variable, get rid of it (you will link to the wrong compiler otherwise).
+-  **경고**: CLI 설치를 원하는 경우:
+   PATH 변수에 이미 Rtools가 있는 경우 이를 제거하세요(그렇지 않으면 잘못된 컴파일러로 연결됩니다).
 
--  R installation must have Rtools in PATH
+-  R 설치는 PATH에 Rtools가 있어야 합니다.
 
--  CLI / Python installation must have MinGW (not Rtools) in PATH
+-  CLI / 파이썬 설치는 PATH에 (Rtools가 아니라) MinGW가 있어야 합니다.
 
 In addition, assuming you are going to use ``C:\boost`` for the folder path,
 you should add now already the following to PATH: ``C:\boost\boost-build\bin``, ``C:\boost\boost-build\include\boost``.
@@ -590,15 +589,15 @@ And open an issue in GitHub `here`_ with that log.
 
 .. _Intel SDK for OpenCL: https://software.intel.com/en-us/articles/opencl-drivers
 
-.. _CUDA Toolkit: https://developer.nvidia.com/cuda-downloads
+.. _CUDA 툴킷: https://developer.nvidia.com/cuda-downloads
 
-.. _for Linux: https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2
+.. _Linux용: https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2
 
-.. _for Windows: https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.135-GA-windows-F-x64.exe
+.. _Windows용: https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.135-GA-windows-F-x64.exe
 
-.. _Khronos official OpenCL headers: https://github.com/KhronosGroup/OpenCL-Headers
+.. _Khronos 공식 OpenCL 헤더: https://github.com/KhronosGroup/OpenCL-Headers
 
-.. _this: http://iweb.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe
+.. _이것: http://iweb.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe
 
 .. _Boost: https://www.boost.org/users/history/
 
