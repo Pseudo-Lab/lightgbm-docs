@@ -1,9 +1,9 @@
-Python API
+파이썬 API
 ==========
 
 .. currentmodule:: lightgbm
 
-Data Structure API
+데이터 구조 API
 ------------------
 
 .. autosummary::
@@ -14,7 +14,7 @@ Data Structure API
     CVBooster
     Sequence
 
-Training API
+훈련 API
 ------------
 
 .. autosummary::
@@ -23,7 +23,7 @@ Training API
     train
     cv
 
-Scikit-learn API
+사이킷런 API
 ----------------
 
 .. autosummary::
@@ -34,7 +34,7 @@ Scikit-learn API
     LGBMRegressor
     LGBMRanker
 
-Dask API
+대스크 API
 --------
 
 .. versionadded:: 3.2.0
@@ -46,7 +46,7 @@ Dask API
     DaskLGBMRegressor
     DaskLGBMRanker
 
-Callbacks
+콜백
 ---------
 
 .. autosummary::
@@ -57,7 +57,7 @@ Callbacks
     record_evaluation
     reset_parameter
 
-Plotting
+그래프
 --------
 
 .. autosummary::
@@ -69,7 +69,7 @@ Plotting
     plot_tree
     create_tree_digraph
 
-Utilities
+유틸리티
 ---------
 
 .. autosummary::
