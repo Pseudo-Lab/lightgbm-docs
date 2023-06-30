@@ -67,7 +67,7 @@ LightGBM 구축하기
 
 두 개의 바이너리(``lightgbm`` 과 ``lib_lightgbm.so``)가 생성된 것을 확인할 수 있습니다.
 
-macOS에서 구축하는 경우, Boost.Compute의 알려진 버그를 피하려면 ``src/treelearner/gpu_tree_learner.h``에서 ``BOOST_COMPUTE_USE_OFFLINE_CACHE`` 매크로를 제거해야 할 수도 있습니다.
+macOS에서 구축하는 경우, Boost.Compute의 알려진 버그를 피하려면 ``src/treelearner/gpu_tree_learner.h`` 에서 ``BOOST_COMPUTE_USE_OFFLINE_CACHE`` 매크로를 제거해야 할 수도 있습니다.
 
 Python 인터페이스 설치하기 (선택 사항)
 -----------------------------------
