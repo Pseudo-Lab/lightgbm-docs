@@ -3,7 +3,7 @@ LightGBM GPU 튜토리얼
 
 이 문서의 목적은 GPU 훈련에 대한 간단한 단계별 튜토리얼을 제공하는 것입니다.
 
-Windows의 경우, `GPU Windows Tutorial <./GPU-Windows.rst>`__ 를 참조하세요.
+Windows의 경우, `GPU Windows Tutorial <./GPU-Windows.rst>`__ 을 참조하세요.
 
 데모에는 `Microsoft Azure 클라우드 컴퓨팅 플랫폼`_ 의 GPU 인스턴스를 사용합니다. 단, 최신 AMD 또는 NVIDIA GPU가 탑재된 모든 머신을 사용할 수 있습니다. 
 
@@ -123,8 +123,8 @@ Python 인터페이스의 사용 방법에 대한 자세한 내용은 `Python �
     EOF
     echo "num_threads=$(nproc)" >> lightgbm_gpu.conf
 
-방금 생성한 구성 파일에서 ``device=gpu``를 설정하여 GPU를 활성화합니다. 
-이 구성에서는 시스템에 설치된 첫 번째 GPU (``gpu_platform_id=0`` 및 ``gpu_device_id=0``)를 사용합니다. ``gpu_platform_id`` 또는 ``gpu_device_id`` 가 설정되지 않은 경우, 기본 플랫폼과 GPU가 선택됩니다. 
+방금 생성한 구성 파일에서 ``device=gpu`` 를 설정하여 GPU를 활성화합니다. 
+이 구성에서는 시스템에 설치된 첫 번째 GPU(``gpu_platform_id=0`` 및 ``gpu_device_id=0``)를 사용합니다. ``gpu_platform_id`` 또는 ``gpu_device_id`` 가 설정되지 않은 경우, 기본 플랫폼과 GPU가 선택됩니다. 
 여러 플랫폼(AMD/Intel/NVIDIA) 또는 GPU를 사용할 수 있습니다. `clinfo`_ 유틸리티를 사용하여 각 플랫폼의 GPU를. 식별할 수 있습니다. Ubuntu의 경우, ``sudo apt-get install clinfo`` 를 실행하여 ``clinfo`` 를 설치할 수 있습니다. AMD/NVIDIA의 외장형 GPU와 Intel의 통합형 GPU를 사용하는 경우, 외장형 GPU를 사용하려면 올바른 ``gpu_platform_id`` 를 선택해야 합니다.
 
 GPU에서 첫 학습 작업 실행하기
@@ -186,7 +186,7 @@ GPU 가속은 다른 작업 및 지표(회귀, 다중 클래스 분류, 랭킹 �
 
 GPU 가속이 유용하다고 생각될 경우, 다음 문헌을 출판물에 인용해 주시기 바랍니다. 
 
-Huan Zhang, Si Si and Cho-Jui Hsieh. "`GPU Acceleration for Large-scale Tree Boosting (대규모 트리 부스팅을 위한 GPU 가속화)`_ ." SysML Conference, 2018.
+Huan Zhang, Si Si and Cho-Jui Hsieh. "`대규모 트리 부스팅을 위한 GPU 가속화`_." SysML Conference, 2018.
 
 .. _Microsoft Azure 클라우드 컴퓨팅 플랫폼: https://azure.microsoft.com/
 
