@@ -1,23 +1,21 @@
-LightGBM GPU Tutorial
+LightGBM GPU 튜토리얼
 =====================
 
-The purpose of this document is to give you a quick step-by-step tutorial on GPU training.
+이 문서의 목적은 GPU 훈련에 대한 간단한 단계별 튜토리얼을 제공하는 것입니다.
 
-For Windows, please see `GPU Windows Tutorial <./GPU-Windows.rst>`__.
+Windows의 경우, `GPU Windows Tutorial <./GPU-Windows.rst>`__를 참조하세요.
 
-We will use the GPU instance on `Microsoft Azure cloud computing platform`_ for demonstration,
-but you can use any machine with modern AMD or NVIDIA GPUs.
+데모에는 `Microsoft Azure 클라우드 컴퓨팅 플랫폼`_ 의 GPU 인스턴스를 사용합니다. 단, 최신 AMD 또는 NVIDIA GPU가 탑재된 모든 머신을 사용할 수 있습니다. 
 
-GPU Setup
+GPU 설정하기
 ---------
 
-You need to launch a ``NV`` type instance on Azure (available in East US, North Central US, South Central US, West Europe and Southeast Asia zones)
-and select Ubuntu 16.04 LTS as the operating system.
+Azure(미국 동부, 미국 중북부, 미국 중남부, 서유럽 및 동남아시아 지역에서 사용 가능)에서 ``NV`` 유형 인스턴스를 시작하고, 운영 체제로 Ubuntu 16.04 LTS를 선택합니다. 
 
-For testing, the smallest ``NV6`` type virtual machine is sufficient, which includes 1/2 M60 GPU, with 8 GB memory, 180 GB/s memory bandwidth and 4,825 GFLOPS peak computation power.
-Don't use the ``NC`` type instance as the GPUs (K80) are based on an older architecture (Kepler).
+테스트용으로는 8GB 메모리, 180GB/s 메모리 대역폭, 4,825 GFLOPS 피크 연산 성능을 갖춘 1/2 M60 GPU가 포함된 가장 작은 ``NV6`` 유형 가상 머신이면 충분합니다. 
+GPU(K80)의 경우, 이전 아키텍처(Kepler)를 기반으로 하므로 ``NC`` 유형 인스턴스는 사용하지 마시기 바랍니다. 
 
-First we need to install minimal NVIDIA drivers and OpenCL development environment:
+먼저 최소한의 NVIDIA 드라이버와 OpenCL 개발 환경을 설치해야 합니다.
 
 ::
 
@@ -25,27 +23,27 @@ First we need to install minimal NVIDIA drivers and OpenCL development environme
     sudo apt-get install --no-install-recommends nvidia-375
     sudo apt-get install --no-install-recommends nvidia-opencl-icd-375 nvidia-opencl-dev opencl-headers
 
-After installing the drivers you need to restart the server.
+드라이버를 설치한 후 서버를 다시 시작해야 합니다.
 
 ::
 
     sudo init 6
 
-After about 30 seconds, the server should be up again.
+약 30초 후 서버가 다시 가동됩니다.
 
-If you are using an AMD GPU, you should download and install the `AMDGPU-Pro`_ driver and also install package ``ocl-icd-libopencl1`` and ``ocl-icd-opencl-dev``.
+AMD GPU를 사용하는 경우, `AMDGPU-Pro`_ 드라이버를 다운로드하여 설치하고 ``ocl-icd-libopencl1`` 및 ``ocl-icd-opencl-dev`` 패키지도 설치해야 합니다.
 
-Build LightGBM
+LightGBM 구축하기
 --------------
 
-Now install necessary building tools and dependencies:
+이제 구축에 필요한 도구와 종속 요소를 설치합니다.
 
 ::
 
     sudo apt-get install --no-install-recommends git cmake build-essential libboost-dev libboost-system-dev libboost-filesystem-dev
 
-The ``NV6`` GPU instance has a 320 GB ultra-fast SSD mounted at ``/mnt``.
-Let's use it as our workspace (skip this if you are using your own machine):
+``NV6`` GPU 인스턴스의 경우, ``/mnt``에 320GB 초고속 SSD가 장착되어 있습니다. 
+이를 작업 공간으로 설정하겠습니다. (개인 PC를 사용하는 경우 이 부분은 건너뛰세요)
 
 ::
 
@@ -53,7 +51,7 @@ Let's use it as our workspace (skip this if you are using your own machine):
     sudo chown $(whoami):$(whoami) /mnt/workspace
     cd /mnt/workspace
 
-Now we are ready to checkout LightGBM and compile it with GPU support:
+이제 LightGBM을 체크아웃하고 GPU 지원으로 컴파일할 준비가 되었습니다.
 
 ::
 
@@ -67,14 +65,14 @@ Now we are ready to checkout LightGBM and compile it with GPU support:
     make -j$(nproc)
     cd ..
 
-You will see two binaries are generated, ``lightgbm`` and ``lib_lightgbm.so``.
+두 개의 바이너리(``lightgbm`` 과 ``lib_lightgbm.so``)가 생성된 것을 확인할 수 있습니다.
 
-If you are building on macOS, you probably need to remove macro ``BOOST_COMPUTE_USE_OFFLINE_CACHE`` in ``src/treelearner/gpu_tree_learner.h`` to avoid a known crash bug in Boost.Compute.
+macOS에서 구축하는 경우, Boost.Compute의 알려진 버그를 피하려면 ``src/treelearner/gpu_tree_learner.h``에서 ``BOOST_COMPUTE_USE_OFFLINE_CACHE`` 매크로를 제거해야 할 수도 있습니다.
 
-Install Python Interface (optional)
+Python 인터페이스 설치하기 (선택 사항)
 -----------------------------------
 
-If you want to use the Python interface of LightGBM, you can install it now (along with some necessary Python-package dependencies):
+LightGBM의 Python 인터페이스를 사용하려면, 필요한 Python 패키지 종속 요소 몇 가지와 함께 설치하면 됩니다.
 
 ::
 
@@ -84,14 +82,14 @@ If you want to use the Python interface of LightGBM, you can install it now (alo
     sudo python setup.py install --precompile
     cd ..
 
-You need to set an additional parameter ``"device" : "gpu"`` (along with your other options like ``learning_rate``, ``num_leaves``, etc) to use GPU in Python.
+Python에서 GPU를 사용하려면 ``learning_rate``, ``num_leaves`` 등의 다른 옵션과 함께 추가 매개변수인 ``"device" : "gpu"``를 설정해야 합니다. 
 
-You can read our `Python-package Examples`_ for more information on how to use the Python interface.
+Python 인터페이스의 사용 방법에 대한 자세한 내용은 `Python 패키지 예제`_ 를 참조하세요.
 
-Dataset Preparation
+데이터셋 준비하기
 -------------------
 
-Using the following commands to prepare the Higgs dataset:
+다음 명령을 사용하여 힉스(Higgs) 데이터셋을 준비합니다.
 
 ::
 
@@ -104,7 +102,7 @@ Using the following commands to prepare the Higgs dataset:
     ln -s boosting_tree_benchmarks/data/higgs.train
     ln -s boosting_tree_benchmarks/data/higgs.test
 
-Now we create a configuration file for LightGBM by running the following commands (please copy the entire block and run it as a whole):
+이제 다음 명령을 실행하여 LightGBM용 구성 파일을 생성합니다. 블록을 모두 복사하여 전체로 실행하세요.
 
 ::
 
@@ -125,77 +123,77 @@ Now we create a configuration file for LightGBM by running the following command
     EOF
     echo "num_threads=$(nproc)" >> lightgbm_gpu.conf
 
-GPU is enabled in the configuration file we just created by setting ``device=gpu``.
-In this configuration we use the first GPU installed on the system (``gpu_platform_id=0`` and ``gpu_device_id=0``). If ``gpu_platform_id`` or ``gpu_device_id`` is not set, the default platform and GPU will be selected.
-You might have multiple platforms (AMD/Intel/NVIDIA) or GPUs. You can use the `clinfo`_ utility to identify the GPUs on each platform. On Ubuntu, you can install ``clinfo`` by executing ``sudo apt-get install clinfo``. If you have a discrete GPU by AMD/NVIDIA and an integrated GPU by Intel, make sure to select the correct ``gpu_platform_id`` to use the discrete GPU.
+방금 생성한 구성 파일에서 ``device=gpu``를 설정하여 GPU를 활성화합니다. 
+이 구성에서는 시스템에 설치된 첫 번째 GPU(``gpu_platform_id=0`` 및 ``gpu_device_id=0``)를 사용합니다. ``gpu_platform_id`` 또는 ``gpu_device_id`` 가 설정되지 않은 경우, 기본 플랫폼과 GPU가 선택됩니다. 
+여러 플랫폼(AMD/Intel/NVIDIA) 또는 GPU를 사용할 수 있습니다. `clinfo`_ 유틸리티를 사용하여 각 플랫폼의 GPU를. 식별할 수 있습니다. Ubuntu의 경우, ``sudo apt-get install clinfo`` 를 실행하여 ``clinfo`` 를 설치할 수 있습니다. AMD/NVIDIA의 외장형 GPU와 Intel의 통합형 GPU를 사용하는 경우, 외장형 GPU를 사용하려면 올바른 ``gpu_platform_id`` 를 선택해야 합니다.
 
-Run Your First Learning Task on GPU
+GPU에서 첫 학습 작업 실행하기
 -----------------------------------
 
-Now we are ready to start GPU training!
+이제 GPU 훈련을 시작할 준비가 완료되었습니다.
 
-First we want to verify the GPU works correctly.
-Run the following command to train on GPU, and take a note of the AUC after 50 iterations:
+먼저 GPU가 올바르게 작동하는지 확인합니다.
+다음 명령을 실행하여 GPU에서 훈련을 실행하고 50회 반복 후 AUC를 기록합니다.
 
 ::
 
     ./lightgbm config=lightgbm_gpu.conf data=higgs.train valid=higgs.test objective=binary metric=auc
 
-Now train the same dataset on CPU using the following command. You should observe a similar AUC:
+이제 다음 명령을 사용하여 CPU에서 동일한 데이터셋을 훈련합니다. 비슷한 AUC를 관찰할 수 있을 것입니다.
 
 ::
 
     ./lightgbm config=lightgbm_gpu.conf data=higgs.train valid=higgs.test objective=binary metric=auc device=cpu
 
-Now we can make a speed test on GPU without calculating AUC after each iteration.
+이제 각 반복마다 AUC를 계산하지 않고도 GPU에서 속도 테스트를 수행할 수 있습니다.
 
 ::
 
     ./lightgbm config=lightgbm_gpu.conf data=higgs.train objective=binary metric=auc
 
-Speed test on CPU:
+CPU상에서 속도 테스트는 다음과 같이 진행합니다.
 
 ::
 
     ./lightgbm config=lightgbm_gpu.conf data=higgs.train objective=binary metric=auc device=cpu
 
-You should observe over three times speedup on this GPU.
+이 GPU에서 3배 이상의 속도 향상을 관찰할 수 있습니다.
 
-The GPU acceleration can be used on other tasks/metrics (regression, multi-class classification, ranking, etc) as well.
-For example, we can train the Higgs dataset on GPU as a regression task:
+GPU 가속은 다른 작업 및 지표(회귀, 다중 클래스 분류, 랭킹 등)에도 사용할 수 있습니다.
+예를 들면, 회귀 작업으로 GPU에서 힉스 데이터셋을 훈련할 수 있습니다.
 
 ::
 
     ./lightgbm config=lightgbm_gpu.conf data=higgs.train objective=regression_l2 metric=l2
 
-Also, you can compare the training speed with CPU:
+또한 훈련 속도를 CPU와 비교할 수 있습니다.
 
 ::
 
     ./lightgbm config=lightgbm_gpu.conf data=higgs.train objective=regression_l2 metric=l2 device=cpu
 
-Further Reading
+추가 정보
 ---------------
 
-- `GPU Tuning Guide and Performance Comparison <./GPU-Performance.rst>`__
+- `GPU 튜닝 가이드 및 성능 비교 <./GPU-Performance.rst>`__
 
-- `GPU SDK Correspondence and Device Targeting Table <./GPU-Targets.rst>`__
+- `GPU SDK 대응 및 디바이스 타겟팅 테이블 <./GPU-Targets.rst>`__
 
-- `GPU Windows Tutorial <./GPU-Windows.rst>`__
+- `GPU Windows 튜토리얼 <./GPU-Windows.rst>`__
 
-Reference
+참고자료
 ---------
 
-Please kindly cite the following article in your publications if you find the GPU acceleration useful:
+GPU 가속이 유용하다고 생각될 경우, 다음 문헌을 출판물에 인용해 주시기 바랍니다. 
 
 Huan Zhang, Si Si and Cho-Jui Hsieh. "`GPU Acceleration for Large-scale Tree Boosting`_." SysML Conference, 2018.
 
-.. _Microsoft Azure cloud computing platform: https://azure.microsoft.com/
+.. _Microsoft Azure 클라우드 컴퓨팅 플랫폼: https://azure.microsoft.com/
 
 .. _AMDGPU-Pro: https://www.amd.com/en/support
 
-.. _Python-package Examples: https://github.com/microsoft/LightGBM/tree/master/examples/python-guide
+.. _Python 패키지 예제: https://github.com/microsoft/LightGBM/tree/master/examples/python-guide
 
-.. _GPU Acceleration for Large-scale Tree Boosting: https://arxiv.org/abs/1706.08359
+.. _대규모 트리 부스팅을 위한 GPU 가속화: https://arxiv.org/abs/1706.08359
 
 .. _clinfo: https://github.com/Oblomov/clinfo
