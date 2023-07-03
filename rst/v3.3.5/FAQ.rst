@@ -1,117 +1,114 @@
 .. role:: raw-html(raw)
     :format: html
 
-LightGBM FAQ
+LightGBM 관련 자주 묻는 질문 (FAQ)
 ############
 
-.. contents:: LightGBM Frequently Asked Questions
+.. contents:: LightGBM 관련 자주묻는 질문 (FAQ)
     :depth: 1
     :local:
     :backlinks: none
 
 ------
 
-Critical Issues
+중요한 문제
 ===============
 
-A **critical issue** could be a *crash*, *prediction error*, *nonsense output*, or something else requiring immediate attention.
+**중요한 문제** 는 *충돌*, *예측 오류*, *무의미한 출력*, 또는 그 밖에 즉각적인 주의가 필요한 것일 수 있습니다.
 
-Please post such an issue in the `Microsoft/LightGBM repository <https://github.com/microsoft/LightGBM/issues>`__.
+이러한 문제는 `Microsoft/LightGBM 리포지토리 <https://github.com/microsoft/LightGBM/issues>`__ 에 게시해 주시기 바랍니다.
 
-You may also ping a member of the core team according to the relevant area of expertise by mentioning them with the arabase (@) symbol:
+또한, 관련 전문 분야에 따라 핵심 팀원을 골뱅이 기호(@)와 함께 멘션하여 메시지를 보낼 수도 있습니다. 각 분야와 팀원에 대해서는 아래를 참조해 주시기 바랍니다. 
 
--  `@guolinke <https://github.com/guolinke>`__ **Guolin Ke** (C++ code / R-package / Python-package)
--  `@chivee <https://github.com/chivee>`__ **Qiwei Ye** (C++ code / Python-package)
--  `@shiyu1994 <https://github.com/shiyu1994>`__ **Yu Shi** (C++ code / Python-package)
--  `@btrotta <https://github.com/btrotta>`__ **Belinda Trotta** (C++ code)
--  `@Laurae2 <https://github.com/Laurae2>`__ **Damien Soukhavong** (R-package)
--  `@jameslamb <https://github.com/jameslamb>`__ **James Lamb** (R-package / Dask-package)
--  `@jmoralez <https://github.com/jmoralez>`__ **José Morales** (Dask-package)
--  `@wxchan <https://github.com/wxchan>`__ **Wenxuan Chen** (Python-package)
--  `@henry0312 <https://github.com/henry0312>`__ **Tsukasa Omoto** (Python-package)
--  `@StrikerRUS <https://github.com/StrikerRUS>`__ **Nikita Titov** (Python-package)
--  `@huanzhang12 <https://github.com/huanzhang12>`__ **Huan Zhang** (GPU support)
--  `@tongwu-msft <https://github.com/tongwu-msft>`__ **Tong Wu** (C++ code / Python-package)
--  `@hzy46 <https://github.com/hzy46>`__ **Zhiyuan He** (C++ code / Python-package)
+-  `@guolinke <https://github.com/guolinke>`__ **Guolin Ke** (C++ 코드 / R 패키지 / Python 패키지)
+-  `@chivee <https://github.com/chivee>`__ **Qiwei Ye** (C++ 코드 / Python 패키지)
+-  `@shiyu1994 <https://github.com/shiyu1994>`__ **Yu Shi** (C++ 코드 / Python 패키지)
+-  `@btrotta <https://github.com/btrotta>`__ **Belinda Trotta** (C++ 코드)
+-  `@Laurae2 <https://github.com/Laurae2>`__ **Damien Soukhavong** (R 패키지)
+-  `@jameslamb <https://github.com/jameslamb>`__ **James Lamb** (R 패키지 / Dask 패키지)
+-  `@jmoralez <https://github.com/jmoralez>`__ **José Morales** (Dask 패키지)
+-  `@wxchan <https://github.com/wxchan>`__ **Wenxuan Chen** (Python 패키지)
+-  `@henry0312 <https://github.com/henry0312>`__ **Tsukasa Omoto** (Python 패키지)
+-  `@StrikerRUS <https://github.com/StrikerRUS>`__ **Nikita Titov** (Python 패키지)
+-  `@huanzhang12 <https://github.com/huanzhang12>`__ **Huan Zhang** (GPU 서포트)
+-  `@tongwu-msft <https://github.com/tongwu-msft>`__ **Tong Wu** (C++ 코드 / Python 패키지)
+-  `@hzy46 <https://github.com/hzy46>`__ **Zhiyuan He** (C++ 코드 / Python 패키지)
 
-Please include as much of the following information as possible when submitting a critical issue:
+중요한 문제를 전송할 시에는 다음과 같은 정보를 최대한 많이 기술해 주시기 바랍니다.
 
--  Is it reproducible on CLI (command line interface), R, and/or Python?
+-  CLI(명령줄 인터페이스), R 및/또는 Python에서 재현 가능한가요?
 
--  Is it specific to a wrapper? (R or Python?)
+-  래퍼 클래스와 관련된 문제인가요? (R 또는 Python?)
 
--  Is it specific to the compiler? (gcc or Clang version? MinGW or Visual Studio version?)
+-  컴파일러와 관련된 문제인가요? (gcc 또는 Clang 버전인가요? MinGW 또는 Visual Studio 버전인가요?)
 
--  Is it specific to your Operating System? (Windows? Linux? macOS?)
+-  운영체제와 관련된 문제인가요? (Windows? Linux? macOS?)
 
--  Are you able to reproduce this issue with a simple case?
+-  간단한 사례를 통해 이 문제를 재현할 수 있나요?
 
--  Does the issue persist after removing all optimization flags and compiling LightGBM in debug mode?
+-  모든 최적화 플래그를 제거하고 디버그 모드에서 LightGBM을 컴파일한 후에도 같은 문제가 지속되나요?
 
-When submitting issues, please keep in mind that this is largely a volunteer effort, and we may not be available 24/7 to provide support.
+중요한 문제에 대한 지원 작업은 대부분 자원봉사로 이루어지며 연중무휴 24시간 제공이 어려울 수도 있다는 점을 염두에 두시기 바랍니다.
 
 --------------
 
-General LightGBM Questions
+LightGBM에 관한 일반적인 질문
 ==========================
 
 .. contents::
     :local:
     :backlinks: none
 
-1. Where do I find more details about LightGBM parameters?
+1. LightGBM 파라미터에 대한 자세한 내용은 어디에서 확인할 수 있나요?
 ----------------------------------------------------------
 
-Take a look at `Parameters <./Parameters.rst>`__ and the `Laurae++/Parameters <https://sites.google.com/view/lauraepp/parameters>`__ website.
+`파라미터 <./Parameters.rst>`__ 와 `Laurae++/Parameters <https://sites.google.com/view/lauraepp/parameters>`__ 페이지를 참조하시기 바랍니다.
 
-2. On datasets with millions of features, training does not start (or starts after a very long time).
+2. 수백만 개의 기능이 있는 데이터 세트의 경우 학습이 시작되지 않거나 매우 오랜 시간이 지난 후에 학습이 시작됩니다.
 -----------------------------------------------------------------------------------------------------
 
-Use a smaller value for ``bin_construct_sample_cnt`` and a larger value for ``min_data``.
+``bin_construct_sample_cnt`` 에는 작은 값을, ``min_data`` 에는 큰 값을 사용합니다.
 
-3. When running LightGBM on a large dataset, my computer runs out of RAM.
+3. 대규모의 데이터 세트에서 LightGBM을 실행할 경우 컴퓨터의 메모리가 부족합니다.
 -------------------------------------------------------------------------
 
-**Multiple Solutions**: set the ``histogram_pool_size`` parameter to the MB you want to use for LightGBM (histogram\_pool\_size + dataset size = approximately RAM used),
-lower ``num_leaves`` or lower ``max_bin`` (see `Microsoft/LightGBM#562 <https://github.com/microsoft/LightGBM/issues/562>`__).
+**다음의 다양한 해결책을 시도해 보세요**: ``histogram_pool_size`` 파라미터를 LightGBM에 사용할 사이즈(MB)로 설정하거나(histogram\_pool\_size + 데이터셋 사이즈 = 대략적인 RAM 사용량), ``num_leaves`` 또는 ``max_bin`` 을 낮춥니다. (`Microsoft/LightGBM#562 <https://github.com/microsoft/LightGBM/issues/562>`__ 참조)
 
-4. I am using Windows. Should I use Visual Studio or MinGW for compiling LightGBM?
+4. Windows를 사용하고 있습니다. LightGBM을 컴파일할 때 Visual Studio를 사용해야 하나요, 아니면 MinGW를 사용해야 하나요?
 ----------------------------------------------------------------------------------
 
-Visual Studio `performs best for LightGBM <https://github.com/microsoft/LightGBM/issues/542>`__.
+Visual Studio가 `LightGBM에서 가장 잘 작동합니다 <https://github.com/microsoft/LightGBM/issues/542>`__.
 
-5. When using LightGBM GPU, I cannot reproduce results over several runs.
+5. LightGBM GPU를 사용할 때 여러 번 실행해도 결과를 재현할 수 없습니다.
 -------------------------------------------------------------------------
 
-This is normal and expected behaviour, but you may try to use ``gpu_use_dp = true`` for reproducibility
-(see `Microsoft/LightGBM#560 <https://github.com/microsoft/LightGBM/pull/560#issuecomment-304561654>`__).
-You may also use the CPU version.
+이는 정상적이며 예상되는 동작이나, 재현성을 위해 ``gpu_use_dp = true`` 를 사용해 볼 수 있습니다.
+(`Microsoft/LightGBM#560 <https://github.com/microsoft/LightGBM/pull/560#issuecomment-304561654>`__ 참조).
+CPU 버전을 사용해 볼 수도 있습니다.
 
-6. Bagging is not reproducible when changing the number of threads.
+6. 스레드 수 변경 시 배깅을 재현할 수 없습니다.
 -------------------------------------------------------------------
 
 :raw-html:`<strike>`
-LightGBM bagging is multithreaded, so its output depends on the number of threads used.
-There is `no workaround currently <https://github.com/microsoft/LightGBM/issues/632>`__.
+LightGBM에서 배깅은 멀티스레드이므로 출력 결과는 사용되는 스레드 수에 따라 달라집니다.
+`현재로선 해결 방법이 없습니다 <https://github.com/microsoft/LightGBM/issues/632>`__.
 :raw-html:`</strike>`
 
-Starting from `#2804 <https://github.com/microsoft/LightGBM/pull/2804>`__ bagging result doesn't depend on the number of threads.
-So this issue should be solved in the latest version.
+`#2804 <https://github.com/microsoft/LightGBM/pull/2804>`__ 부터 시작하는 배깅 결과는 스레드 수에 의존하지 않습니다. 
+따라서 이 문제는 최신 버전에서 해결되어야 합니다.
 
-7. I tried to use Random Forest mode, and LightGBM crashes!
+7. 랜덤 포레스트 모드를 사용하려고 했는데 LightGBM과 충돌합니다.
 -----------------------------------------------------------
 
-This is expected behaviour for arbitrary parameters. To enable Random Forest,
-you must use ``bagging_fraction`` and ``feature_fraction`` different from 1, along with a ``bagging_freq``.
-`This thread <https://github.com/microsoft/LightGBM/issues/691>`__ includes an example.
+이는 임의의 파라미터에 대해 예상되는 동작입니다. 랜덤 포레스트를 활성화하려면, ``bagging_freq`` 와 함께 1이 아닌 ``bagging_fraction`` 및 ``feature_fraction`` 을 사용해야 합니다. 
+다음 `스레드 <https://github.com/microsoft/LightGBM/issues/691>`__ 에서 예제를 확인할 수 있습니다.
 
-8. CPU usage is low (like 10%) in Windows when using LightGBM on very large datasets with many-core systems.
+8. LightGBM을 멀티코어 시스템에서 매우 큰 데이터 세트에 대해 사용할 때 Windows의 CPU 사용량이 10% 정도로 낮습니다.
 ------------------------------------------------------------------------------------------------------------
 
-Please use `Visual Studio <https://visualstudio.microsoft.com/downloads/>`__
-as it may be `10x faster than MinGW <https://github.com/microsoft/LightGBM/issues/749>`__ especially for very large trees.
+`Visual Studio <https://visualstudio.microsoft.com/downloads/>`__ 를 사용하세요. 특히 매우 큰 트리의 경우 `MinGW 보다 10배 더 빠를 수 있습니다 <https://github.com/microsoft/LightGBM/issues/749>`__.
 
-9. When I'm trying to specify a categorical column with the ``categorical_feature`` parameter, I get the following sequence of warnings, but there are no negative values in the column.
+9. ``categorical_feature`` 파라미터를 사용하여 범주형 열을 지정하려고 할 때 다음과 같은 일련의 경고가 표시되지만 열에 음수 값이 없습니다.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 .. code-block:: console
@@ -119,12 +116,12 @@ as it may be `10x faster than MinGW <https://github.com/microsoft/LightGBM/issue
    [LightGBM] [Warning] Met negative value in categorical features, will convert it to NaN
    [LightGBM] [Warning] There are no meaningful features, as all feature values are constant.
 
-The column you're trying to pass via ``categorical_feature`` likely contains very large values.
-Categorical features in LightGBM are limited by int32 range,
-so you cannot pass values that are greater than ``Int32.MaxValue`` (2147483647) as categorical features (see `Microsoft/LightGBM#1359 <https://github.com/microsoft/LightGBM/issues/1359>`__).
-You should convert them to integers ranging from zero to the number of categories first.
+``categorical_feature`` 를 통해 전달하려는 열에 매우 큰 값이 포함되어 있을 가능성이 높습니다.
+LightGBM의 범주형 기능은 int32 범위에 의해 제한됩니다.
+따라서 ``Int32.MaxValue`` (2147483647)보다 큰 값은 범주형 기능으로 전달할 수 없습니다. (`Microsoft/LightGBM#1359 <https://github.com/microsoft/LightGBM/issues/1359>`__ 참조).
+먼저 0에서 범주 수 사이의 정수로 변환해야 합니다.
 
-10. LightGBM crashes randomly with the error like: ``Initializing libiomp5.dylib, but found libomp.dylib already initialized.``
+10. 다음과 같은 오류와 함께 LightGBM이 무작위로 충돌합니다: ``Initializing libiomp5.dylib, but found libomp.dylib already initialized.``
 -------------------------------------------------------------------------------------------------------------------------------
 
 .. code-block:: console
@@ -132,69 +129,62 @@ You should convert them to integers ranging from zero to the number of categorie
    OMP: Error #15: Initializing libiomp5.dylib, but found libomp.dylib already initialized.
    OMP: Hint: This means that multiple copies of the OpenMP runtime have been linked into the program. That is dangerous, since it can degrade performance or cause incorrect results. The best thing to do is to ensure that only a single OpenMP runtime is linked into the process, e.g. by avoiding static linking of the OpenMP runtime in any library. As an unsafe, unsupported, undocumented workaround you can set the environment variable KMP_DUPLICATE_LIB_OK=TRUE to allow the program to continue to execute, but that may cause crashes or silently produce incorrect results. For more information, please see http://www.intel.com/software/products/support/.
 
-**Possible Cause**: This error means that you have multiple OpenMP libraries installed on your machine and they conflict with each other.
-(File extensions in the error message may differ depending on the operating system).
+**가능한 원인**: 이 오류는 컴퓨터에 여러 개의 OpenMP 라이브러리가 설치되어 있고 서로 충돌한다는 의미입니다.
+(오류 메시지의 파일 확장자는 운영 체제에 따라 다를 수 있습니다)
 
-If you are using Python distributed by Conda, then it is highly likely that the error is caused by the ``numpy`` package from Conda which includes the ``mkl`` package which in turn conflicts with the system-wide library.
-In this case you can update the ``numpy`` package in Conda or replace the Conda's OpenMP library instance with system-wide one by creating a symlink to it in Conda environment folder ``$CONDA_PREFIX/lib``.
+Conda에서 배포한 Python을 사용하는 경우, 이 오류는 ``mkl`` 패키지가 포함된 Conda의 ``numpy`` 패키지가 시스템 전체 라이브러리와 충돌하여 발생했을 가능성이 높습니다. 
+이 경우, Conda에서 ``numpy`` 패키지를 업데이트하거나, Conda 환경 폴더 ``$CONDA_PREFIX/lib`` 에 심볼릭 링크를 생성하여 Conda의 OpenMP 라이브러리 인스턴스를 시스템 전체 인스턴스로 교체합니다.
 
-**Solution**: Assuming you are using macOS with Homebrew, the command which overwrites OpenMP library files in the current active Conda environment with symlinks to the system-wide library ones installed by Homebrew:
+**해결책**: Homebrew와 함께 macOS를 사용하는 경우, 현재 활성 상태인 Conda 환경의 OpenMP 라이브러리 파일을 Homebrew가 설치한 시스템 전체 라이브러리 파일에 대한 심볼릭 링크로 덮어쓰는 명령은 다음과 같습니다.
 
 .. code-block:: bash
 
    ln -sf `ls -d "$(brew --cellar libomp)"/*/lib`/* $CONDA_PREFIX/lib
 
-The described above fix worked fine before the release of OpenMP 8.0.0 version.
-Starting from 8.0.0 version, Homebrew formula for OpenMP includes ``-DLIBOMP_INSTALL_ALIASES=OFF`` option which leads to that the fix doesn't work anymore.
-However, you can create symlinks to library aliases manually:
+위의 내용은 OpenMP 8.0.0 버전 출시 이전에는 정상적으로 작동했습니다. 
+8.0.0 버전부터는, OpenMP용 Homebrew 수식에 ``-DLIBOMP_INSTALL_ALIASES=OFF`` 옵션이 포함되어 위 내용을 통한 수정은 더 이상 작동하지 않습니다. 
+단, 다음을 통해 라이브러리 별칭에 대한 심볼릭 링크를 수동으로 생성할 수 있습니다.
 
 .. code-block:: bash
 
    for LIBOMP_ALIAS in libgomp.dylib libiomp5.dylib libomp.dylib; do sudo ln -sf "$(brew --cellar libomp)"/*/lib/libomp.dylib $CONDA_PREFIX/lib/$LIBOMP_ALIAS; done
 
-Another workaround would be removing MKL optimizations from Conda's packages completely:
+또 다른 해결 방법은 Conda의 패키지에서 MKL 최적화를 완전히 제거하는 것입니다.
 
 .. code-block:: bash
 
     conda install nomkl
 
-If this is not your case, then you should find conflicting OpenMP library installations on your own and leave only one of them.
+이 경우에 해당하지 않는다면, 충돌하는 OpenMP 라이브러리 설치를 직접 찾아서 그 중 하나만 남겨 두어야 합니다.
 
-11. LightGBM hangs when multithreading (OpenMP) and using forking in Linux at the same time.
+11. Linux에서 멀티스레딩(OpenMP)과 포킹을 동시에 사용하면 LightGBM이 중단됩니다.
 --------------------------------------------------------------------------------------------
 
-Use ``nthreads=1`` to disable multithreading of LightGBM. There is a bug with OpenMP which hangs forked sessions
-with multithreading activated. A more expensive solution is to use new processes instead of using fork, however,
-keep in mind it is creating new processes where you have to copy memory and load libraries (example: if you want to
-fork 16 times your current process, then you will require to make 16 copies of your dataset in memory)
-(see `Microsoft/LightGBM#1789 <https://github.com/microsoft/LightGBM/issues/1789#issuecomment-433713383>`__).
+LightGBM의 멀티스레딩을 비활성화하려면 ``nthreads=1`` 을 사용하세요. 멀티스레딩이 활성화된 상태에서 포크된 세션을 중단시키는 버그가 OpenMP에 존재합니다. 좀 더 수고스러운 해결책은 포크 대신 새 프로세스를 사용하는 것입니다. 단, 새 프로세스 생성 시 메모리를 복사하고 라이브러리를 로딩하는 작업이 필요하다는 점을 염두에 두세요. (예: 현재의 프로세스를 16회 포크할 경우, 메모리상에 데이터 세트의 복사본을 16개 생성해야 합니다)
+(`Microsoft/LightGBM#1789 <https://github.com/microsoft/LightGBM/issues/1789#issuecomment-433713383>`__ 참조).
 
-An alternative, if multithreading is really necessary inside the forked sessions, would be to compile LightGBM with
-Intel toolchain. Intel compilers are unaffected by this bug.
+포크된 세션 내에서 멀티스레딩이 필요한 경우, LightGBM을 Intel 툴체인으로 컴파일하는 방법이 있습니다. Intel 컴파일러는 이 문제의 영향을 받지 않습니다. 
 
-For C/C++ users, any OpenMP feature cannot be used before the fork happens. If an OpenMP feature is used before the
-fork happens (example: using OpenMP for forking), OpenMP will hang inside the forked sessions. Use new processes instead
-and copy memory as required by creating new processes instead of forking (or, use Intel compilers).
+C/C++ 사용자의 경우, 포크가 발생하기 전에는 OpenMP 기능을 사용할 수 없습니다. 포크가 발생하기 전에 OpenMP 기능을 사용하면(예: 포크에 OpenMP 사용), OpenMP는 포크된 세션 내부에서 중단됩니다. 이 경우, 대신 새 프로세스를 사용하고, 포크 대신 새 프로세스를 생성하여 필요에 따라 메모리를 복사합니다(또는 Intel 컴파일러 사용). 
 
-Cloud platform container services may cause LightGBM to hang, if they use Linux fork to run multiple containers on a 
-single instance. For example, LightGBM hangs in AWS Batch array jobs, which `use the ECS agent 
-<https://aws.amazon.com/batch/faqs/#Features>`__ to manage multiple running jobs. Setting ``nthreads=1`` mitigates the issue.
+클라우드 플랫폼 컨테이너 서비스가 Linux 포크를 사용하여 단일 인스턴스상에서 복수의 컨테이너를 실행하는 경우, LightGBM이 중단될 수 있습니다. 예를 들면, LightGBM은 `ECS 에이전트 
+<https://aws.amazon.com/batch/faqs/#Features>`__ 를 사용하여 실행 중인 여러 작업을 관리하는 AWS의 배치 배열 작업에서 중단됩니다. ``nthreads=1`` 을 설정하면 문제가 개선됩니다.
 
-12. Why is early stopping not enabled by default in LightGBM?
+12. LightGBM에서 조기 중단이 기본적으로 활성화되지 않는 이유는 무엇인가요?
 -------------------------------------------------------------
 
-Early stopping involves choosing a validation set, a special type of holdout which is used to evaluate the current state of the model after each iteration to see if training can stop.
+조기 중단은 각각의 반복 후 모델의 현재 상태를 평가하여 학습을 중단할 수 있는지 확인하는 데 사용되는 특수한 유형의 홀드아웃인 유효성 검사 집합의 선택을 포함합니다.
 
-In ``LightGBM``, `we have decided to require that users specify this set directly <./Parameters.rst#valid>`_. Many options exist for splitting training data into training, test, and validation sets.
+``LightGBM`` 에서는 `사용자가 이 세트를 직접 지정하도록 했습니다 <./Parameters.rst#valid>`_. 훈련 데이터를 훈련, 테스트 및 검증 세트로 분할하는 데는 여러 가지 옵션이 있습니다.
 
-The appropriate splitting strategy depends on the task and domain of the data, information that a modeler has but which ``LightGBM`` as a general-purpose tool does not.
+적절한 분할 전략은 데이터의 작업과 도메인, 그리고 모델러에는 있으나 범용 도구인 ``LightGBM`` 에는 없는 정보에 따라 달라집니다.
 
-13. Does LightGBM support direct loading data from zero-based or one-based LibSVM format file?
+13. LightGBM은 제로 기반 또는 1 기반 LibSVM 형식 파일에서 데이터 직접 로딩을 지원하나요?
 ----------------------------------------------------------------------------------------------
 
-LightGBM supports loading data from zero-based LibSVM format file directly.
+LightGBM은 제로 기반 LibSVM 형식 파일에서 데이터를 직접 로드하는 기능을 지원합니다.
 
-14. Why CMake cannot find the compiler when compiling LightGBM with MinGW?
+14. CMake가 MinGW로 LightGBM을 컴파일할 때 컴파일러를 찾을 수 없는 이유는 무엇인가요?
 --------------------------------------------------------------------------
 
 .. code-block:: bash
@@ -202,52 +192,52 @@ LightGBM supports loading data from zero-based LibSVM format file directly.
     CMake Error: CMAKE_C_COMPILER not set, after EnableLanguage
     CMake Error: CMAKE_CXX_COMPILER not set, after EnableLanguage
 
-This is a known issue of CMake when using MinGW. The easiest solution is to run again your ``cmake`` command to bypass the one time stopper from CMake. Or you can upgrade your version of CMake to at least version 3.17.0.
+이것은 CMake의 알려진 문제로 MinGW 사용 시 발생합니다. 가장 쉬운 해결책은 ``cmake`` 명령을 다시 실행하여 CMake의 일회성 스토퍼를 우회하는 것입니다. 또는 CMake 버전을 최소 버전 3.17.0으로 업그레이드하는 방법이 있습니다.
 
-See `Microsoft/LightGBM#3060 <https://github.com/microsoft/LightGBM/issues/3060#issuecomment-626338538>`__ for more details.
+자세한 내용은 '`Microsoft/LightGBM#3060 <https://github.com/microsoft/LightGBM/issues/3060#issuecomment-626338538>`__' 을 참조하세요.
 
-15. Where can I find LightGBM's logo to use it in my presentation?
+15. 프레젠테이션에 사용할 LightGBM의 로고는 어디에서 찾을 수 있나요?
 ------------------------------------------------------------------
 
-You can find LightGBM's logo in different file formats and resolutions `here <https://github.com/microsoft/LightGBM/tree/master/docs/logo>`__.
+다음 `링크 <https://github.com/microsoft/LightGBM/tree/master/docs/logo>`__ 를 클릭하면 다양한 파일 형식과 해상도의 LightGBM 로고를 찾을 수 있습니다.
 
 ------
 
-R-package
+R 패키지
 =========
 
 .. contents::
     :local:
     :backlinks: none
 
-1. Any training command using LightGBM does not work after an error occurred during the training of a previous LightGBM model.
+1. 이전 LightGBM 모델을 학습하는 동안 오류가 발생한 후부터 LightGBM을 사용하는 모든 학습 명령이 작동하지 않습니다.
 ------------------------------------------------------------------------------------------------------------------------------
 
-Run ``lgb.unloader(wipe = TRUE)`` in the R console, and recreate the LightGBM datasets (this will wipe all LightGBM-related variables).
-Due to the pointers, choosing to not wipe variables will not fix the error.
-This is a known issue: `Microsoft/LightGBM#698 <https://github.com/microsoft/LightGBM/issues/698>`__.
+R 콘솔에서 ``lgb.unloader(wipe = TRUE)`` 를 실행하고 LightGBM 데이터 세트를 다시 생성합니다(이렇게 하면 모든 LightGBM 관련 변수가 지워집니다). 
+포인터로 인해 변수를 지우지 않도록 선택해도 오류는 해결되지 않습니다.
+이는 이미 알려진 문제입니다. `Microsoft/LightGBM#698 <https://github.com/microsoft/LightGBM/issues/698>`__ 을 참조하세요.
 
-2. I used ``setinfo()``, tried to print my ``lgb.Dataset``, and now the R console froze!
+2. ``setinfo()`` 를 사용하여 ``lgb.Dataset`` 를 표시하려 했는데 R 콘솔이 반응하지 않습니다.
 ----------------------------------------------------------------------------------------
 
-Avoid printing the ``lgb.Dataset`` after using ``setinfo``.
-This is a known bug: `Microsoft/LightGBM#539 <https://github.com/microsoft/LightGBM/issues/539>`__.
+``setinfo`` 를 사용한 후 ``lgb.Dataset`` 을 표시하지 마세요. 
+이는 이미 알려진 문제입니다. `Microsoft/LightGBM#539 <https://github.com/microsoft/LightGBM/issues/539>`__ 를 참조하세요. 
 
 3. ``error in data.table::data.table()...argument 2 is NULL``
 -------------------------------------------------------------
 
-If you are experiencing this error when running ``lightgbm``, you may be facing the same issue reported in `#2715 <https://github.com/microsoft/LightGBM/issues/2715>`_ and later in `#2989 <https://github.com/microsoft/LightGBM/pull/2989#issuecomment-614374151>`_. We have seen that some in some situations, using ``data.table`` 1.11.x results in this error. To get around this, you can upgrade your version of ``data.table`` to at least version 1.12.0.
+``lightgbm`` 실행 시 이 오류가 발생하는 경우, `#2715 <https://github.com/microsoft/LightGBM/issues/2715>`_ 및 `#2989 <https://github.com/microsoft/LightGBM/pull/2989#issuecomment-614374151>`_ 이후에서 보고된 것과 동일한 문제에 직면할 가능성이 있습니다. 일부 상황에서 ``data.table`` 1.11.x를 사용하면 이 문제가 발생하는 것으로 확인되었습니다. 이 문제를 해결하려면 ``data.table`` 을 버전 1.12.0이상으로 업그레이드하세요.
 
 ------
 
-Python-package
+Python 패키지
 ==============
 
 .. contents::
     :local:
     :backlinks: none
 
-1. ``Error: setup script specifies an absolute path`` when installing from GitHub using ``python setup.py install``.
+1. ``python setup.py install`` 을 사용하여 GitHub에서 설치 시 ``Error: setup script specifies an absolute path`` 라는 에러 메시지가 표시됩니다.
 --------------------------------------------------------------------------------------------------------------------
 
 .. code-block:: console
@@ -256,53 +246,51 @@ Python-package
    /Users/Microsoft/LightGBM/python-package/lightgbm/../../lib_lightgbm.so
    setup() arguments must *always* be /-separated paths relative to the setup.py directory, *never* absolute paths.
 
-This error should be solved in latest version.
-If you still meet this error, try to remove ``lightgbm.egg-info`` folder in your Python-package and reinstall,
-or check `this thread on stackoverflow <http://stackoverflow.com/questions/18085571/pip-install-error-setup-script-specifies-an-absolute-path>`__.
+이 문제는 최신 버전에서 해결되어야 합니다. 
+그럼에도 불구하고 이 문제가 계속해서 발생할 경우, Python 패키지에서 ``lightgbm.egg-info`` 폴더를 제거한 후 다시 설치해 보세요. 
+또는 `Stack Overflow의 다음 스레드를 참조하세요 <http://stackoverflow.com/questions/18085571/pip-install-error-setup-script-specifies-an-absolute-path>`__.
 
-2. Error messages: ``Cannot ... before construct dataset``.
+2. ``Cannot ... before construct dataset`` 과 같은 에러 메시지가 표시됩니다.
 -----------------------------------------------------------
 
-I see error messages like...
+다음과 같은 에러 메시지가 표시됩니다.
 
 .. code-block:: console
 
    Cannot get/set label/weight/init_score/group/num_data/num_feature before construct dataset
 
-but I've already constructed a dataset by some code like:
+하지만 이미 다음과 같은 코드로 데이터 세트를 이미 구성했습니다. 
 
 .. code-block:: python
 
     train = lightgbm.Dataset(X_train, y_train)
 
-or error messages like
+또는 다음과 같은 에러 메시지가 표시됩니다.
 
 .. code-block:: console
 
     Cannot set predictor/reference/categorical feature after freed raw data, set free_raw_data=False when construct Dataset to avoid this.
 
-**Solution**: Because LightGBM constructs bin mappers to build trees, and train and valid Datasets within one Booster share the same bin mappers,
-categorical features and feature names etc., the Dataset objects are constructed when constructing a Booster.
-If you set ``free_raw_data=True`` (default), the raw data (with Python data struct) will be freed.
-So, if you want to:
+**해결책**: LightGBM은 bin 매퍼를 구성하여 트리를 구축하고, 같은 bin 매퍼, 범주형 기능, 기능 이름 등을 공유하는 하나의 부스터 내에서 데이터 세트를 훈련하고 검증합니다. 따라서 부스터 구성 시 데이터 세트의 객체도 함께 구성됩니다.
+``free_raw_data=True`` (기본값)을 설정하면, 미가공 데이터(Python 데이터 구조 포함)가 해제됩니다.
+다음을 참조하여 각 상황에 맞는 대응을 실시하세요.
 
--  get label (or weight/init\_score/group/data) before constructing a dataset, it's same as get ``self.label``;
+-  데이터 세트를 구성하기 전에 label(또는 weight/init\_score/group/data)을 가져올 경우, 방법은 ``self.label`` 을 가져오는 방법과 동일합니다.
 
--  set label (or weight/init\_score/group) before constructing a dataset, it's same as ``self.label=some_label_array``;
+-  데이터 세트를 구성하기 전에 label(또는 weight/init\_score/group)을 설정할 경우, 방법은 ``self.label=some_label_array`` 와 동일합니다.
 
--  get num\_data (or num\_feature) before constructing a dataset, you can get data with ``self.data``.
-   Then, if your data is ``numpy.ndarray``, use some code like ``self.data.shape``. But do not do this after subsetting the Dataset, because you'll get always ``None``;
+-  데이터 세트를 구성하기 전에 num\_data(또는 num\_feature)을 가져올 경우, ``self.data`` 를 통해 데이터를 얻을 수 있습니다.
+   그리고 만약 데이터가 ``numpy.ndarray`` 인 경우, ``self.data.shape`` 와 같은 코드를 사용합니다. 단, 데이터 세트를 서브 세트로 설정한 후 이를 실행하게 되면 계속해서 ``None`` 을 결과 값으로 얻게 되니 주의하세요.
 
--  set predictor (or reference/categorical feature) after constructing a dataset,
-   you should set ``free_raw_data=False`` or init a Dataset object with the same raw data.
+-  데이터 세트를 구성한 후에 predictor(또는 reference/categorical feature)를 설정할 경우, ``free_raw_data=False`` 를 설정하거나 동일한 미가공 데이터로 데이터 세트 객체를 초기화해야 합니다. 
 
-3. I encounter segmentation faults (segfaults) randomly after installing LightGBM from PyPI using ``pip install lightgbm``.
+3. PyPI에서 ``pip install lightgbm`` 을 사용하여 LightGBM을 설치한 후 세그멘테이션 오류(세그폴트)가 무작위로 발생합니다.
 ---------------------------------------------------------------------------------------------------------------------------
 
-We are doing our best to provide universal wheels which have high running speed and are compatible with any hardware, OS, compiler, etc. at the same time.
-However, sometimes it's just impossible to guarantee the possibility of usage of LightGBM in any specific environment (see `Microsoft/LightGBM#1743 <https://github.com/microsoft/LightGBM/issues/1743>`__).
+저희는 빠른 실행 속도와 동시에 모든 하드웨어, OS, 컴파일러 등과 호환되는 범용 휠을 제공하기 위해 최선을 다하고 있습니다.
+그러나 특정 환경에서의 사용 가능성을 보장할 수 없는 경우도 있습니다(`Microsoft/LightGBM#1743 <https://github.com/microsoft/LightGBM/issues/1743>`__ 참조).
 
-Therefore, the first thing you should try in case of segfaults is **compiling from the source** using ``pip install --no-binary :all: lightgbm``.
-For the OS-specific prerequisites see `this guide <https://github.com/microsoft/LightGBM/blob/master/python-package/README.rst#user-content-build-from-sources>`__.
+따라서, 세그폴트 발생 시 가장 먼저 시도해야 할 것은 ``pip install --no-binary :all: lightgbm`` 을 사용하여 **소스로부터 컴파일** 하는 것입니다.
+OS별 전제 조건에 대해서는 다음 `가이드 <https://github.com/microsoft/LightGBM/blob/master/python-package/README.rst#user-content-build-from-sources>`__ 를 참조하세요.
 
-Also, feel free to post a new issue in our GitHub repository. We always look at each case individually and try to find a root cause.
+또한 새로운 문제가 있다면 GitHub 리포지토리에 자유롭게 게시해 주세요. 저희는 항상 각각의 사례를 개별적으로 살펴보고 근본적인 원인을 찾으려고 노력합니다.
