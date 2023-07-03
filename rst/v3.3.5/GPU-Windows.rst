@@ -1,61 +1,61 @@
-GPU Windows Compilation
+GPU Windows 컴파일
 =======================
 
-This guide is for the MinGW build.
+이 가이드는 MinGW 빌드용입니다.
 
-For the MSVC (Visual Studio) build with GPU, please refer to `Installation Guide <./Installation-Guide.rst#build-gpu-version>`__.
-(We recommend you to use this since it is much easier).
+GPU가 포함된 MSVC(Visual Studio) 빌드는 `설치 가이드 <./Installation-Guide.rst#build-gpu-version>`__ 를 참조하세요.
+(훨씬 쉽기 때문에 이 방법을 사용하는 것을 권장합니다).
 
-Install LightGBM GPU version in Windows (CLI / R / Python), using MinGW/gcc
+MinGW/gcc를 사용하여 Windows(CLI/R/Python)에 LightGBM GPU 버전을 설치합니다.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is for a vanilla installation of Boost, including full compilation steps from source without precompiled libraries.
+이것은 사전 컴파일된 라이브러리 없이 소스에서 컴파일하는 전체 단계와 Boost 설치 가이드입니다.
 
-Installation steps (depends on what you are going to do):
+설치 단계 (수행하려는 작업에 따라 다름):
 
--  Install the appropriate OpenCL SDK
+-  적절한 OpenCL SDK 설치
 
--  Install MinGW
+-  MinGW 설치
 
--  Install Boost
+-  Boost 설치
 
--  Install Git
+-  Git 설치
 
--  Install CMake
+-  CMake 설치 
 
--  Create LightGBM binaries
+-  LightGBM 바이너리 생성하기
 
--  Debugging LightGBM in CLI (if GPU is crashing or any other crash reason)
+-  CLI에서 LightGBM 디버깅(GPU가 충돌하거나 기타 다른 충돌이 있는 경우)
 
-If you wish to use another compiler like Visual Studio C++ compiler, you need to adapt the steps to your needs.
+Visual Studio C++ 컴파일러와 같은 다른 컴파일러를 사용하려는 경우 필요에 따라 단계를 조정해야 합니다.
 
-For this compilation tutorial, we are using AMD SDK for our OpenCL steps.
-However, you are free to use any OpenCL SDK you want, you just need to adjust the PATH correctly.
+이 컴파일 튜토리얼에서는 OpenCL 단계에 AMD SDK를 사용합니다.
+그러나 원하는 OpenCL SDK를 자유롭게 사용할 수 있으며, PATH를 올바르게 조정하기만 하면 됩니다.
 
-You will also need administrator rights. This will not work without them.
+또한 관리자 권한이 필요합니다. 관리자 권한이 없으면 설치할 수 없습니다.
 
-At the end, you can restore your original PATH.
+마지막에 원래 PATH로 복원할 수 있습니다.
 
 --------------
 
-Modifying PATH (for newbies)
+PATH 수정하기(초보자)
 ----------------------------
 
-To modify PATH, just follow the pictures after going to the ``Control Panel``:
+PATH를 수정하려면 ``제어판`` 으로 이동한 후 다음 그림과 같이 따라하세요:
 
 .. image:: ./_static/images/screenshot-system.png
    :align: center
    :target: ./_static/images/screenshot-system.png
    :alt: A screenshot of the System option under System and Security of the Control Panel.
 
-Then, go to ``Advanced`` > ``Environment Variables...``:
+그다음 ``Advanced`` > ``Environment Variables...`` 으로 이동하세요:
 
 .. image:: ./_static/images/screenshot-advanced-system-settings.png
    :align: center
    :target: ./_static/images/screenshot-advanced-system-settings.png
    :alt: A screenshot of the System Properties window.
 
-Under ``System variables``, the variable ``Path``:
+``System variables`` 아래 ``Path`` 변수:
 
 .. image:: ./_static/images/screenshot-environment-variables.png
    :align: center
@@ -64,72 +64,71 @@ Under ``System variables``, the variable ``Path``:
 
 --------------
 
-Antivirus Performance Impact
+안티바이러스 성능 영향
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Does not apply to you if you do not use a third-party antivirus nor the default preinstalled antivirus on Windows.
+타사 바이러스 백신이나 Windows에 사전 설치된 기본 바이러스 백신을 사용하지 않는 경우에는 적용되지 않습니다.
 
-**Windows Defender or any other antivirus will have a significant impact on the speed you will be able to perform the steps.**
-It is recommended to **turn them off temporarily** until you finished with building and setting up everything, then turn them back on, if you are using them.
+**Windows Defender 또는 기타 바이러스 백신은 설치 단계를 수행하는 속도에 상당한 영향을 미칩니다**.
+사용 중이라면 빌드 및 설정을 모두 마칠 때까지 **일시적으로 꺼두었다가** 다시 켜는 것이 좋습니다.
 
 --------------
 
-OpenCL SDK Installation
+OpenCL SDK 설치
 -----------------------
 
-Installing the appropriate OpenCL SDK requires you to download the correct vendor source SDK.
-You need to know what you are going to use LightGBM!
+적절한 OpenCL SDK를 설치하려면 올바른 벤더의 SDK 소스를 다운로드해야 합니다.
+LightGBM의 용도를 알아야 합니다!
 
--  For running on Intel, get `Intel SDK for OpenCL`_ (**NOT RECOMMENDED**).
+-  인텔에서 실행하는 경우 `Intel SDK for OpenCL`_ 을 다운받습니다(**추천하지 않음**).
 
--  For running on AMD, get AMD APP SDK (downloads `for Linux`_ and `for Windows`_). You may want to replace the ``OpenCL.dll`` from the GPU driver package with the one from the SDK, if the one shipped with the driver lacks some functions.
+-  AMD에서 실행하려면 AMD APP SDK를 다운로드하십시오(``Linux용``_ 및 ``Windows용``_ 다운로드). 드라이버와 함께 제공된 라이브러리에 일부 기능이 없는 경우 GPU 드라이버 패키지의 ``OpenCL.dll``을 SDK의 드라이버로 교체할 수 있습니다.
 
--  For running on NVIDIA, get `CUDA Toolkit`_.
+-  NVIDIA에서 실행하려면 `CUDA 툴킷`_ 을 다운로드합니다.
 
--  Or you can try to use `Khronos official OpenCL headers`_, the CMake module would automatically find the OpenCL library used in your system, though the result may be not portable.
+-  또는 `Khronos 공식 OpenCL 헤더`_ 를 사용하면 CMake 모듈이 시스템에서 사용되는 OpenCL 라이브러리를 자동으로 찾을 수 있지만 결과는 이식성이 없을 수 있습니다.
 
-Further reading and correspondence table (especially if you intend to use cross-platform devices,
-like Intel CPU with AMD APP SDK): `GPU SDK Correspondence and Device Targeting Table <./GPU-Targets.rst>`__.
+추가 읽기 및 대응 표(특히 AMD APP SDK를 사용하는 인텔 CPU와 같은 크로스 플랫폼 장치를 사용하려는 경우): `GPU SDK 대응 및 디바이스 타겟팅 표 <./GPU-Targets.rst>`__.
 
-**Warning**: using Intel OpenCL is not recommended and may crash your machine due to being non compliant to OpenCL standards.
-If your objective is to use LightGBM + OpenCL on CPU, please use AMD APP SDK instead (it can run also on Intel CPUs without any issues).
+**경고**: 인텔 OpenCL을 사용하는 것은 권장되지 않으며, OpenCL 표준을 준수하지 않아 컴퓨터가 충돌할 수 있습니다.
+CPU에서 LightGBM + OpenCL을 사용하는 것이 목적이라면 대신 AMD APP SDK를 사용하세요(인텔 CPU에서도 문제 없이 실행 가능).
 
 --------------
 
-MinGW Correct Compiler Selection
+MinGW 올바른 컴파일러 선택
 --------------------------------
 
-If you are expecting to use LightGBM without R, you need to install MinGW.
-Installing MinGW is straightforward, download `this`_.
+R 없이 LightGBM을 사용하려면 MinGW를 설치해야 합니다.
+MinGW 설치는 간단합니다. `이것`_ 을 다운로드하세요.
 
-Make sure you are using the x86\_64 architecture, and do not modify anything else.
-You may choose a version other than the most recent one if you need a previous MinGW version.
+x86\_64 아키텍처를 사용하고 있는지 확인하고 다른 것을 수정하지 마세요.
+이전 MinGW 버전이 필요한 경우 최신 버전이 아닌 다른 버전을 선택할 수 있습니다.
 
 .. image:: ./_static/images/screenshot-mingw-installation.png
    :align: center
    :target: ./_static/images/screenshot-mingw-installation.png
    :alt: A screenshot of the Min G W installation setup settings window.
 
-Then, add to your PATH the following (to adjust to your MinGW version):
+그런 다음 PATH에 다음을 추가하여 MinGW 버전에 맞게 조정합니다:
 
 ::
 
     C:\Program Files\mingw-w64\x86_64-5.3.0-posix-seh-rt_v4-rev0\mingw64\bin
 
-**Warning**: R users (even if you do not want LightGBM for R)
+**경고**: R 사용자(R용 LightGBM을 원하지 않는 경우에도)
 
-If you have RTools and MinGW installed, and wish to use LightGBM in R,
-get rid of MinGW from PATH (to keep: ``c:\Rtools\bin;c:\Rtools\mingw_32\bin`` for 32-bit R installation,
-``c:\Rtools\bin;c:\Rtools\mingw_64\bin`` for 64-bit R installation).
+RTools와 MinGW가 설치되어 있고 R에서 LightGBM을 사용하려면,
+PATH에서 MinGW을 삭제합니다 (유지할 경로: 32비트 R 설치의 경우 ``c:\Rtools\bin;c:\Rtools\mingw_32\bin``,
+64비트 R 설치의 경우 ``c:\Rtools\bin;c:\Rtools\mingw_64\bin``).
 
-You can check which MinGW version you are using by running the following in a command prompt: ``gcc -v``:
+명령 프롬프트에서 다음을 실행하여 사용 중인 MinGW 버전을 확인할 수 있습니다: ``gcc -v``:
 
 .. image:: ./_static/images/screenshot-r-mingw-used.png
    :align: center
    :target: ./_static/images/screenshot-r-mingw-used.png
    :alt: A screenshot of the administrator command prompt where G C C version is being checked.
 
-To check whether you need 32-bit or 64-bit MinGW for R, install LightGBM as usual and check for the following:
+R에 32비트 또는 64비트 MinGW가 필요한지 확인하려면 평소와 같이 LightGBM을 설치하고 다음을 확인합니다:
 
 .. code:: r
 
@@ -137,49 +136,48 @@ To check whether you need 32-bit or 64-bit MinGW for R, install LightGBM as usua
     ** libs
     c:/Rtools/mingw_64/bin/g++
 
-If it says ``mingw_64`` then you need the 64-bit version (PATH with ``c:\Rtools\bin;c:\Rtools\mingw_64\bin``),
-otherwise you need the 32-bit version (``c:\Rtools\bin;c:\Rtools\mingw_32\bin``), the latter being a very rare and untested case.
+``mingw_64``라고 나오면 64비트 버전이 필요하고(``c:\Rtools\bin;c:\Rtools\mingw_64\bin``),
+그렇지 않으면 32비트 버전이 필요합니다(``c:\Rtools\bin;c:\Rtools\mingw_32\bin``). 후자는 매우 드물고 검증되지 않은 사례입니다.
 
-NOTE: If you are using `Rtools` 4.0 or later, the path will have `mingw64` instead of `mingw_64` (PATH with `C:\rtools40\mingw64\bin`), and `mingw32` instead of `mingw_32` (`C:\rtools40\mingw32\bin`). The 32-bit version remains an unsupported solution under Rtools 4.0.
+노트: If you are using `Rtools` 4.0 또는 그 이후 버전을 사용한다면 경로에 `mingw_64` 대신 `mingw64`를 사용하고 (`C:\rtools40\mingw64\bin`), `mingw_32` 대신 `mingw32`를 사용합니다(`C:\rtools40\mingw32\bin`). 32비트 버전은 Rtools 4.0에서 지원되지 않는 솔루션으로 남아 있습니다.
 
-Download the prebuilt Boost
+사전 빌드한 Boost 다운로드하기
 ---------------------------
 
-Download  `Prebuilt Boost x86_64`_ or `Prebuilt Boost i686`_ and unpack them with `7zip`_, alternatively you can build Boost from source.
+Download  `Prebuilt Boost x86_64`_ 나 `Prebuilt Boost i686`_ 를 다운로드하고 `7zip`_ 으로 압축을 풉니다. 또는 소스에서 Boost를 빌드할 수 있습니다.
 
 --------------
 
-Boost Compilation
+Boost 컴파일
 -----------------
 
-Installing Boost requires to download Boost and to install it.
-It takes about 10 minutes to several hours depending on your CPU speed and network speed.
+부스트를 설치하려면 부스트를 다운로드하고 설치해야 합니다.
+CPU 속도와 네트워크 속도에 따라 약 10분에서 몇 시간까지 소요됩니다.
 
-We will assume an installation in ``C:\boost`` and a general installation (like in Unix variants: without versioning and without type tags).
+``C:\boost`` 에 설치와 일반 설치를 가정합니다 (유닉스 변형: 버전 관리와 타입 태그가 없음).
 
-There is one mandatory step to check the compiler:
+컴파일러를 확인하기 위한 필수 단계가 하나 있습니다:
 
--  **Warning**: if you want the R installation:
-   If you have already MinGW in your PATH variable, get rid of it (you will link to the wrong compiler otherwise).
+-  **경고**: R 설치를 원하는 경우:
+   PATH 변수에 이미 MinGW가 있는 경우, 이를 제거하세요(그렇지 않으면 잘못된 컴파일러로 연결됩니다).
 
--  **Warning**: if you want the CLI installation:
-   If you have already Rtools in your PATH variable, get rid of it (you will link to the wrong compiler otherwise).
+-  **경고**: CLI 설치를 원하는 경우:
+   PATH 변수에 이미 Rtools가 있는 경우 이를 제거하세요(그렇지 않으면 잘못된 컴파일러로 연결됩니다).
 
--  R installation must have Rtools in PATH
+-  R 설치는 PATH에 Rtools가 있어야 합니다.
 
--  CLI / Python installation must have MinGW (not Rtools) in PATH
+-  CLI / 파이썬 설치는 PATH에 (Rtools가 아니라) MinGW가 있어야 합니다.
 
-In addition, assuming you are going to use ``C:\boost`` for the folder path,
-you should add now already the following to PATH: ``C:\boost\boost-build\bin``, ``C:\boost\boost-build\include\boost``.
-Adjust ``C:\boost`` if you install it elsewhere.
+또한 폴더 경로로 ``C:\boost``를 사용한다고 가정하면 PATH에 다음 경로를 추가해야 합니다: ``C:\boost\boost-build\bin``, ``C:\boost\boost-build\include\boost``
+다른 곳에 설치한다면 ``C:\boost``를 수정하세요.
 
-We can now start downloading and compiling the required Boost libraries:
+이제 필요한 부스트 라이브러리 다운로드하고 컴파일을 시작할 수 있습니다:
 
--  Download `Boost`_ (for example, the filename for 1.63.0 version is ``boost_1_63_0.zip``)
+-  `Boost`_ 를 다운로드합니다(1.63.0 버전의 파일 이름은 ``boost_1_63_0.zip``입니다)
 
--  Extract the archive to ``C:\boost``
+-  ``C:\boost``에 압축을 해제합니다.
 
--  Open a command prompt, and run
+-  명령 프롬프트를 열고 다음을 실행합니다.
 
    .. code::
 
@@ -188,24 +186,24 @@ We can now start downloading and compiling the required Boost libraries:
        b2 install --prefix="C:\boost\boost-build" toolset=gcc
        cd C:\boost\boost_1_63_0
 
-To build the Boost libraries, you have two choices for command prompt:
+Boost 라이브러리를 빌드하려면 명령 프롬프트에서 두 가지 옵션이 있습니다:
 
--  If you have only one single core, you can use the default
+-  단일 코어를 사용한다면 기본값을 사용할 수 있습니다.
 
    .. code::
 
        b2 install --build_dir="C:\boost\boost-build" --prefix="C:\boost\boost-build" toolset=gcc --with=filesystem,system threading=multi --layout=system release
 
--  If you want to do a multithreaded library building (faster), add ``-j N`` by replacing N by the number of cores/threads you have.
-   For instance, for 2 cores, you would do
+-  멀티스레드 라이브러리를 원하는 경우 ``-j N``을 추가하고 N을 코어/스레드 개수로 바꿉니다.
+   예를 들어 두 개의 코어를 가지고 있다면 다음과 같습니다.
 
    .. code::
 
        b2 install --build_dir="C:\boost\boost-build" --prefix="C:\boost\boost-build" toolset=gcc --with=filesystem,system threading=multi --layout=system release -j 2
 
-Ignore all the errors popping up, like Python, etc., they do not matter for us.
+파이썬 등에서 발생하는 오류는 모두 무시해도 상관없습니다.
 
-Your folder should look like this at the end (not fully detailed):
+폴더는 마지막에 다음과 같이 표시되어야 합니다(완전히 상세하지는 않음):
 
 ::
 
@@ -220,38 +218,37 @@ Your folder should look like this at the end (not fully detailed):
       |--------- lib
       |--------- share
 
-This is what you should (approximately) get at the end of Boost compilation:
+부스트 컴파일이 끝나면 (대략적으로) 이런 결과를 얻을 수 있습니다:
 
 .. image:: ./_static/images/screenshot-boost-compiled.png
    :align: center
    :target: ./_static/images/screenshot-boost-compiled.png
    :alt: A screenshot of the command prompt that ends with text that reads - updated 14621 targets.
 
-If you are getting an error:
+오류가 발생하는 경우:
 
--  Wipe your Boost directory
+-  부스트 디렉터리 지웁니다.
 
--  Close the command prompt
+-  명령 프롬프트를 닫습니다.
 
--  Make sure you added
-   ``C:\boost\boost-build\bin``, ``C:\boost\boost-build\include\boost`` to
-   your PATH (adjust accordingly if you use another folder)
+-  PATH에 
+   ``C:\boost\boost-build\bin``, ``C:\boost\boost-build\include\boost``를 추가했는지 확인하세요 (다른 폴더를 사용하는 경우 적절하게 수정합니다)
 
--  Do the Boost compilation steps again (extract => command prompt => ``cd`` => ``bootstrap`` => ``b2`` => ``cd`` => ``b2``
+-  Boost 컴파일 단계를 다시 수행합니다 (추출 => 명령 프롬프트 => ``cd`` => ``bootstrap`` => ``b2`` => ``cd`` => ``b2``
 
 --------------
 
-Git Installation
+깃 설치
 ----------------
 
-Installing Git for Windows is straightforward, use the following `link`_.
+윈도우용 깃(Git) 설치는 간단합니다. 다음 `링크`_ 를 사용하세요.
 
 .. image:: ./_static/images/screenshot-git-for-windows.png
    :align: center
    :target: ./_static/images/screenshot-git-for-windows.png
    :alt: A screenshot of the website to download git that shows various versions of git compatible with 32 bit and 64 bit Windows separately.
 
-Now, we can fetch LightGBM repository for GitHub. Run Git Bash and the following command:
+이제 깃허브에서 LightGBM 저장소를 가져올 수 있습니다. Git Bash를 열고 다음 명령을 실행합니다:
 
 ::
 
@@ -260,38 +257,37 @@ Now, we can fetch LightGBM repository for GitHub. Run Git Bash and the following
     cd github_repos
     git clone --recursive https://github.com/microsoft/LightGBM
 
-Your LightGBM repository copy should now be under ``C:\github_repos\LightGBM``.
-You are free to use any folder you want, but you have to adapt.
+이제 LightGBM 저장소 사본이 ``C:\github_repos\LightGBM`` 아래에 있어야 합니다.
+자유롭게 다른 폴더를 사용할 수 있지만 적절하게 맞추어야 합니다.
 
-Keep Git Bash open.
+Git Bash를 그대로 열어 두세요.
 
 --------------
 
-CMake Installation, Configuration, Generation
+CMake 설치, 설정, 생성
 ---------------------------------------------
 
-**CLI / Python users only**
+**CLI / 파이썬 사용자 전용**
 
-Installing CMake requires one download first and then a lot of configuration for LightGBM:
+CMake를 설치하려면 먼저 다운로드한 다음 LightGBM을 위한 많은 설정이 필요합니다:
 
 .. image:: ./_static/images/screenshot-downloading-cmake.png
    :align: center
    :target: ./_static/images/screenshot-downloading-cmake.png
    :alt: A screenshot of the binary distributions of C Make for downloading on 64 bit Windows.
 
--  Download `CMake`_ (3.8 or higher)
+-  `CMake`_ 를 다운로드합니다(3.8 또는 그 이상)
 
--  Install CMake
+-  CMake를 설치합니다.
 
--  Run cmake-gui
+-  cmake-gui를 실행합니다.
 
--  Select the folder where you put LightGBM for ``Where is the source code``,
-   default using our steps would be ``C:/github_repos/LightGBM``
+-  ``Where is the source code``를 위해 LightGBM을 저장한 폴더를 선택합니다. 앞서 선택한 폴더는 ``C:/github_repos/LightGBM``입니다.
 
--  Copy the folder name, and add ``/build`` for "Where to build the binaries",
-   default using our steps would be ``C:/github_repos/LightGBM/build``
+-  ``Where to build the binaries``를 위해 폴더 이름을 복사하고 ``/build``를 덧붙입니다.
+   우리의 경우에 ``C:/github_repos/LightGBM/build``가 됩니다.
 
--  Click ``Configure``
+-  ``Configure``를 클릭합니다.
 
    .. image:: ./_static/images/screenshot-create-directory.png
       :align: center
@@ -303,16 +299,16 @@ Installing CMake requires one download first and then a lot of configuration for
       :target: ./_static/images/screenshot-mingw-makefiles-to-use.png
       :alt: A screenshot that asks to specify the generator for the project which should be selected as Min G W makefiles and selected as the use default native compilers option.
 
--  Lookup for ``USE_GPU`` and check the checkbox
+-  ``USE_GPU``를 찾아 체크박스에 체크를 합니다.
 
    .. image:: ./_static/images/screenshot-use-gpu.png
       :align: center
       :target: ./_static/images/screenshot-use-gpu.png
       :alt: A screenshot of the C Make window where the checkbox with the test Use G P U is checked.
 
--  Click ``Configure``
+-  ``Configure``를 클릭합니다.
 
-   You should get (approximately) the following after clicking Configure:
+   Configure을 클릭하면 대략 다음과 같은 메시지가 표시됩니다:
 
    .. image:: ./_static/images/screenshot-configured-lightgbm.png
       :align: center
@@ -331,61 +327,61 @@ Installing CMake requires one download first and then a lot of configuration for
          system
        Configuring done
 
--  Click ``Generate`` to get the following message:
+-  ``Generate``를 클릭하면 다음과 같은 메시지가 나옵니다:
 
    ::
 
        Generating done
 
-This is straightforward, as CMake is providing a large help into locating the correct elements.
+CMake가 올바른 요소를 찾는 데 큰 도움을 주기 때문에 간단합니다.
 
 --------------
 
-LightGBM Compilation (CLI: final step)
+LightGBM 컴파일 (CLI: 최종 단계)
 --------------------------------------
 
-Installation in CLI
+CLI에서 설치
 ~~~~~~~~~~~~~~~~~~~
 
-**CLI / Python users**
+**CLI / 파이썬 사용자**
 
-Creating LightGBM libraries is very simple as all the important and hard steps were done before.
+중요하고 어려운 단계는 모두 이전에 완료되었기 때문에 LightGBM 라이브러리 생성은 매우 간단합니다.
 
-You can do everything in the Git Bash console you left open:
+열어둔 Git Bash 콘솔에서 모든 작업을 수행할 수 있습니다:
 
--  If you closed Git Bash console previously, run this to get back to the build folder:
+-  이전에 Git Bash 콘솔을 닫았다면 다음 명령으로 빌드 폴더로 돌아갑니다:
 
    ::
 
        cd C:/github_repos/LightGBM/build
 
--  If you did not close the Git Bash console previously, run this to get to the build folder:
+-  이전에 Git Bash 콘솔을 닫지 않았다면 다음 명령으로 빌드 폴더로 이동합니다:
 
    ::
 
        cd LightGBM/build
 
--  Setup MinGW as ``make`` using
+-  ``make``로 MinGW를 설정합니다.
 
    ::
 
        alias make='mingw32-make'
 
-   otherwise, beware error and name clash!
+   그렇지 않으면 에러와 이름 충돌에 주의하세요!
 
--  In Git Bash, run ``make`` and see LightGBM being installing!
+-  Git Bash에서 ``make``를 실행하면 LightGBM이 설치되는 것을 확인할 수 있습니다!
 
 .. image:: ./_static/images/screenshot-lightgbm-with-gpu-support-compiled.png
    :align: center
    :target: ./_static/images/screenshot-lightgbm-with-gpu-support-compiled.png
    :alt: A screenshot of the git bash window with Light G B M successfully installed.
 
-If everything was done correctly, you now compiled CLI LightGBM with GPU support!
+모든 것이 올바르게 완료되었다면 이제 GPU를 지원하는 CLI LightGBM을 컴파일했습니다!
 
-Testing in CLI
+CLI에서 테스트
 ~~~~~~~~~~~~~~
 
-You can now test LightGBM directly in CLI in a **command prompt** (not Git Bash):
+이제 CLI에서 **명령 프롬프트**(Git Bash가 아닌)로 직접 LightGBM을 테스트할 수 있습니다:
 
 ::
 
@@ -397,56 +393,56 @@ You can now test LightGBM directly in CLI in a **command prompt** (not Git Bash)
    :target: ./_static/images/screenshot-lightgbm-in-cli-with-gpu.png
    :alt: A screenshot of the command prompt where a binary classification model is being trained using Light G B M.
 
-Congratulations for reaching this stage!
+이 단계에 도달한 것을 축하합니다!
 
-To learn how to target a correct CPU or GPU for training, please see: `GPU SDK Correspondence and Device Targeting Table <./GPU-Targets.rst>`__.
+훈련을 위해 올바른 CPU 또는 GPU를 지정하는 방법을 알아보려면 다음을 참조하세요.: `GPU SDK Correspondence and Device Targeting Table <./GPU-Targets.rst>`__.
 
 --------------
 
-Debugging LightGBM Crashes in CLI
+CLI에서 LightGBM 충돌 디버깅하기
 ---------------------------------
 
-Now that you compiled LightGBM, you try it... and you always see a segmentation fault or an undocumented crash with GPU support:
+이제 LightGBM을 컴파일하고 실행해보면, GPU를 사용하는 경우 항상 세그멘테이션 오류 또는 문서화되지 않은 충돌이 발생합니다:
 
 .. image:: ./_static/images/screenshot-segmentation-fault.png
    :align: center
    :target: ./_static/images/screenshot-segmentation-fault.png
    :alt: A screenshot of the command prompt where a segmentation fault has occurred while using Light G B M.
 
-Please check if you are using the right device (``Using GPU device: ...``). You can find a list of your OpenCL devices using `GPUCapsViewer`_, and make sure you are using a discrete (AMD/NVIDIA) GPU if you have both integrated (Intel) and discrete GPUs installed.
-Also, try to set ``gpu_device_id = 0`` and ``gpu_platform_id = 0`` or ``gpu_device_id = -1`` and ``gpu_platform_id = -1`` to use the first platform and device or the default platform and device.
-If it still does not work, then you should follow all the steps below.
+올바른 장치를 사용하고 있는지 확인하세요(``Using GPU device: ...``). `GPUCapsViewer`_ 를 사용하여 OpenCL 장치 목록을 확인할 수 있으며, 통합 (인텔) 및 외장형 GPU가 모두 설치되어 있는 경우 외장형(AMD/NVIDIA) GPU를 사용하고 있는지 확인합니다.
+또한, 첫 번째 플랫폼과 디바이스 또는 기본 플랫폼과 디바이스를 사용하려면 ``gpu_device_id = 0`` 및 ``gpu_platform_id = 0`` 또는 ``gpu_device_id = -1`` 및 ``gpu_platform_id = -1``을 설정해 보세요.
+그래도 작동하지 않으면 아래의 모든 단계를 따라야 합니다.
 
-You will have to redo the compilation steps for LightGBM to add debugging mode. This involves:
+디버깅 모드를 추가하려면 LightGBM의 컴파일 단계를 다시 수행해야 합니다. 여기에는 다음이 포함됩니다:
 
--  Deleting ``C:/github_repos/LightGBM/build`` folder
+-  ``C:/github_repos/LightGBM/build`` 폴더를 삭제합니다.
 
--  Deleting ``lightgbm.exe``, ``lib_lightgbm.dll``, and ``lib_lightgbm.dll.a`` files
+-  ``lightgbm.exe``, ``lib_lightgbm.dll``, ``lib_lightgbm.dll.a`` 파일을 삭제합니다.
 
 .. image:: ./_static/images/screenshot-files-to-remove.png
    :align: center
    :target: ./_static/images/screenshot-files-to-remove.png
    :alt: A screenshot of the Light G B M folder with 1 folder and 3 files selected to be removed.
 
-Once you removed the file, go into CMake, and follow the usual steps.
-Before clicking "Generate", click on "Add Entry":
+파일을 제거한 후 CMake로 이동하여 일반적인 단계를 따릅니다.
+"Generate"를 클릭하기 전에 "Add Entry"를 클릭합니다:
 
 .. image:: ./_static/images/screenshot-added-manual-entry-in-cmake.png
    :align: center
    :target: ./_static/images/screenshot-added-manual-entry-in-cmake.png
    :alt: A screenshot of the Cache Entry popup where the name is set to CMAKE_BUILD_TYPE in all caps, the type is set to STRING in all caps and the value is set to Debug.
 
-In addition, click on Configure and Generate:
+또한 Configure와 Generate를 클릭합니다:
 
 .. image:: ./_static/images/screenshot-configured-and-generated-cmake.png
    :align: center
    :target: ./_static/images/screenshot-configured-and-generated-cmake.png
    :alt: A screenshot of the C Make window after clicking on configure and generate.
 
-And then, follow the regular LightGBM CLI installation from there.
+그런 다음 거기에서 일반적인 LightGBM CLI 설치를 따르세요.
 
-Once you have installed LightGBM CLI, assuming your LightGBM is in ``C:\github_repos\LightGBM``,
-open a command prompt and run the following:
+LightGBM CLI를 설치한 후, LightGBM이 ``C:\github_repos\LightGBM``에 있다고 가정합니다,
+명령 프롬프트를 열고 다음을 실행합니다:
 
 ::
 
@@ -457,9 +453,9 @@ open a command prompt and run the following:
    :target: ./_static/images/screenshot-debug-run.png
    :alt: A screenshot of the command prompt after the command above is run.
 
-Type ``run`` and press the Enter key.
+``run``를 입력하게 엔터키를 누르세요.
 
-You will probably get something similar to this:
+아마 다음과 비슷한 결과가 나올 것입니다:
 
 ::
 
@@ -474,7 +470,7 @@ You will probably get something similar to this:
     0x00007ffbb37c11f1 in strlen () from C:\Windows\system32\msvcrt.dll
     (gdb)
 
-There, write ``backtrace`` and press the Enter key as many times as gdb requests two choices:
+거기에 ``backtrace``를 작성하고 gdb가 두 가지 선택을 요청하는 횟수만큼 Enter 키를 누릅니다:
 
 ::
 
@@ -509,7 +505,7 @@ There, write ``backtrace`` and press the Enter key as many times as gdb requests
     #13 0x00000000004f0b55 in LightGBM::Application::Run (this=0x23f9d0) at C:/LightGBM/include/LightGBM/application.h:84
     #14 main (argc=6, argv=0x1f21e90) at C:\LightGBM\src\main.cpp:7
 
-Right-click the command prompt, click "Mark", and select all the text from the first line (with the command prompt containing gdb) to the last line printed, containing all the log, such as:
+명령 프롬프트를 마우스 오른쪽 버튼으로 클릭하고 "Mark"를 클릭한 다음 첫 번째 줄(명령 프롬프트에 gdb가 포함된 경우)부터 인쇄된 마지막 줄까지 모든 로그가 포함된 모든 텍스트를 선택합니다:
 
 ::
 
@@ -586,19 +582,19 @@ Right-click the command prompt, click "Mark", and select all the text from the f
     #13 0x00000000004f0b55 in LightGBM::Application::Run (this=0x23f9d0) at C:/LightGBM/include/LightGBM/application.h:84
     #14 main (argc=6, argv=0x1f21e90) at C:\LightGBM\src\main.cpp:7
 
-And open an issue in GitHub `here`_ with that log.
+그리고 해당 로그를 사용하여 GitHub `이슈`_ 를 엽니다.
 
 .. _Intel SDK for OpenCL: https://software.intel.com/en-us/articles/opencl-drivers
 
-.. _CUDA Toolkit: https://developer.nvidia.com/cuda-downloads
+.. _CUDA 툴킷: https://developer.nvidia.com/cuda-downloads
 
-.. _for Linux: https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2
+.. _Linux용: https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2
 
-.. _for Windows: https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.135-GA-windows-F-x64.exe
+.. _Windows용: https://github.com/microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.135-GA-windows-F-x64.exe
 
-.. _Khronos official OpenCL headers: https://github.com/KhronosGroup/OpenCL-Headers
+.. _Khronos 공식 OpenCL 헤더: https://github.com/KhronosGroup/OpenCL-Headers
 
-.. _this: http://iweb.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe
+.. _이것: http://iweb.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe
 
 .. _Boost: https://www.boost.org/users/history/
 
@@ -608,10 +604,10 @@ And open an issue in GitHub `here`_ with that log.
 
 .. _7zip: https://www.7-zip.org/download.html
 
-.. _link: https://git-scm.com/download/win
+.. _링크: https://git-scm.com/download/win
 
 .. _CMake: https://cmake.org/download/
 
-.. _here: https://github.com/microsoft/LightGBM/issues
+.. _이슈: https://github.com/microsoft/LightGBM/issues
 
 .. _GPUCapsViewer: http://www.ozone3d.net/gpu_caps_viewer/
